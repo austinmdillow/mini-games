@@ -5,7 +5,7 @@ function love.load()
    airport_x = frame_width / 2
    airport_y = frame_height / 2
 
-   score
+   score = 10
 
    p1 = Plane:new(50,200)
    p2 = Plane:new(100,50)
