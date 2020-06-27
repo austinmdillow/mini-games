@@ -3,25 +3,31 @@ gameplay = {}
 local airport_x
 local airport_y
 
-local score = 10
+local score
 
 local plane_list = {}
 local selected_plane = plane_list[1]
 
 local path = {}
 local player_action = "idle"
+local plane_img = love.graphics.newImage("assets/airplane.png")
 
 function gameplay:draw()
     love.graphics.setColor(1,1,1)
     love.graphics.print("Score: " .. score, 20, 10, 0, 3, 3)
 
     for i,plane in ipairs(plane_list) do
+        local img_scale = 1/15
+        local img_w = plane_img:getWidth()
+        local img_h = plane_img:getHeight()
+        
         if plane == selected_plane then
             love.graphics.setColor(0,1,0)
         else
             love.graphics.setColor(1,1,1)
         end
         love.graphics.circle('fill', plane.coord.x, plane.coord.y, 10)
+        love.graphics.draw(plane_img, plane.coord.x, plane.coord.y, math.rad(plane.coord.dir + 90), img_scale, img_scale, img_w/2, img_h/2)
     end
 
    love.graphics.setColor(1,1,1)
@@ -46,7 +52,7 @@ function gameplay:update(dt)
     end
 
     makeFlightPath()
-    generateAircraft(dt)
+    --generateAircraft(dt)
 end
 
 
@@ -56,6 +62,8 @@ function gameplay:enter(previous)
 
     airport_x = frame_width / 2
     airport_y = frame_height / 2
+
+    score = 0
 
     p1 = Plane(50,200)
     p2 = Plane(100,50)

@@ -37,7 +37,7 @@ function Plane:update(dt)
     if self.path[1] ~= nil then
       local dir_diff = self.coord:angleToPoint(self.path[1], self.path[2]) - self.coord.dir
 
-      self.coord.dir = self.coord.dir + dir_diff * dt * 5
+      self.coord.dir = self.coord.dir + dir_diff
 
       if self.coord:distanceToPoint(self.path[1], self.path[2]) < 10 then
         table.remove(self.path, 1)
