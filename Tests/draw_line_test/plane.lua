@@ -37,7 +37,9 @@ function Plane:update(dt)
   --print("Path ", self.path[1], self.path[2])
   if self:isFlying() then
     if self.path[1] ~= nil then
-      self.coord.dir = self.coord:angleToPoint(self.path[1], self.path[2])
+      local dir_diff = self.coord:angleToPoint(self.path[1], self.path[2]) - self.coord.dir
+
+      self.coord.dir = self.coord.dir + dir_diff * dt * 5
 
       if self.coord:distanceToPoint(self.path[1], self.path[2]) < 10 then
         table.remove(self.path, 1)
@@ -59,6 +61,4 @@ function Plane:move(dt)
   local y_tmp = self.coord.y + math.sin(math.rad(self.coord.dir))/norm
   self.coord.x = x_tmp
   self.coord.y = y_tmp
-  print("After calculation ", x_tmp, y_tmp, self.coord.dir)
-  print("After calculation ", self.coord.x, self.coord.y, self.dir)
 end

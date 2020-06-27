@@ -1,19 +1,15 @@
 require("plane")
 
 function love.load()
-	index = 3
-   depth = 1
+   frame_width, frame_height = love.graphics.getDimensions()
+   airport_x = frame_width / 2
+   airport_y = frame_height / 2
 
-   airport_x = 500
-   airport_y = 500
-   
-   p = Plane:new(101,1)
-   p:print()
+   score
 
    p1 = Plane:new(50,200)
    p2 = Plane:new(100,50)
    p1:print()
-   p:print()
    plane_list = {}
    table.insert(plane_list, p1)
    table.insert(plane_list, p2)
@@ -23,22 +19,25 @@ function love.load()
    path = {}
    game_state = "play"
    player_action = "idle"
-   path = {selected_plane.coord.x, selected_plane.coord.y}
+   path = {}
 end
 
 function love.update(dt)
 
    if game_state == "play" then
 
-      for i,plane in ipairs(plane_list) do
+      for idx,plane in ipairs(plane_list) do
          plane:update(dt)
+         checkCollisions(plane)
+         checkLanding(plane, idx)
       end
-      print("After Update", p1.coord.x, p1.coord.y)
 
       makeFlightPath()
    elseif game_state == "fail" then
       print(3)
    end
+
+   --generateAircraft(dt)
 
 end
 
@@ -64,6 +63,10 @@ function love.draw()
    if selected_plane ~= nil and table.getn(selected_plane.path) >= 4 then
       love.graphics.setColor(1,0,0)
       love.graphics.line(selected_plane.path)
+   end
+
+   if game_state == "fail" then
+      love.graphics.print("GAME OVER", 300, 400, 0, 5, 5)
    end
 end
 
@@ -94,12 +97,11 @@ function love.mousereleased(x, y, button)
       print(path[1], path[2])
       print(p1.path[1], p1.path[2])
       path = {}
-      print("PATH UPDATED")
    end
 end
 
 
-function love.keypressed( key )
+function love.keypressed(key)
    if key == "=" then
       depth = depth + 1
       print("depth ", depth)
@@ -130,8 +132,21 @@ function love.keypressed( key )
 end
 
 
-function checkCollisions()
-   for i,plane in ipairs(plane_list) do
+function checkCollisions(plane)
+   for j,plane2 in ipairs(plane_list) do
+      if plane ~= plane2 then
+         local dist = plane.coord:distanceToCoord(plane2.coord)
+         if dist < plane.radius + plane2.radius then
+            print("FAIL")
+            game_state = "fail"
+         end
+      end
+   end
+end
+
+function checkLanding(plane, idx)
+   if plane.coord:distanceToPoint(airport_x, airport_y) < 50 then
+      table.remove(plane_list, idx)
    end
 end
 
@@ -162,6 +177,17 @@ function makeFlightPath()
          end
       end
 
+   end
+end
+
+function generateAircraft(dt)
+   local rand = love.math.random(0,10/dt)
+   if rand < .01 then
+      local plane_temp = Plane:new(0,love.math.random(0,frame_height))
+      plane_temp.path[1] = 500
+      plane_temp.path[2] = 500
+      plane_temp.flying = true
+      table.insert(plane_list, plane_temp)
    end
 end
 

@@ -15,3 +15,8 @@ end
 function Coord:distanceToPoint(x, y)
   return math.sqrt((x - self.x)^2 + (y - self.y)^2)
 end
+
+
+function Coord:distanceToCoord(coord)
+  return math.sqrt((coord.x - self.x)^2 + (coord.y - self.y)^2)
+end
