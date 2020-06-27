@@ -7,7 +7,8 @@ function Plane:new(x_start, y_start)
     x = x_start, 
     y = y_start, 
     t = 0,
-    curve = }
+    curve = 3
+  }
   setmetatable(this, Plane)
   return this
 end
