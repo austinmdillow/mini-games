@@ -7,11 +7,12 @@ Plane = Object:extend()
 Plane.__index = Plane
 
 function Plane:new(x_start, y_start)
-  self.coord = Coord(x_start, y_start, 90)
-  self.speed = 50
+  self.coord = Coord(x_start, y_start, 0)
+  self.speed = 30
   self.flying = false
   self.path = {}
   self.radius = 10
+  self.tail_number = "N7261" .. math.floor(love.math.random(0,10))
 end
 
 function Plane:print()
@@ -29,6 +30,10 @@ end
 
 function Plane:getCoords()
   return self.x, self.y
+end
+
+function Plane:setDirection(angle)
+  self.coord.dir = angle
 end
 
 function Plane:update(dt)
