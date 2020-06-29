@@ -20,3 +20,7 @@ function love.load()
    Gamestate.registerEvents()
    Gamestate.switch(menu)
 end
+
+function love.draw()
+   love.graphics.print('Memory actually used (in kB): ' .. collectgarbage('count'), 10,200)
+end

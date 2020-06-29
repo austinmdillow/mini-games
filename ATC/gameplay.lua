@@ -29,8 +29,9 @@ function gameplay:draw()
         else
             love.graphics.setColor(1,1,1)
         end
-        love.graphics.draw(plane_img, plane.coord.x, plane.coord.y, math.rad(plane.coord.dir + 90), img_scale, img_scale, img_w/2, img_h/2)
+        --love.graphics.draw(plane_img, plane.coord.x, plane.coord.y, math.rad(plane.coord.dir + 90), img_scale, img_scale, img_w/2, img_h/2)
     end
+
 
    love.graphics.setColor(1,1,1)
 
@@ -44,7 +45,7 @@ function gameplay:draw()
     end
 
     camera:detach()
-    drawHUD()
+    --drawHUD()
 end
 
 function gameplay:update(dt)
@@ -72,11 +73,15 @@ function gameplay:enter(previous)
 
     plane_list = {}
     table.insert(plane_list, p1)
-    table.insert(plane_list, p2)    
+    table.insert(plane_list, p2)
+    for i=1,1000 do
+        table.insert(plane_list, Plane(0, i * 300))
+    end
 end
 
 function gameplay:leave()
     total_score = total_score + score
+    plane_list = {}
 end
 
 function gameplay:mousereleased(x, y, button)
