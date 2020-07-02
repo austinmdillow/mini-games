@@ -1,102 +1,116 @@
--- Include Simple Tiled Implementation into project
+-- This example uses the included Box2D (love.physics) plugin!!
+
 local sti = require "sti"
+local Camera = require "lib.hump.camera"
+camera = Camera(100, 100)
+--windfield = require 'windfield'
+--world = windfield.newWorld(0,0,true)
+world = love.physics.newWorld(0,0)
+
+require("player")
 
 function love.load()
-    -- Load map file
-    map = sti("map.lua")
+	-- Grab window size
+	windowWidth  = love.graphics.getWidth()
+	windowHeight = love.graphics.getHeight()
 
-    -- Create new dynamic data layer called "Sprites" as the 8th layer
-    local layer = map:addCustomLayer("Sprites", 3)
+	-- Set world meter size (in pixels)
+	--love.physics.setMeter(32)
 
-    -- Get player spawn object
-    local player
-    for k, object in pairs(map.objects) do
-        if object.name == "Player" then
-            player = object
-            break
-        end
-    end
+	-- Load a map exported to Lua from Tiled
+	map = sti("map.lua", { "box2d" })
+	love.physics.setMeter(1)
+	map:box2d_init(world)
+	world:setCallbacks(beginContact)
 
-    -- Create player object
-    local sprite = love.graphics.newImage("sp.png")
-    layer.player = {
-        sprite = sprite,
-        x      = player.x,
-        y      = player.y,
-        ox     = sprite:getWidth() / 2,
-        oy     = sprite:getHeight() / 1.35
-    }
+	-- Prepare physics world with horizontal and vertical gravity
+	
+	static = {}
+	static.b = love.physics.newBody(world, 500,400, "static") -- "static" makes it not move
+	static.s = love.physics.newRectangleShape(500,500)         -- set size to 200,50 (x,y)
+	static.f = love.physics.newFixture(static.b, static.s)
+	static.f:setUserData("Block")
+	
 
-    -- Add controls to player
-    layer.update = function(self, dt)
-        -- 96 pixels per second
-        local speed = 96
+	-- Create a Custom Layer
+	map:addCustomLayer("Sprite Layer", 3)
 
-        -- Move player up
-        if love.keyboard.isDown("w") or love.keyboard.isDown("up") then
-            self.player.y = self.player.y - speed * dt
-        end
+	-- Add data to Custom Layer
+	local spriteLayer = map.layers["Sprite Layer"]
+	spriteLayer.sprites = {
+		player = Player(100,00)
+	}
 
-        -- Move player down
-        if love.keyboard.isDown("s") or love.keyboard.isDown("down") then
-            self.player.y = self.player.y + speed * dt
-        end
+	-- Update callback for Custom Layer
+	function spriteLayer:update(dt)
+		for _, sprite in pairs(self.sprites) do
+			sprite:update(dt)
+			camera.x = sprite.coord.x
+			camera.y = sprite.coord.y
+		end
+	end
 
-        -- Move player left
-        if love.keyboard.isDown("a") or love.keyboard.isDown("left") then
-            self.player.x = self.player.x - speed * dt
-        end
-
-        -- Move player right
-        if love.keyboard.isDown("d") or love.keyboard.isDown("right") then
-            self.player.x = self.player.x + speed * dt
-        end
-    end
-
-    -- Draw player
-    layer.draw = function(self)
-        love.graphics.draw(
-            self.player.sprite,
-            math.floor(self.player.x),
-            math.floor(self.player.y),
-            0,
-            1,
-            1,
-            self.player.ox,
-            self.player.oy
-        )
-        print(self.player.x, self.player.y)
-
-        -- Temporarily draw a point at our location so we know
-        -- that our sprite is offset properly
-        love.graphics.setPointSize(5)
-        love.graphics.points(math.floor(self.player.x), math.floor(self.player.y))
-    end
-
-    -- Remove unneeded object layer
-    --map:removeLayer("Spawn Point")
+	-- Draw callback for Custom Layer
+	function spriteLayer:draw()
+		for _, sprite in pairs(self.sprites) do
+			sprite:draw()
+		end
+	end
 end
 
 function love.update(dt)
-    -- Update world
-    map:update(dt)
+	
+	world:update(dt)
+	map:update(dt)
+	
 end
 
 function love.draw()
-    -- Scale world
-    local scale = 2
-    local screen_width = love.graphics.getWidth() / scale
-    local screen_height = love.graphics.getHeight() / scale
+	
+	-- Draw the map and all objects within
+	love.graphics.setColor(1, 1, 1)
+	local tx = camera.x - love.graphics.getWidth() / 2
+	local ty = camera.y - love.graphics.getHeight() / 2
 
-    -- Translate world so that player is always centred
-    local player = map.layers["Sprites"].player
-    local tx = math.floor(player.x - screen_width / 2)
-    local ty = math.floor(player.y - screen_height / 2)
+	if tx < 0 then 
+		tx = 0 
+	end
+	if tx > map.width  * map.tilewidth  - love.graphics.getWidth()  then
+		tx = map.width  * map.tilewidth  - love.graphics.getWidth()  
+	end
+	if ty > map.height * map.tileheight - love.graphics.getHeight() then
+		ty = map.height * map.tileheight - love.graphics.getHeight()
+	end
 
-    -- Transform world
-    love.graphics.scale(scale)
-    love.graphics.translate(-tx, -ty)
+	map:draw(-tx, -ty, camera.scale, camera.scale)
+	print("camera", -camera.x + love.graphics.getWidth() / 2, camera.y - love.graphics.getHeight() / 2)
 
-    -- Draw world
-    map:draw()
+	-- Draw Collision Map (useful for debugging)
+	love.graphics.setColor(1, 1, 0)
+	
+	camera:attach()
+	drawBodies()
+	
+
+	-- Please note that map:draw, map:box2d_draw, and map:bump_draw take
+	-- translate and scale arguments (tx, ty, sx, sy) for when you want to
+	-- grow, shrink, or reposition your map on screen.
+	camera:detach()
+end
+
+function drawBodies()
+	for _, body in pairs(world:getBodies()) do
+		for _, fixture in pairs(body:getFixtures()) do
+				local shape = fixture:getShape()
+ 
+				if shape:typeOf("CircleShape") then
+						local cx, cy = body:getWorldPoints(shape:getPoint())
+						love.graphics.circle("line", cx, cy, shape:getRadius())
+				elseif shape:typeOf("PolygonShape") then
+						love.graphics.polygon("line", body:getWorldPoints(shape:getPoints()))
+				else
+						love.graphics.line(body:getWorldPoints(shape:getPoints()))
+				end
+		end
+	end
 end
