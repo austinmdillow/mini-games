@@ -55,12 +55,20 @@
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
+        "tilemaps/inn_map.tmx": {
+            "scale": 1.3048363095238094,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 479.3704738552775,
+                "y": 495.84763642584255
+            }
+        },
         "tilemaps/main_world_map.tmx": {
             "scale": 1.5611,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 375.056050220998,
-                "y": 374.09518928960347
+                "x": 280.2511049900711,
+                "y": 280.57139196720266
             }
         },
         "tilesets/RPG_tileset.tsx": {
@@ -69,17 +77,17 @@
         }
     },
     "frame.defaultDuration": 150,
-    "map.height": 50,
+    "map.height": 20,
     "map.lastUsedExportFilter": "Lua files (*.lua)",
     "map.lastUsedFormat": "tmx",
     "map.layerDataFormat": null,
-    "map.width": 50,
+    "map.width": 20,
     "openFiles": [
         "tilesets/RPG_tileset.tsx",
         "tilemaps/main_world_map.tmx"
     ],
     "project": "RPG_Tiled.tiled-project",
-    "property.type": "string",
+    "property.type": "bool",
     "recentFiles": [
         "tilesets/RPG_tileset.tsx",
         "tilemaps/main_world_map.tmx",

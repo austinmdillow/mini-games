@@ -1,5 +1,4 @@
 
---require("src.levels.menu")
 
 function love.load()
   require("src.startup.gameStart")
@@ -9,11 +8,15 @@ function love.load()
   total_score = 0
 
   gamedata = {
+    location = 1,
     progression = {
       xp = 0
     },
     stats = {}
   }
+
+  player = Player(100, 100)
+  camera = Camera(100, 100)
 
   Gamestate.registerEvents()
   Gamestate.switch(menu)
@@ -21,5 +24,5 @@ end
 
 
 function love.draw()
-  love.graphics.print('Memory actually used (in kB): ' .. collectgarbage('count'), 10,200)
+
 end

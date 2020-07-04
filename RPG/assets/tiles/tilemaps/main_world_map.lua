@@ -8,8 +8,8 @@ return {
   height = 50,
   tilewidth = 32,
   tileheight = 32,
-  nextlayerid = 7,
-  nextobjectid = 4,
+  nextlayerid = 8,
+  nextobjectid = 5,
   properties = {},
   tilesets = {
     {
@@ -37,15 +37,188 @@ return {
       properties = {},
       terrains = {},
       tilecount = 1040,
-      tiles = {}
+      tiles = {
+        {
+          id = 432,
+          properties = {
+            ["collidable"] = true
+          }
+        },
+        {
+          id = 435,
+          properties = {
+            ["collidable"] = true
+          }
+        },
+        {
+          id = 472,
+          properties = {
+            ["collidable"] = true
+          }
+        },
+        {
+          id = 475,
+          properties = {
+            ["collidable"] = true
+          }
+        },
+        {
+          id = 736,
+          objectGroup = {
+            type = "objectgroup",
+            draworder = "index",
+            id = 2,
+            name = "",
+            visible = true,
+            opacity = 1,
+            offsetx = 0,
+            offsety = 0,
+            properties = {},
+            objects = {
+              {
+                id = 1,
+                name = "",
+                type = "",
+                shape = "rectangle",
+                x = 8,
+                y = 16,
+                width = 24,
+                height = 16,
+                rotation = 0,
+                visible = true,
+                properties = {
+                  ["collidable"] = true
+                }
+              }
+            }
+          }
+        },
+        {
+          id = 737,
+          objectGroup = {
+            type = "objectgroup",
+            draworder = "index",
+            id = 2,
+            name = "",
+            visible = true,
+            opacity = 1,
+            offsetx = 0,
+            offsety = 0,
+            properties = {},
+            objects = {
+              {
+                id = 1,
+                name = "",
+                type = "",
+                shape = "rectangle",
+                x = 0,
+                y = 16,
+                width = 24,
+                height = 16,
+                rotation = 0,
+                visible = true,
+                properties = {
+                  ["collidable"] = true
+                }
+              }
+            }
+          }
+        },
+        {
+          id = 776,
+          objectGroup = {
+            type = "objectgroup",
+            draworder = "index",
+            id = 2,
+            name = "",
+            visible = true,
+            opacity = 1,
+            offsetx = 0,
+            offsety = 0,
+            properties = {},
+            objects = {
+              {
+                id = 1,
+                name = "",
+                type = "",
+                shape = "rectangle",
+                x = 8,
+                y = 0,
+                width = 24,
+                height = 32,
+                rotation = 0,
+                visible = true,
+                properties = {
+                  ["collidable"] = true
+                }
+              }
+            }
+          }
+        },
+        {
+          id = 777,
+          objectGroup = {
+            type = "objectgroup",
+            draworder = "index",
+            id = 2,
+            name = "",
+            visible = true,
+            opacity = 1,
+            offsetx = 0,
+            offsety = 0,
+            properties = {},
+            objects = {
+              {
+                id = 1,
+                name = "",
+                type = "",
+                shape = "rectangle",
+                x = 0,
+                y = 0,
+                width = 24,
+                height = 32,
+                rotation = 0,
+                visible = true,
+                properties = {
+                  ["collidable"] = true
+                }
+              }
+            }
+          }
+        },
+        {
+          id = 852,
+          properties = {
+            ["collidable"] = true
+          }
+        },
+        {
+          id = 853,
+          properties = {
+            ["collidable"] = true
+          }
+        },
+        {
+          id = 854,
+          properties = {
+            ["collidable"] = true
+          }
+        },
+        {
+          id = 855,
+          properties = {
+            ["collidable"] = true
+          }
+        }
+      }
     }
   },
   layers = {
     {
       type = "objectgroup",
       draworder = "topdown",
-      id = 2,
-      name = "PlayerSpawn",
+      id = 7,
+      name = "EnemySpawn",
       visible = true,
       opacity = 1,
       offsetx = 0,
@@ -53,19 +226,17 @@ return {
       properties = {},
       objects = {
         {
-          id = 1,
-          name = "default_spawn",
+          id = 4,
+          name = "",
           type = "",
           shape = "point",
-          x = 280,
-          y = 280,
+          x = 104,
+          y = 456,
           width = 0,
           height = 0,
           rotation = 0,
           visible = true,
-          properties = {
-            ["default"] = true
-          }
+          properties = {}
         }
       }
     },
@@ -100,6 +271,34 @@ return {
     {
       type = "objectgroup",
       draworder = "topdown",
+      id = 2,
+      name = "PlayerSpawn",
+      visible = true,
+      opacity = 1,
+      offsetx = 0,
+      offsety = 0,
+      properties = {},
+      objects = {
+        {
+          id = 1,
+          name = "default_spawn",
+          type = "",
+          shape = "point",
+          x = 280,
+          y = 280,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["default"] = true
+          }
+        }
+      }
+    },
+    {
+      type = "objectgroup",
+      draworder = "topdown",
       id = 6,
       name = "Boundaries",
       visible = true,
@@ -120,7 +319,6 @@ return {
           rotation = 0,
           visible = true,
           polygon = {
-            { x = 0, y = -8 },
             { x = 0, y = -136 },
             { x = 64, y = -200 },
             { x = 128, y = -136 },
@@ -128,9 +326,11 @@ return {
             { x = 96, y = -8 },
             { x = 72, y = -40 },
             { x = 56, y = -40 },
-            { x = 32, y = -8 }
+            { x = 0, y = -8 }
           },
-          properties = {}
+          properties = {
+            ["collidable"] = true
+          }
         }
       }
     },

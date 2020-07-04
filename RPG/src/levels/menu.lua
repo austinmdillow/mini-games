@@ -49,6 +49,10 @@ function menu:keypressed(key, scancode, isrepeat)
     if scancode == "escape" then
         love.event.quit()
     end
+
+    if key == 'p' then
+        print(map)
+    end
 end
 
 function menu:mousemoved(x, y, dx, dy, istouch)

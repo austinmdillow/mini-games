@@ -5,12 +5,25 @@ Player = Entity:extend()
 function Player:new(x_start, y_start)
   Player.super.new(self, x_start, y_start)
   self.image = sprites.player_img
+  self.speed = 200
+end
 
-  -- init physics
+function Player:initPhysics(world)
+  self.world = world
   self.body = love.physics.newBody(world, self.coord.x, self.coord.y + self.image:getWidth()/2, 'dynamic')
   self.shape = love.physics.newCircleShape(10)
   self.fixture = love.physics.newFixture(self.body, self.shape)
 end
+
+function Player:setPosition(x_set, y_set)
+  self.coord.x = x_set
+  self.coord.y = y_set
+
+  if self.world ~= nil then
+    self.body:setPosition(x_set, y_set)
+  end
+end
+
 
 function Player:update()
 

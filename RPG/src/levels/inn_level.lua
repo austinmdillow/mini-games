@@ -1,53 +1,57 @@
 -- main world
-mainWorld = {}
+inn_level = {}
 local world = nil
 local map = nil
 local active_selection = {}
 local last_location = nil
 
-function mainWorld:enter()
-  map = sti("assets/tiles/tilemaps/main_world_map.lua", {"box2d"})
+function inn_level:enter()
+  print("we are in the inn level")
+  map = sti("assets/tiles/tilemaps/inn_map.lua", {"box2d"})
   world = love.physics.newWorld(0,0)
-  
+  player:setPosition(300,300)
   player:initPhysics(world)
+  
 
   love.physics.setMeter(16)
 	map:box2d_init(world)
   world:setCallbacks(beginContact)
-  
-	setupMap(map, 6)
 
+
+  setupMap(map)
+	-- Add data to Custom Layer
 end
 
 
-function mainWorld:exit()
-	print("leaving main world")
+function inn_level:exit()
+	print("leaving inn level")
 	last_location = player.coord
 end
 
-function mainWorld:update(dt)
+function inn_level:update(dt)
   world:update(dt)
 	map:update(dt)
 end
 
 
-function mainWorld:draw()
+function inn_level:draw()
   	-- Draw the map and all objects within
 	love.graphics.setColor(1, 1, 1)
 	local tx = camera.x - love.graphics.getWidth() / 2
 	local ty = camera.y - love.graphics.getHeight() / 2
 
 	map:draw(-tx, -ty, camera.scale, camera.scale)
+	--print("camera", -camera.x + love.graphics.getWidth() / 2, camera.y - love.graphics.getHeight() / 2)
 	
 	-- Draw Collision Map (useful for debugging)
 	love.graphics.setColor(1, 0, 0)
 	map:box2d_draw(-tx, -ty, camera.scale, camera.scale)
 	drawBodies(world)
-	displayActions(map, player)
-	drawDebugInfo()
+  displayActions(map, player)
+  drawDebugInfo()
 end
 
-function mainWorld:keypressed(key)
+function inn_level:keypressed(key)
   if key == 'p' then
     print_table(map)
   elseif key == "escape" then

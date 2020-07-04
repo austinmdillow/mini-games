@@ -3,7 +3,7 @@ Entity = Object:extend()
 function Entity:new(x_start, y_start)
   self.coord = Coord(x_start, y_start, 0)
   self.speed = 100
-  self.image = nil
+  self.image = sprites.player_img
 end
 
 function Entity:draw()
@@ -12,4 +12,7 @@ function Entity:draw()
   else
     love.graphics.circle('line', self.coord.x, self.coord.y, 10)
   end
+end
+
+function Entity:update(dt)
 end
