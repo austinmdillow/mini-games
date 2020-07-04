@@ -1,0 +1,84 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "mini.tmx",
+    "expandedProjectPaths": [
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "": {
+            "scaleInDock": 1
+        },
+        "/home/austin/Github/mini-games/Tests/TileTest/untitled.tmx": {
+            "scale": 1,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 2804.5,
+                "y": 2954
+            }
+        },
+        "1.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 5,
+            "viewCenter": {
+                "x": -508.3333333333333,
+                "y": -2286.6666666666665
+            }
+        },
+        "RPGpack_map.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "RPGpack_sheet2.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "mini.tmx": {
+            "scale": 1.9984,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 545.6865492393915,
+                "y": 323.7590072057646
+            }
+        },
+        "mymap.tmx": {
+            "scale": 1,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 492.5,
+                "y": 583
+            }
+        },
+        "set.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "frame.defaultDuration": 150,
+    "map.height": 50,
+    "map.lastUsedExportFilter": "Lua files (*.lua)",
+    "map.lastUsedFormat": "tmx",
+    "map.width": 50,
+    "openFiles": [
+        "mini.tmx",
+        "1.tmx",
+        "set.tsx"
+    ],
+    "project": "tiled_test.tiled-project",
+    "property.type": "string",
+    "recentFiles": [
+        "set.tsx",
+        "1.tmx",
+        "mini.tmx",
+        "RPGpack_sheet2.tsx",
+        "RPGpack_map.tsx",
+        "mymap.tmx",
+        "/home/austin/Github/mini-games/Tests/TileTest/untitled.tmx"
+    ],
+    "tileset.embedInMap": false,
+    "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)",
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.type": 0
+}

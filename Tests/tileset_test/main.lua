@@ -6,6 +6,7 @@ camera = Camera(100, 100)
 --windfield = require 'windfield'
 --world = windfield.newWorld(0,0,true)
 world = love.physics.newWorld(0,0)
+obj_interaction_text = nils
 
 require("player")
 
@@ -18,27 +19,28 @@ function love.load()
 	--love.physics.setMeter(32)
 
 	-- Load a map exported to Lua from Tiled
-	map = sti("map.lua", { "box2d" })
-	love.physics.setMeter(1)
+	map = sti("mini.lua", {"box2d"})
+	love.physics.setMeter(16)
 	map:box2d_init(world)
 	world:setCallbacks(beginContact)
 
 	-- Prepare physics world with horizontal and vertical gravity
 	
 	static = {}
-	static.b = love.physics.newBody(world, 500,400, "static") -- "static" makes it not move
-	static.s = love.physics.newRectangleShape(500,500)         -- set size to 200,50 (x,y)
-	static.f = love.physics.newFixture(static.b, static.s)
-	static.f:setUserData("Block")
+	--static.b = love.physics.newBody(world, 500,400, "static") -- "static" makes it not move
+	--static.s = love.physics.newRectangleShape(500,500)         -- set size to 200,50 (x,y)
+	--static.f = love.physics.newFixture(static.b, static.s)
+	--static.f:setUserData("Block")
 	
 
 	-- Create a Custom Layer
 	map:addCustomLayer("Sprite Layer", 3)
 
+
 	-- Add data to Custom Layer
 	local spriteLayer = map.layers["Sprite Layer"]
 	spriteLayer.sprites = {
-		player = Player(100,00)
+		player = Player(100,100)
 	}
 
 	-- Update callback for Custom Layer
@@ -62,6 +64,21 @@ function love.update(dt)
 	
 	world:update(dt)
 	map:update(dt)
+	local player = map.layers["Sprite Layer"].sprites.player
+	local x_tile, y_tile = map:convertPixelToTile(player.coord.x, player.coord.y)
+	print(math.floor(x_tile), math.floor(y_tile))
+	local t_prop = map:getTileProperties("Midground", math.floor(x_tile) + 1, math.floor(y_tile) + 1)
+	local properties = map:getLayerProperties("Background")
+	print(print_r(t_prop, 1))
+	local door = getObjectAtCoord("Doors", player.coord)
+	if door ~= nil then
+		obj_interaction_text = "Press enter"
+		print(door.properties["Destination"])
+	else
+		obj_interaction_text = nil
+	end
+
+	getObjectAtCoord("PlayerSpawn", player.coord)
 	
 end
 
@@ -83,19 +100,35 @@ function love.draw()
 	end
 
 	map:draw(-tx, -ty, camera.scale, camera.scale)
-	print("camera", -camera.x + love.graphics.getWidth() / 2, camera.y - love.graphics.getHeight() / 2)
-
+	--print("camera", -camera.x + love.graphics.getWidth() / 2, camera.y - love.graphics.getHeight() / 2)
+	
 	-- Draw Collision Map (useful for debugging)
-	love.graphics.setColor(1, 1, 0)
+	love.graphics.setColor(1, 0, 0)
+	map:box2d_draw(-tx, -ty, camera.scale, camera.scale)
+
+	if obj_interaction_text ~= nil then
+		love.graphics.print(obj_interaction_text, 0,400)
+	end
+	
 	
 	camera:attach()
-	drawBodies()
+	--drawBodies()
 	
 
 	-- Please note that map:draw, map:box2d_draw, and map:bump_draw take
 	-- translate and scale arguments (tx, ty, sx, sy) for when you want to
 	-- grow, shrink, or reposition your map on screen.
 	camera:detach()
+end
+
+function love.keypressed(key)
+	if key == 'b' then
+		 text = "The B key was pressed."
+	elseif key == 'a' then
+		 a_down = true
+	elseif key == 'return' and obj_interaction_text ~= nil then
+		gameState.load()
+	end
 end
 
 function drawBodies()
@@ -113,4 +146,40 @@ function drawBodies()
 				end
 		end
 	end
+end
+
+function getObjectAtCoord(layer, coord)
+	local x_tile, y_tile = map:convertPixelToTile(coord.x, coord.y)
+	for i, obj in pairs(map.layers[layer].objects) do 
+		if coord:distanceToPoint(obj.x, obj.y) < 30 then
+			return obj
+		end
+	end
+end
+
+
+function print_r(arr, indentLevel)
+	local str = ""
+	local indentStr = "#"
+
+	if(indentLevel == nil) then
+			print(print_r(arr, 0))
+			return
+	end
+
+	for i = 0, indentLevel do
+			indentStr = indentStr.."\t"
+	end
+
+	for index,value in pairs(arr) do
+			if type(value) == "table" then
+					str = str..indentStr..index..": \n"..print_r(value, (indentLevel + 1))
+			elseif type(value == "bool") then
+					str = str..indentStr..index..": "..tostring(value).."\n"
+			else 
+					str = str..indentStr..index..": "..value.."\n"
+			end
+			print(str)
+	end
+	return str
 end

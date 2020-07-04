@@ -1,24 +1,14 @@
-require("coord")
-Object = require "classic"
-Player = {}
+require("entity")
 
-Player = Object:extend()
-
-Player.__index = Player
-
-
---Player.collider:setCollisionClass("Player")
+Player = Entity:extend()
 
 function Player:new(x_start, y_start)
-  --self.collider = world:newCircleCollider(0, 0, 40)
-  self.coord = Coord(x_start, y_start, 0)
-  self.speed = 100
-  self.r = 0
+  Player.super.new(self, x_start, y_start)
   self.image = love.graphics.newImage("sp.png")
 
   -- init physics
-  self.body = love.physics.newBody(world, self.coord.x + self.image:getWidth()/2, self.coord.y + self.image:getWidth()/2 + 30, 'dynamic')
-  self.shape = love.physics.newCircleShape(40)
+  self.body = love.physics.newBody(world, self.coord.x, self.coord.y + self.image:getWidth()/2, 'dynamic')
+  self.shape = love.physics.newCircleShape(10)
   self.fixture = love.physics.newFixture(self.body, self.shape)
 end
 
@@ -55,5 +45,5 @@ function Player:update()
 end
 
 function Player:draw()
-  love.graphics.draw(self.image, self.coord.x, self.coord.y, self.r)
+  love.graphics.draw(self.image, self.coord.x - self.image:getWidth()/2, self.coord.y - self.image:getWidth()/2, self.r)
 end
