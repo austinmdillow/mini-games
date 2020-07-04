@@ -8,13 +8,18 @@ camera = Camera(100, 100)
 world = love.physics.newWorld(0,0)
 obj_interaction_text = nils
 
-require("player")
+require("src.entities.player")
 require("intersections")
 
 function love.load()
 	-- Grab window size
 	windowWidth  = love.graphics.getWidth()
 	windowHeight = love.graphics.getHeight()
+
+	score = 0
+
+	require("src.startup.gameStart")
+	gameStart()
 
 	-- Set world meter size (in pixels)
 	--love.physics.setMeter(32)

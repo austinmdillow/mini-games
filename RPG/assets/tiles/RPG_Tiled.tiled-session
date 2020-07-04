@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "mini.tmx",
+    "activeFile": "tilemaps/main_world_map.tmx",
     "expandedProjectPaths": [
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
@@ -19,7 +19,7 @@
                 "y": 2954
             }
         },
-        "1.tmx": {
+        "/home/austin/Github/mini-games/Tests/tileset_test/1.tmx": {
             "scale": 1.5,
             "selectedLayer": 5,
             "viewCenter": {
@@ -27,15 +27,15 @@
                 "y": 1600
             }
         },
-        "RPGpack_map.tsx": {
+        "/home/austin/Github/mini-games/Tests/tileset_test/RPGpack_map.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
-        "RPGpack_sheet2.tsx": {
+        "/home/austin/Github/mini-games/Tests/tileset_test/RPGpack_sheet2.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
-        "mini.tmx": {
+        "/home/austin/Github/mini-games/Tests/tileset_test/mini.tmx": {
             "scale": 1.9984,
             "selectedLayer": 3,
             "viewCenter": {
@@ -43,7 +43,7 @@
                 "y": 311.7493995196157
             }
         },
-        "mymap.tmx": {
+        "/home/austin/Github/mini-games/Tests/tileset_test/mymap.tmx": {
             "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
@@ -51,7 +51,19 @@
                 "y": 583
             }
         },
-        "set.tsx": {
+        "/home/austin/Github/mini-games/Tests/tileset_test/set.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tilemaps/main_world_map.tmx": {
+            "scale": 1.5611,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 375.056050220998,
+                "y": 374.09518928960347
+            }
+        },
+        "tilesets/RPG_tileset.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 1
         }
@@ -60,21 +72,23 @@
     "map.height": 50,
     "map.lastUsedExportFilter": "Lua files (*.lua)",
     "map.lastUsedFormat": "tmx",
+    "map.layerDataFormat": null,
     "map.width": 50,
     "openFiles": [
-        "mini.tmx",
-        "1.tmx",
-        "set.tsx"
+        "tilesets/RPG_tileset.tsx",
+        "tilemaps/main_world_map.tmx"
     ],
-    "project": "tiled_test.tiled-project",
-    "property.type": "bool",
+    "project": "RPG_Tiled.tiled-project",
+    "property.type": "string",
     "recentFiles": [
-        "set.tsx",
-        "1.tmx",
-        "mini.tmx",
-        "RPGpack_sheet2.tsx",
-        "RPGpack_map.tsx",
-        "mymap.tmx",
+        "tilesets/RPG_tileset.tsx",
+        "tilemaps/main_world_map.tmx",
+        "/home/austin/Github/mini-games/Tests/tileset_test/set.tsx",
+        "/home/austin/Github/mini-games/Tests/tileset_test/1.tmx",
+        "/home/austin/Github/mini-games/Tests/tileset_test/mini.tmx",
+        "/home/austin/Github/mini-games/Tests/tileset_test/RPGpack_sheet2.tsx",
+        "/home/austin/Github/mini-games/Tests/tileset_test/RPGpack_map.tsx",
+        "/home/austin/Github/mini-games/Tests/tileset_test/mymap.tmx",
         "/home/austin/Github/mini-games/Tests/TileTest/untitled.tmx"
     ],
     "tileset.embedInMap": false,
