@@ -10,10 +10,11 @@ function Player:new(x_start, y_start)
   self.weapon = {
     hitbox = {}
   }
-  self.inventory = {}
-  self.inventory[1] = Weapon()
+  self.inventory = Inventory()
+  self.inventory:addItem(Axe(), 1)
+  self.inventory:addItem(Item(), 3)
   self.map = nil
-  self.tool = Weapon()
+  self.tool = Axe()
 end
 
 function Player:initPhysics(world)
@@ -28,6 +29,8 @@ end
 
 function Player:initMap(map)
   self.map = map
+  self.inventory:addItem(Item(), 4)
+  self.inventory:addItem(Item(), 2)
 end
 
 function Player:setPosition(x_set, y_set)
@@ -41,6 +44,8 @@ end
 
 
 function Player:update(dt)
+  --print(self.inventory.item_list[1])
+  --self.inventory.item_list[3]:print()
   local vectorX = 0
   local vectorY = 0
   -- Keyboard direction checks for movement
@@ -72,8 +77,10 @@ function Player:update(dt)
     vectorY = 0
   end
 
-  self.body:applyForce(vectorX * self.speed * 200, vectorY * self.speed * 200)
-  self.body:applyForce(-x_vel * self.stats.size, -y_vel)
+  self.body:applyForce(vectorX * self.speed * 300, vectorY * self.speed * 300)
+  if vectorX == 0 and vectorY == 0 then
+    self.body:applyForce(-x_vel * self.stats.size * 10, -y_vel * self.stats.size * 10)
+  end
   local x_tmp, y_tmp = self.body:getPosition()
   self.coord.x = x_tmp
   self.coord.y = y_tmp
@@ -83,12 +90,16 @@ end
 
 function Player:draw()
   love.graphics.draw(self.image, self.coord.x - self.image:getWidth()/2, self.coord.y - self.image:getWidth()/2, self.r)
+  love.graphics.draw(self.inventory.item_list[4].image, self.coord.x, self.coord.y, 34)
 end
 
 function Player:keypressed(key)
   if key == "space" then
     self:attack()
+  elseif key == "e" then
+    self.inventory:setActive(not self.inventory:getActive())
   end
+
 end
 
 

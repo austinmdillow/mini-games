@@ -1,5 +1,6 @@
 Entity = Object:extend()
 require("src.entities.weapon")
+require("src.entities.axe")
 
 function Entity:new(x_start, y_start)
   self.coord = Coord(x_start, y_start, 0)

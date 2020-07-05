@@ -1,4 +1,6 @@
-
+DEBUG_FLAGS = {
+	print_debug = true
+}
 
 function print_table(arr, indentLevel)
 	local str = ""
@@ -50,6 +52,11 @@ end
 
 
 function drawDebugInfo()
+	love.graphics.setColor(COLORS.red)
   love.graphics.print('Memory actually used (in kB): ' .. collectgarbage('count'), 10,10)
   love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 10, 40)
+end
+
+function LOG_ERROR(msg)
+	print(msg) -- for now just print
 end

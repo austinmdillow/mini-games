@@ -1,6 +1,7 @@
-Weapon = Object:extend()
+Weapon = Item:extend()
 
 function Weapon:new()
+  Weapon.super:new()
   self.attack = 50
   self.rate = 1.5 -- swings per second
   self.durability = math.random(150-10, 150 + 10)

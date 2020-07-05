@@ -50,11 +50,11 @@ function mainWorld:draw()
 	-- Draw Collision Map (useful for debugging)
 	love.graphics.setColor(1, 0, 0)
 	--map:box2d_draw(-tx, -ty, camera.scale, camera.scale)
+	drawCommon()
 	camera:attach()
 	drawBodies(world)
 	camera:detach()
 	displayActions(map, player)
-	drawDebugInfo()
 end
 
 function mainWorld:keypressed(key)
