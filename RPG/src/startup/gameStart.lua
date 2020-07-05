@@ -9,6 +9,7 @@ function gameStart()
   require("src.coord")
   require("src.debug")
   require("src.environment.interactions")
+  require("src.environment.setup")
 
   -- require all of the levels
   require("src.levels.menu")
@@ -16,6 +17,7 @@ function gameStart()
   require("src.levels.inn_level")
   require("src.intersections")
   require("src.entities.player")
+  require("src.entities.enemy")
 
   -- import assets
   require("assets.resources")

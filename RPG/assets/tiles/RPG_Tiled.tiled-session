@@ -65,10 +65,10 @@
         },
         "tilemaps/main_world_map.tmx": {
             "scale": 1.5611,
-            "selectedLayer": 2,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 280.2511049900711,
-                "y": 280.57139196720266
+                "x": 104.09326756774067,
+                "y": 455.44808148100697
             }
         },
         "tilesets/RPG_tileset.tsx": {

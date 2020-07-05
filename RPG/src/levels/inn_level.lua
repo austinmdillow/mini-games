@@ -18,7 +18,7 @@ function inn_level:enter()
   world:setCallbacks(beginContact)
 
 
-  setupMap(map)
+  setupMap(map, world, 5)
 	-- Add data to Custom Layer
 end
 

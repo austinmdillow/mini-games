@@ -4,18 +4,26 @@ local world = nil
 local map = nil
 local active_selection = {}
 local last_location = nil
+local map_sprites = nil
 
 function mainWorld:enter()
   map = sti("assets/tiles/tilemaps/main_world_map.lua", {"box2d"})
   world = love.physics.newWorld(0,0)
   
-  player:initPhysics(world)
+	player:initPhysics(world)
+	player:initMap(map)
 
-  love.physics.setMeter(16)
+  
 	map:box2d_init(world)
   world:setCallbacks(beginContact)
-  
-	setupMap(map, 6)
+
+	map_sprites = setupMap(map, world, 6)
+	local wall = {}
+	wall.body = love.physics.newBody(world, 300, 500, 'dynamic')
+  wall.shape = love.physics.newCircleShape(100)
+	wall.fixture = love.physics.newFixture(wall.body, wall.shape)
+	wall.body:setMass(2)
+	print(wall.fixture:getMask())
 
 end
 
@@ -48,6 +56,7 @@ function mainWorld:draw()
 end
 
 function mainWorld:keypressed(key)
+	player:keypressed(key)
   if key == 'p' then
     print_table(map)
   elseif key == "escape" then
