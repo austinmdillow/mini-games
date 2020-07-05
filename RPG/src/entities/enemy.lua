@@ -20,12 +20,10 @@ function Enemy:update(dt)
 local vectorX, vectorY
   if self.coord:distanceToCoord(player:getCoord()) < 200 then
     vectorX, vectorY = self.coord:normalVectorToCoord(player:getCoord())
-    print(vectorX, vectorY)
   else
     self.coord.dir = self.coord.dir + love.math.random(-5,5)
     vectorX, vectorY = self.coord:polarToCartesian(1, self.coord.dir)
   end
-  
   
   local x_vel, y_vel = self.body:getLinearVelocity()
   local vel = math.sqrt(x_vel^2 + y_vel ^ 2)

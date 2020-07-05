@@ -1,9 +1,18 @@
 Entity = Object:extend()
+require("src.entities.weapon")
 
 function Entity:new(x_start, y_start)
   self.coord = Coord(x_start, y_start, 0)
   self.speed = 80
   self.image = sprites.player_img
+  self.stats = {
+    hp = 100,
+    size = 100,
+    strength = 10,
+    food = 100,
+    water = 100
+  }
+  self.tool = nil
 end
 
 function Entity:draw()
@@ -26,4 +35,13 @@ end
 
 function Entity:getCoord()
   return self.coord
+end
+
+function Entity:harm(damage)
+  self.stats.hp = self.stats.hp - damage
+  if (self.stats.hp <= 0) then
+    print(self, "has died")
+    return true
+  end
+  return false
 end

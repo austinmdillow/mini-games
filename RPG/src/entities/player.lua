@@ -1,4 +1,5 @@
 require("src.entities.entity")
+require("src.entities.weapon")
 
 Player = Entity:extend()
 
@@ -9,7 +10,10 @@ function Player:new(x_start, y_start)
   self.weapon = {
     hitbox = {}
   }
+  self.inventory = {}
+  self.inventory[1] = Weapon()
   self.map = nil
+  self.tool = Weapon()
 end
 
 function Player:initPhysics(world)
@@ -18,7 +22,7 @@ function Player:initPhysics(world)
   self.shape = love.physics.newCircleShape(15)
   self.fixture = love.physics.newFixture(self.body, self.shape)
   self.fixture:setFilterData(1,65535,-2)
-  self.body:setMass(1) -- set mass to 1 kg
+  self.body:setMass(self.stats.size) -- set mass to 1 kg
   self.body:setLinearDamping(1)
 end
 
@@ -68,8 +72,8 @@ function Player:update(dt)
     vectorY = 0
   end
 
-  self.body:applyForce(vectorX * self.speed * 2, vectorY * self.speed * 2)
-  self.body:applyForce(-x_vel, -y_vel)
+  self.body:applyForce(vectorX * self.speed * 200, vectorY * self.speed * 200)
+  self.body:applyForce(-x_vel * self.stats.size, -y_vel)
   local x_tmp, y_tmp = self.body:getPosition()
   self.coord.x = x_tmp
   self.coord.y = y_tmp
@@ -83,25 +87,34 @@ end
 
 function Player:keypressed(key)
   if key == "space" then
-    self:fireBullet()
+    self:attack()
   end
 end
 
 
-function Player:fireBullet()
+function Player:attack()
   --[[ self.weapon.hitbox.body = love.physics.newBody(self.world, self.coord.x + 10, self.coord.y, 'dynamic')
   self.weapon.hitbox.shape = love.physics.newCircleShape(15)
   self.weapon.hitbox.fixture = love.physics.newFixture(self.weapon.hitbox.body, self.weapon.hitbox.shape)
   self.weapon.hitbox.fixture:setFilterData(1,65535,-2)
   self.weapon.hitbox.body:setMass(100) -- set mass to 1 kg
   self.weapon.hitbox.time_left = .5 ]]
-  for _, entity in pairs(self.map.layers["Sprite Layer"].sprites) do
-    if entity ~= self and self.coord:distanceToCoord(entity.coord) < 100 then
-      entity:knockback(100, 0)
+  local dmg, rng = self.tool:use()
+  print("attacking")
+  if dmg ~= nil then
+    for key, entity in pairs(self.map.layers["Sprite Layer"].sprites) do
+      print(key, entity)
+      if entity ~= self and self.coord:distanceToCoord(entity.coord) < rng then
+        entity:knockback(5 * self.stats.strength, 0)
+        local killed = entity:harm(dmg)
+        if killed then
+          print("killed")
+          entity.body:destroy()
+          self.map.layers["Sprite Layer"].sprites[key] = nil
+        end
+      end
     end
   end
-
-
 end
 
 function Player:handleWeapons(dt)

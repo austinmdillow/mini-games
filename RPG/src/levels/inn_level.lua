@@ -11,6 +11,7 @@ function inn_level:enter()
   world = love.physics.newWorld(0,0)
   player:setPosition(300,300)
   player:initPhysics(world)
+	player:initMap(map)
   
 
   love.physics.setMeter(16)
@@ -52,6 +53,7 @@ function inn_level:draw()
 end
 
 function inn_level:keypressed(key)
+  player:keypressed(key)
   if key == 'p' then
     print_table(map)
   elseif key == "escape" then
