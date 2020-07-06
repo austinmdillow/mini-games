@@ -96,6 +96,9 @@ end
 function Player:keypressed(key)
   if key == "space" then
     self:attack()
+    local clip = love.audio.newSource("assets/sounds/RPG_Sound_Pack/battle/swing.wav", "static")
+    clip:play()
+
   elseif key == "e" then
     self.inventory:setActive(not self.inventory:getActive())
   end
