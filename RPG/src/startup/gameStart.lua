@@ -31,6 +31,7 @@ function gameStart()
   -- require common
   require("src.common.debug")
   require("src.common.draw_common")
+  require("src.common.update_common")
 
 
   PLAYER_SPAWN_LAYER = "PlayerSpawn"

@@ -16,6 +16,13 @@ function BoundingBox(box, tx, ty)
 		or  (box[1].x >= tx and box[2].y >= ty)
 		and (box[2].x <= tx and box[1].y <= ty)
 end
+
+function PointWithinRectangle(x_rect, y_rect, width, height, tx, ty)
+	return	(x_rect + width >= tx and y_rect + height >= ty)
+		and (x_rect <= tx and y_rect <= ty)
+		or  (x_rect >= tx and y_rect + height >= ty)
+		and (x_rect + width <= tx and y_rect <= ty)
+end
  
 function colinear(line, x, y, e)
 	e = e or 0.1

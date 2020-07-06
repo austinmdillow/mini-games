@@ -12,15 +12,15 @@ function Player:new(x_start, y_start)
   }
   self.inventory = Inventory()
   self.inventory:addItem(Axe(), 1)
-  self.inventory:addItem(Item(), 3)
   self.map = nil
   self.tool = Axe()
+  self.collider_height = 32
 end
 
 function Player:initPhysics(world)
   self.world = world
-  self.body = love.physics.newBody(world, self.coord.x, self.coord.y + self.image:getWidth()/2, 'dynamic')
-  self.shape = love.physics.newCircleShape(15)
+  self.body = love.physics.newBody(world, self.coord.x, self.coord.y, 'dynamic')
+  self.shape = love.physics.newCircleShape(self.collider_height / 2)
   self.fixture = love.physics.newFixture(self.body, self.shape)
   self.fixture:setFilterData(1,65535,-2)
   self.body:setMass(self.stats.size) -- set mass to 1 kg
@@ -83,14 +83,14 @@ function Player:update(dt)
   end
   local x_tmp, y_tmp = self.body:getPosition()
   self.coord.x = x_tmp
-  self.coord.y = y_tmp
+  self.coord.y = y_tmp + self.collider_height / 2
 
   self:handleWeapons(dt)
 end
 
 function Player:draw()
-  love.graphics.draw(self.image, self.coord.x - self.image:getWidth()/2, self.coord.y - self.image:getWidth()/2, self.r)
-  love.graphics.draw(self.inventory.item_list[4].image, self.coord.x, self.coord.y, 34)
+  love.graphics.draw(self.image, self.coord.x - self.image:getWidth()/2, self.coord.y - self.image:getHeight(), self.r)
+  --love.graphics.draw(self.inventory.item_list[1].image, self.coord.x + 5, self.coord.y - 40, 0)
 end
 
 function Player:keypressed(key)
@@ -117,6 +117,7 @@ function Player:attack()
       print(key, entity)
       if entity ~= self and self.coord:distanceToCoord(entity.coord) < rng then
         entity:knockback(5 * self.stats.strength, 0)
+        print("hit")
         local killed = entity:harm(dmg)
         if killed then
           print("killed")

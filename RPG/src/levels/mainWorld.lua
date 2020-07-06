@@ -42,18 +42,20 @@ end
 function mainWorld:draw()
   	-- Draw the map and all objects within
 	love.graphics.setColor(1, 1, 1)
-	local tx = camera.x - love.graphics.getWidth() / 2
-	local ty = camera.y - love.graphics.getHeight() / 2
-
+	camera.scale = 1
+	local tx = camera.x - love.graphics.getWidth() / 2 / camera.scale
+	local ty = camera.y - love.graphics.getHeight() / 2 / camera.scale
+	
 	map:draw(-tx, -ty, camera.scale, camera.scale)
 	
 	-- Draw Collision Map (useful for debugging)
 	love.graphics.setColor(1, 0, 0)
-	--map:box2d_draw(-tx, -ty, camera.scale, camera.scale)
+	--camera:attach()
+	map:box2d_draw(-tx, -ty, camera.scale, camera.scale)
 	drawCommon()
-	camera:attach()
-	drawBodies(world)
-	camera:detach()
+	
+	--drawBodies(world)
+	--camera:detach()
 	displayActions(map, player)
 end
 
@@ -66,4 +68,9 @@ function mainWorld:keypressed(key)
 	elseif key == "return" then
 		handleActions(map, player)
   end
+end
+
+function mainWorld:mousepressed(x, y, button, istouch, presses)
+	mousepressedCommon(x, y, button, istouch, presses)
+	--print(x, y)
 end

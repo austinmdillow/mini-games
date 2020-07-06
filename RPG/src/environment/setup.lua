@@ -30,7 +30,8 @@ function setupMap(m, w, layer_level)
 			sprite:update(dt)
     end
     camera.x = player.coord.x
-		camera.y = player.coord.y
+    camera.y = player.coord.y
+    camera.scale = 1
 	end
 
 	-- Draw callback for Custom Layer

@@ -25,3 +25,7 @@ function drawInventory(inventory)
   inventory:draw()
 end
 
+function resetColor()
+  love.graphics.setColor(COLORS.white)
+end
+
