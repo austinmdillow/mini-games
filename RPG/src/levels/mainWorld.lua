@@ -36,6 +36,7 @@ end
 function mainWorld:update(dt)
   world:update(dt)
 	map:update(dt)
+	updateCommon(dt)
 end
 
 
@@ -67,6 +68,14 @@ function mainWorld:keypressed(key)
 		Gamestate.switch(menu)
 	elseif key == "return" then
 		handleActions(map, player)
+	elseif key == "[" then
+		love.audio.setOrientation( 0, 0, -1, 0, 1, 0 )
+	elseif key == "]" then
+		love.audio.setOrientation( 0, 0, 1, 0, 1, 0 )
+	elseif key == "{" then
+		love.audio.setOrientation( 1, 0, 0, 0, 1, 0 )
+	elseif key == "}" then
+		love.audio.setOrientation( -1, 0, 0, 0, 1, 0 )
   end
 end
 

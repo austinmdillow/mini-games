@@ -20,7 +20,7 @@ end
 
 -- Quit Game
 local function quit_game()
-
+    love.event.quit()
 end
 
 function menu:draw()
@@ -33,7 +33,6 @@ end
 
 function menu:enter(previous)
     print(VERSION)
-
     love.graphics.setFont(love.graphics.newFont(20))
 
     mainmenu = menuengine.new(300,300)

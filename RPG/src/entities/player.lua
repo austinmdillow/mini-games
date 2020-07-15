@@ -49,22 +49,22 @@ function Player:update(dt)
   local vectorX = 0
   local vectorY = 0
   -- Keyboard direction checks for movement
-  if love.keyboard.isDown("left") then
+  if love.keyboard.isDown("left") or love.keyboard.isDown("a")then
     vectorX = -1
     --Player.anim = Player.animations.walkLeft
     self.dir = "left"
   end
-  if love.keyboard.isDown("right") then
+  if love.keyboard.isDown("right") or love.keyboard.isDown("d") then
       vectorX = 1
       --Player.anim = Player.animations.walkRight
       self.dir = "right"
   end
-  if love.keyboard.isDown("up") then
+  if love.keyboard.isDown("up") or love.keyboard.isDown("w") then
       vectorY = -1
       --Player.anim = Player.animations.walkUp
       self.dir = "up"
   end
-  if love.keyboard.isDown("down") then
+  if love.keyboard.isDown("down") or love.keyboard.isDown("s") then
       vectorY = 1
       --Player.anim = Player.animations.walkDown
       self.dir = "down"
@@ -84,18 +84,17 @@ function Player:update(dt)
   local x_tmp, y_tmp = self.body:getPosition()
   self.coord.x = x_tmp
   self.coord.y = y_tmp + self.collider_height / 2
-
-  self:handleWeapons(dt)
+  print(self.tool.last_use, self.tool.condition)
+  --self:handleWeapons(dt)
 end
 
 function Player:draw()
   love.graphics.draw(self.image, self.coord.x - self.image:getWidth()/2, self.coord.y - self.image:getHeight(), self.r)
-  --love.graphics.draw(self.inventory.item_list[1].image, self.coord.x + 5, self.coord.y - 40, 0)
 end
 
 function Player:keypressed(key)
   if key == "space" then
-    self:attack()
+    self.tool:attack(self, self.map)
     local clip = love.audio.newSource("assets/sounds/RPG_Sound_Pack/battle/swing.wav", "static")
     clip:play()
 
@@ -106,7 +105,7 @@ function Player:keypressed(key)
 end
 
 
-function Player:attack()
+function Player:attackOLD()
   --[[ self.weapon.hitbox.body = love.physics.newBody(self.world, self.coord.x + 10, self.coord.y, 'dynamic')
   self.weapon.hitbox.shape = love.physics.newCircleShape(15)
   self.weapon.hitbox.fixture = love.physics.newFixture(self.weapon.hitbox.body, self.weapon.hitbox.shape)

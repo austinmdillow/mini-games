@@ -1,6 +1,7 @@
 Entity = Object:extend()
 require("src.entities.weapon")
 require("src.entities.axe")
+require("src.entities.sword")
 
 function Entity:new(x_start, y_start)
   self.coord = Coord(x_start, y_start, 0)
@@ -8,6 +9,7 @@ function Entity:new(x_start, y_start)
   self.image = sprites.player_img
   self.stats = {
     hp = 100,
+    hp_max = 100,
     size = 100,
     strength = 10,
     food = 100,
@@ -22,6 +24,7 @@ function Entity:draw()
   else
     love.graphics.circle('line', self.coord.x, self.coord.y, 10)
   end
+  print("AHHHH")
 end
 
 function Entity:update(dt)
@@ -38,11 +41,21 @@ function Entity:getCoord()
   return self.coord
 end
 
+function Entity:die()
+  print(self, "has died")
+end
+
 function Entity:harm(damage)
   self.stats.hp = self.stats.hp - damage
   if (self.stats.hp <= 0) then
-    print(self, "has died")
+    self:die()
     return true
   end
   return false
+end
+
+function Entity:drawHealth(x_offset, y_offset)
+  local bar_width = 50
+  love.graphics.setColor(COLORS.red)
+  love.graphics.rectangle('fill', self.coord.x - bar_width / 2, self.coord.y - y_offset, self.stats.hp / self.stats.hp_max * bar_width, 5)
 end
