@@ -4,7 +4,7 @@ function Item:new()
   self.coord = nil
   self.image = sprites.player_img -- default image for an item
   self.isGarbage = false -- if true, it will be garbage collected in the map
-  print("Item Image", self.image)
+  --print("Item Image", self.image)
 end
 
 function Item:setImage(im)

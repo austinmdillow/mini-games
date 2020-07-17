@@ -27,7 +27,7 @@ function handleActions(map, entity)
 		active_selection.type = "door"
     active_selection.property = door.properties["Destination"]
     local destination = door.properties["destination"]
-    print(door.properties["destination"])
+    print("Door properties " .. door.properties["destination"])
     if destination == "inn" then
       Gamestate.switch(inn_level)
     elseif destination == "mainWorld" then
@@ -46,7 +46,7 @@ function displayActions(map, entity)
 		active_selection.text = "Press enter"
 		active_selection.type = "door"
 		active_selection.property = door.properties["Destination"]
-		print(door.properties["destination"])
+		--print(door.properties["destination"])
 	else
 		active_selection = {}
 	end

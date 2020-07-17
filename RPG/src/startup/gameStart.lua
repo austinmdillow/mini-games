@@ -6,6 +6,7 @@ function gameStart()
   sti = require "lib.sti"
   Camera = require "lib.hump.camera"
   Object = require "lib.classic"
+  anim8 = require 'lib.anim8.anim8'
   require("src.coord")
 
   -- import assets

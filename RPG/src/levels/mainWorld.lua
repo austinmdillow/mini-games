@@ -63,7 +63,7 @@ end
 function mainWorld:keypressed(key)
 	player:keypressed(key)
   if key == 'p' then
-    print_table(map)
+    --print_table(map)
   elseif key == "escape" then
 		Gamestate.switch(menu)
 	elseif key == "return" then

@@ -12,7 +12,7 @@ function Weapon:new()
 end
 
 function Weapon:use()
-  print(self.last_use)
+  print("Weapon last use time " .. self.last_use)
   if (love.timer.getTime() - self.last_use) > 1 / self.rate then
     self.last_use = love.timer.getTime()
     self.condition = self.condition - 1
@@ -37,10 +37,10 @@ function Weapon:attack(attacker, map) -- this should only be called by the playe
   self.weapon.hitbox.body:setMass(100) -- set mass to 1 kg
   self.weapon.hitbox.time_left = .5 ]]
   local dmg, rng = self:use()
-  print(dmg, rng)
+  print("Dmg rang ", dmg, rng)
   if dmg ~= nil then
     for key, entity in pairs(map.layers[SPRITE_LAYER].sprites) do
-      print(key, entity)
+      --print(key, entity)
       if entity ~= attacker and attacker.coord:distanceToCoord(entity.coord) < rng then
         entity:knockback(5 * attacker.stats.strength, 0)
         print("hit")
@@ -49,7 +49,6 @@ function Weapon:attack(attacker, map) -- this should only be called by the playe
           GAME_DATA.xp = GAME_DATA.xp + entity.stats.xp
           GAME_DATA.kills = GAME_DATA.kills + 1
         end
-        return killed
       end
     end
   end

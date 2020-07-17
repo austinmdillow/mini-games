@@ -6,6 +6,7 @@ Player = Entity:extend()
 function Player:new(x_start, y_start)
   Player.super.new(self, x_start, y_start)
   self.image = sprites.player_img
+  self.sheet = sprites.player_sheet
   self.speed = 200
   self.weapon = {
     hitbox = {}
@@ -15,6 +16,17 @@ function Player:new(x_start, y_start)
   self.map = nil
   self.tool = Axe()
   self.collider_height = 32
+  self.animations = {}
+  self:initAnimations()
+end
+
+function Player:initAnimations()
+  local grid = anim8.newGrid(32, 32, self.sheet:getWidth(), self.sheet:getHeight())
+  self.animations.walk_down = anim8.newAnimation(grid('1-4',1), 0.1)
+  self.animations.walk_up = anim8.newAnimation(grid('1-4',2), 0.1)
+  self.animations.walk_left = anim8.newAnimation(grid('1-4',3), 0.1)
+  self.animations.walk_right = anim8.newAnimation(grid('1-4',4), 0.1)
+  self.animations.current = self.animations.walk_down
 end
 
 function Player:initPhysics(world)
@@ -45,29 +57,28 @@ end
 
 function Player:update(dt)
   Player.super.update(self, dt)
-  --print(self.inventory.item_list[1])
-  --self.inventory.item_list[3]:print()
+
   local vectorX = 0
   local vectorY = 0
   -- Keyboard direction checks for movement
   if love.keyboard.isDown("left") or love.keyboard.isDown("a")then
     vectorX = -1
-    --Player.anim = Player.animations.walkLeft
+    self.animations.current = self.animations.walk_left
     self.dir = "left"
   end
   if love.keyboard.isDown("right") or love.keyboard.isDown("d") then
       vectorX = 1
-      --Player.anim = Player.animations.walkRight
+      self.animations.current = self.animations.walk_right
       self.dir = "right"
   end
   if love.keyboard.isDown("up") or love.keyboard.isDown("w") then
       vectorY = -1
-      --Player.anim = Player.animations.walkUp
+      self.animations.current = self.animations.walk_up
       self.dir = "up"
   end
   if love.keyboard.isDown("down") or love.keyboard.isDown("s") then
       vectorY = 1
-      --Player.anim = Player.animations.walkDown
+      self.animations.current = self.animations.walk_down
       self.dir = "down"
   end
 
@@ -85,8 +96,8 @@ function Player:update(dt)
   local x_tmp, y_tmp = self.body:getPosition()
   self.coord.x = x_tmp
   self.coord.y = y_tmp + self.collider_height / 2
-  print(self.tool.last_use, self.tool.condition)
   --self:handleWeapons(dt)
+  self.animations.current:update(dt)
 end
 
 function Player:draw()
@@ -94,6 +105,7 @@ function Player:draw()
   love.graphics.draw(self.image, self.coord.x - self.image:getWidth()/2, self.coord.y - self.image:getHeight(), self.r)
   self:drawHealth(0, 50)
   self:drawWeapon()
+  self.animations.current:draw(self.sheet, self.coord.x, self.coord.y)
 end
 
 function Player:keypressed(key)
@@ -110,32 +122,6 @@ function Player:die()
   Gamestate.switch(menu)
 end
 
-
-function Player:attackOLD()
-  --[[ self.weapon.hitbox.body = love.physics.newBody(self.world, self.coord.x + 10, self.coord.y, 'dynamic')
-  self.weapon.hitbox.shape = love.physics.newCircleShape(15)
-  self.weapon.hitbox.fixture = love.physics.newFixture(self.weapon.hitbox.body, self.weapon.hitbox.shape)
-  self.weapon.hitbox.fixture:setFilterData(1,65535,-2)
-  self.weapon.hitbox.body:setMass(100) -- set mass to 1 kg
-  self.weapon.hitbox.time_left = .5 ]]
-  local dmg, rng = self.tool:use()
-  print("attacking")
-  if dmg ~= nil then
-    for key, entity in pairs(self.map.layers["Sprite Layer"].sprites) do
-      print(key, entity)
-      if entity ~= self and self.coord:distanceToCoord(entity.coord) < rng then
-        entity:knockback(5 * self.stats.strength, 0)
-        print("hit")
-        local killed = entity:harm(dmg)
-        if killed then
-          print("killed")
-          entity.body:destroy()
-          self.map.layers["Sprite Layer"].sprites[key] = nil
-        end
-      end
-    end
-  end
-end
 
 function Player:handleWeapons(dt)
   local time_left = self.weapon.hitbox.time_left

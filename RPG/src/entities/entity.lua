@@ -27,7 +27,6 @@ function Entity:draw()
   else
     love.graphics.circle('line', self.coord.x, self.coord.y, 10)
   end
-  print("AHHHH")
 end
 
 function Entity:update(dt)

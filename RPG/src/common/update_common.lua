@@ -14,7 +14,6 @@ end
 function spawnCharacters(dt, map, world)
   local spriteLayer = map.layers[SPRITE_LAYER]
   for _, obj in pairs(map.layers[ENEMY_SPAWN_LAYER].objects) do
-    print(obj)
     if obj.properties["on_start"] == false and obj.shape == "point" and love.timer.getTime() - last_spawn_time > obj.properties["period"]then
       table.insert(spriteLayer.sprites, Enemy(obj.x, obj.y, world))
       last_spawn_time = love.timer.getTime()

@@ -36,3 +36,8 @@ end
 function Coord:distanceToCoord(coord)
   return math.sqrt((coord.x - self.x)^2 + (coord.y - self.y)^2)
 end
+
+function Coord:add(x_add, y_add)
+  self.x = self.x + x_add
+  self.y = self.y + y_add
+end

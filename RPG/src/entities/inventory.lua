@@ -144,7 +144,7 @@ end
 function Inventory:setActive(active)
   if type(active) == "boolean" then
     self.active = active
-    print(active)
+    --print(active)
   else
     LOG_ERROR("wrong type passed to Inventory:setActive(active)")
   end
