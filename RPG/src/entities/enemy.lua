@@ -20,6 +20,7 @@ function Enemy:initPhysics(world)
 end
 
 function Enemy:update(dt)
+Enemy.super.update(self, dt)
 local vectorX, vectorY
   if self.coord:distanceToCoord(player:getCoord()) < 200 then -- if we are close to the player
     vectorX, vectorY = self.coord:normalVectorToCoord(player:getCoord())
@@ -48,6 +49,7 @@ local vectorX, vectorY
 end
 
 function Enemy:draw()
+  love.graphics.setColor(COLORS.white)
   if self.image ~= nil then
     love.graphics.draw(self.image, self.coord.x - self.image:getWidth()/2, self.coord.y - self.image:getHeight())
     self:drawHealth(0, 35)

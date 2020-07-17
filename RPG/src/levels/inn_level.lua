@@ -32,6 +32,7 @@ end
 function inn_level:update(dt)
   world:update(dt)
 	map:update(dt)
+	updateCommon(dt, map, world)
 end
 
 
@@ -51,7 +52,8 @@ function inn_level:draw()
 	drawBodies(world)
 	camera:detach()
   displayActions(map, player)
-  drawDebugInfo()
+	drawDebugInfo()
+	drawCommon()
 end
 
 function inn_level:keypressed(key)

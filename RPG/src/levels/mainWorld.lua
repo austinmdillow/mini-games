@@ -36,7 +36,7 @@ end
 function mainWorld:update(dt)
   world:update(dt)
 	map:update(dt)
-	updateCommon(dt)
+	updateCommon(dt, map, world)
 end
 
 

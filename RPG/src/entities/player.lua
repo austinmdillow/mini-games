@@ -44,6 +44,7 @@ end
 
 
 function Player:update(dt)
+  Player.super.update(self, dt)
   --print(self.inventory.item_list[1])
   --self.inventory.item_list[3]:print()
   local vectorX = 0
@@ -89,19 +90,24 @@ function Player:update(dt)
 end
 
 function Player:draw()
+  love.graphics.setColor(COLORS.white)
   love.graphics.draw(self.image, self.coord.x - self.image:getWidth()/2, self.coord.y - self.image:getHeight(), self.r)
+  self:drawHealth(0, 50)
+  self:drawWeapon()
 end
 
 function Player:keypressed(key)
   if key == "space" then
     self.tool:attack(self, self.map)
-    local clip = love.audio.newSource("assets/sounds/RPG_Sound_Pack/battle/swing.wav", "static")
-    clip:play()
 
   elseif key == "e" then
     self.inventory:setActive(not self.inventory:getActive())
   end
 
+end
+
+function Player:die()
+  Gamestate.switch(menu)
 end
 
 
@@ -140,4 +146,13 @@ function Player:handleWeapons(dt)
       self.weapon.hitbox.time_left = nil -- let us know that it's done
     end
   end
+end
+
+function Player:drawWeapon()
+  local bar_width = 50
+  local x = math.floor(self.coord.x)
+  local y = math.floor(self.coord.y)
+  love.graphics.setColor(1,1,3)
+  love.graphics.rectangle('line', x - bar_width / 2, y+40, bar_width, 10)
+  love.graphics.rectangle('fill', x - bar_width / 2, y+40, self.tool:getRecharge() * bar_width, 10)
 end

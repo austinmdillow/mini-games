@@ -51,3 +51,6 @@ function displayActions(map, entity)
 		active_selection = {}
 	end
 end
+
+function addItemToMap(item, map)
+end

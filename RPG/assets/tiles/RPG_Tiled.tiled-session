@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "tilemaps/inn_map.tmx",
+    "activeFile": "tilemaps/main_world_map.tmx",
     "expandedProjectPaths": [
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
@@ -57,18 +57,18 @@
         },
         "tilemaps/inn_map.tmx": {
             "scale": 1.3048363095238094,
-            "selectedLayer": 2,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 387.40491532189094,
-                "y": 484.35194160916933
+                "x": 475.5385755830531,
+                "y": 376.29241033244006
             }
         },
         "tilemaps/main_world_map.tmx": {
             "scale": 1.5611,
-            "selectedLayer": 0,
+            "selectedLayer": 8,
             "viewCenter": {
-                "x": 104.09326756774067,
-                "y": 455.44808148100697
+                "x": 731.8557427455,
+                "y": 286.97713150983276
             }
         },
         "tilesets/RPG_tileset.tsx": {
@@ -91,8 +91,8 @@
     "property.type": "bool",
     "recentFiles": [
         "tilesets/RPG_tileset.tsx",
-        "tilemaps/main_world_map.tmx",
         "tilemaps/inn_map.tmx",
+        "tilemaps/main_world_map.tmx",
         "/home/austin/Github/mini-games/Tests/tileset_test/set.tsx",
         "/home/austin/Github/mini-games/Tests/tileset_test/1.tmx",
         "/home/austin/Github/mini-games/Tests/tileset_test/mini.tmx",

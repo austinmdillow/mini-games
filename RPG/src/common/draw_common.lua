@@ -17,8 +17,13 @@ function drawCommon()
 end
 
 function drawUI()
-  love.graphics.setColor(.1, .1, .1)
-  love.graphics.rectangle('fill', 0, frame_height, frame_width, 10)
+  local bar_height = 50
+  love.graphics.setColor(.3, .3, .3)
+  love.graphics.rectangle('fill', 0, frame_height - bar_height, frame_width, bar_height)
+
+  -- draw the score
+  love.graphics.setColor(COLORS.white)
+  love.graphics.print("Wallet " .. GAME_DATA.money .. ", Kills " .. GAME_DATA.kills .. ", XP " .. GAME_DATA.xp, 10, frame_height - bar_height / 2)
 end
 
 function drawInventory(inventory)

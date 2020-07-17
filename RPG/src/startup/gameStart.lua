@@ -22,6 +22,7 @@ function gameStart()
 
   -- require items
   require("src.entities.item")
+  require("src.entities.coin")
   require("src.entities.inventory")
 
   -- require entities
@@ -34,7 +35,11 @@ function gameStart()
   require("src.common.update_common")
 
 
+
+
   PLAYER_SPAWN_LAYER = "PlayerSpawn"
   ENEMY_SPAWN_LAYER = "EnemySpawn"
+  ITEM_LAYER = "ItemSpawn"
+  SPRITE_LAYER = "SpriteLayer"
 
 end

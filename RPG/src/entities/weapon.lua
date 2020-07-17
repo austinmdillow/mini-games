@@ -1,9 +1,9 @@
 Weapon = Item:extend()
 
 function Weapon:new()
-  Weapon.super:new()
+  Weapon.super.new(self)
   self.damage = 33
-  self.rate = 1.5 -- swings per second
+  self.rate = 1 -- swings per second
   self.durability = math.random(150-10, 150 + 10)
   self.condition = self.durability
   self.range = 44
@@ -25,7 +25,11 @@ function Weapon:getRange()
   return self.range
 end
 
-function Weapon:attack(attacker, map)
+function Weapon:getRecharge()
+  return math.min((love.timer.getTime() - self.last_use) * self.rate, 1) -- between 0 and 1
+end
+
+function Weapon:attack(attacker, map) -- this should only be called by the player
   --[[ self.weapon.hitbox.body = love.physics.newBody(self.world, self.coord.x + 10, self.coord.y, 'dynamic')
   self.weapon.hitbox.shape = love.physics.newCircleShape(15)
   self.weapon.hitbox.fixture = love.physics.newFixture(self.weapon.hitbox.body, self.weapon.hitbox.shape)
@@ -34,19 +38,18 @@ function Weapon:attack(attacker, map)
   self.weapon.hitbox.time_left = .5 ]]
   local dmg, rng = self:use()
   print(dmg, rng)
-  print("attacking")
   if dmg ~= nil then
-    for key, entity in pairs(map.layers["Sprite Layer"].sprites) do
+    for key, entity in pairs(map.layers[SPRITE_LAYER].sprites) do
       print(key, entity)
       if entity ~= attacker and attacker.coord:distanceToCoord(entity.coord) < rng then
         entity:knockback(5 * attacker.stats.strength, 0)
         print("hit")
         local killed = entity:harm(dmg)
-        if killed then
-          print("killed")
-          entity.body:destroy()
-          map.layers["Sprite Layer"].sprites[key] = nil
+        if killed == true then
+          GAME_DATA.xp = GAME_DATA.xp + entity.stats.xp
+          GAME_DATA.kills = GAME_DATA.kills + 1
         end
+        return killed
       end
     end
   end

@@ -7,10 +7,13 @@ function love.load()
   frame_width, frame_height = love.graphics.getDimensions()
   total_score = 0
 
-  gamedata = {
+  GAME_DATA = {
     location = 1,
+    money = 0,
+    kills = 0,
+    xp = 0,
     progression = {
-      xp = 0
+      xp = 0,
     },
     stats = {}
   }

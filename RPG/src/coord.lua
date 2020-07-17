@@ -1,9 +1,12 @@
 Coord = Object:extend()
 
 function Coord:new(x, y, dir)
-  self.x = x or 0
-  self.y = y or 0
-  self.dir = dir or 90
+  if x == nil or y == nil then
+    error("invalid x, y for Coord setup")
+  end
+  self.x = x
+  self.y = y
+  self.dir = dir or 0
 end
 
 function Coord:angleToPoint(x, y)

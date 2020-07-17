@@ -13,9 +13,12 @@ function Entity:new(x_start, y_start)
     size = 100,
     strength = 10,
     food = 100,
-    water = 100
+    water = 100,
+    xp = 10,
   }
   self.tool = nil
+  self.isGarbage = false
+  self.isDead = false
 end
 
 function Entity:draw()
@@ -28,7 +31,9 @@ function Entity:draw()
 end
 
 function Entity:update(dt)
-
+  if self.isDead == true then
+    self.isGarbage = true
+  end
 end
 
 function Entity:knockback(ix, iy)
@@ -43,6 +48,11 @@ end
 
 function Entity:die()
   print(self, "has died")
+  self.isDead = true
+end
+
+function Entity:garbage()
+  return self.isGarbage
 end
 
 function Entity:harm(damage)
