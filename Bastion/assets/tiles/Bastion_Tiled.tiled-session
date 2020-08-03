@@ -1,0 +1,112 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "/home/austin/Github/mini-games/RPG/assets/tiles/tilemaps/main_world_map.tmx",
+    "expandedProjectPaths": [
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "": {
+            "scaleInDock": 1
+        },
+        "/home/austin/Github/mini-games/RPG/assets/tiles/tilemaps/inn_map.tmx": {
+            "scale": 1.3048363095238094,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 320.7298853851857,
+                "y": 320.34669555796324
+            }
+        },
+        "/home/austin/Github/mini-games/RPG/assets/tiles/tilemaps/main_world_map.tmx": {
+            "scale": 1.5611,
+            "selectedLayer": 7,
+            "viewCenter": {
+                "x": 257.83101659086543,
+                "y": 477.22759592594963
+            }
+        },
+        "/home/austin/Github/mini-games/RPG/assets/tiles/tilesets/RPG_tileset.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "/home/austin/Github/mini-games/Tests/TileTest/untitled.tmx": {
+            "scale": 1,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 2804.5,
+                "y": 2954
+            }
+        },
+        "/home/austin/Github/mini-games/Tests/tileset_test/1.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 5,
+            "viewCenter": {
+                "x": 1599.6666666666665,
+                "y": 1600
+            }
+        },
+        "/home/austin/Github/mini-games/Tests/tileset_test/RPGpack_map.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "/home/austin/Github/mini-games/Tests/tileset_test/RPGpack_sheet2.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "/home/austin/Github/mini-games/Tests/tileset_test/mini.tmx": {
+            "scale": 1.9984,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 271.46717373899116,
+                "y": 311.7493995196157
+            }
+        },
+        "/home/austin/Github/mini-games/Tests/tileset_test/mymap.tmx": {
+            "scale": 1,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 492.5,
+                "y": 583
+            }
+        },
+        "/home/austin/Github/mini-games/Tests/tileset_test/set.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "frame.defaultDuration": 150,
+    "map.height": 20,
+    "map.lastUsedExportFilter": "Lua files (*.lua)",
+    "map.lastUsedFormat": "tmx",
+    "map.layerDataFormat": null,
+    "map.width": 40,
+    "openFiles": [
+        "/home/austin/Github/mini-games/RPG/assets/tiles/tilesets/RPG_tileset.tsx",
+        "/home/austin/Github/mini-games/RPG/assets/tiles/tilemaps/main_world_map.tmx",
+        "/home/austin/Github/mini-games/RPG/assets/tiles/tilemaps/inn_map.tmx"
+    ],
+    "project": "Bastion_Tiled.tiled-project",
+    "property.type": "bool",
+    "recentFiles": [
+        "/home/austin/Github/mini-games/RPG/assets/tiles/tilemaps/inn_map.tmx",
+        "/home/austin/Github/mini-games/RPG/assets/tiles/tilemaps/main_world_map.tmx",
+        "/home/austin/Github/mini-games/RPG/assets/tiles/tilesets/RPG_tileset.tsx",
+        "/home/austin/Github/mini-games/Tests/tileset_test/set.tsx",
+        "/home/austin/Github/mini-games/Tests/tileset_test/1.tmx",
+        "/home/austin/Github/mini-games/Tests/tileset_test/mini.tmx",
+        "/home/austin/Github/mini-games/Tests/tileset_test/RPGpack_sheet2.tsx",
+        "/home/austin/Github/mini-games/Tests/tileset_test/RPGpack_map.tsx",
+        "/home/austin/Github/mini-games/Tests/tileset_test/mymap.tmx",
+        "/home/austin/Github/mini-games/Tests/TileTest/untitled.tmx"
+    ],
+    "tileset.embedInMap": false,
+    "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)",
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    },
+    "tileset.type": 0
+}

@@ -5,6 +5,8 @@ function love.load()
 	gameStart()
   VERSION = "0.2"
   frame_width, frame_height = love.graphics.getDimensions()
+  field_width = frame_width - 100
+  field_heght = frame_height - 40
   total_score = 0
 
   GAME_DATA = {

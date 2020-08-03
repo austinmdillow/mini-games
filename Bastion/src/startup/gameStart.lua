@@ -14,6 +14,7 @@ function gameStart()
   
   require("src.environment.interactions")
   require("src.environment.setup")
+ 
 
   -- require all of the levels
   require("src.levels.menu")
@@ -27,6 +28,8 @@ function gameStart()
   require("src.entities.inventory")
   require("src.entities.walls")
 
+ 
+
   -- require entities
   require("src.entities.player")
   require("src.entities.enemy")
@@ -35,6 +38,8 @@ function gameStart()
   require("src.common.debug")
   require("src.common.draw_common")
   require("src.common.update_common")
+
+  require("src.environment.toolbar")
 
 
 

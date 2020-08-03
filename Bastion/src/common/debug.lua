@@ -31,6 +31,7 @@ end
 -- draw the box_2d bodies in a given world
 -- must use camera or something similar for alignment
 function drawBodies(world)
+	love.graphics.setColor(COLORS.orange)
 	local i = 0
 	for _, body in pairs(world:getBodies()) do
     for _, fixture in pairs(body:getFixtures()) do

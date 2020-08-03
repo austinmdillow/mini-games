@@ -1,8 +1,10 @@
 
 COLORS = {
+  black = {0, 0, 0},
   red = {1, 0, 0},
   white = {1,1,1},
-  green = {0, 1, 0}
+  green = {0, 1, 0},
+  orange = {255, 69, 0},
 }
 -- draws common elements that are needed during gameplay
 function drawCommon()
