@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "/home/austin/Github/mini-games/RPG/assets/tiles/tilemaps/main_world_map.tmx",
+    "activeFile": "tilemaps/level_1_seige.tmx",
     "expandedProjectPaths": [
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
@@ -74,6 +74,18 @@
         "/home/austin/Github/mini-games/Tests/tileset_test/set.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 1
+        },
+        "tilemaps/level_1_seige.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 342.3333333333333,
+                "y": 112.66666666666666
+            }
+        },
+        "tilesets/pixel_adventure_terrain.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 2
         }
     },
     "frame.defaultDuration": 150,
@@ -83,16 +95,18 @@
     "map.layerDataFormat": null,
     "map.width": 40,
     "openFiles": [
-        "/home/austin/Github/mini-games/RPG/assets/tiles/tilesets/RPG_tileset.tsx",
-        "/home/austin/Github/mini-games/RPG/assets/tiles/tilemaps/main_world_map.tmx",
-        "/home/austin/Github/mini-games/RPG/assets/tiles/tilemaps/inn_map.tmx"
+        "tilesets/pixel_adventure_terrain.tsx",
+        "tilemaps/level_1_seige.tmx",
+        "/home/austin/Github/mini-games/RPG/assets/tiles/tilesets/RPG_tileset.tsx"
     ],
     "project": "Bastion_Tiled.tiled-project",
-    "property.type": "bool",
+    "property.type": "string",
     "recentFiles": [
+        "tilesets/pixel_adventure_terrain.tsx",
+        "/home/austin/Github/mini-games/RPG/assets/tiles/tilesets/RPG_tileset.tsx",
+        "tilemaps/level_1_seige.tmx",
         "/home/austin/Github/mini-games/RPG/assets/tiles/tilemaps/inn_map.tmx",
         "/home/austin/Github/mini-games/RPG/assets/tiles/tilemaps/main_world_map.tmx",
-        "/home/austin/Github/mini-games/RPG/assets/tiles/tilesets/RPG_tileset.tsx",
         "/home/austin/Github/mini-games/Tests/tileset_test/set.tsx",
         "/home/austin/Github/mini-games/Tests/tileset_test/1.tmx",
         "/home/austin/Github/mini-games/Tests/tileset_test/mini.tmx",
