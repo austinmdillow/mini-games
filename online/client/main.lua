@@ -2,7 +2,7 @@ local count = 0
 local sock = require "lib.sock.sock"
 
 
-require "player"
+require "lib.mylove.player"
 
 local state = {
     local_player = Player(100,100),
@@ -75,6 +75,15 @@ function love.keypressed(key)
     count = count + 1
     client:send("count", count)
     print("down")
+
+    if key == " " then
+        client:send("bullet", {
+            x = state.local_player:getX(),
+            y = state.local_player:getY(),
+            dir = state.local_player:getDir(),
+            bullet_type = 1
+        })
+    end
 end
 
 

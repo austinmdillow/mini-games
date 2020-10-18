@@ -4,12 +4,16 @@
 local sock = require "lib.sock.sock"
 local count = 0
 local my_count = 0
-require "player"
+require "lib.mylove.player"
+require "lib.mylove.coord"
+require "bullet"
 
 game_data = {
     x_pos = 0,
     y_pos = 0,
-    clients = {}
+    clients = {},
+    enemies = {},
+    bullet_list = {}
 }
 local start_time = love.timer.getTime()
 
@@ -31,6 +35,8 @@ function love.load()
 
     server:on("update", onUpdateCallback)
 
+    server:on("bullet", onBulletCallback)
+
     server:on("disconnect", function(data, client)
         -- Send a message back to the connected client
         local msg = "failed"
@@ -49,6 +55,13 @@ function onUpdateCallback(data, client)
     game_data.clients[index]:setXYT(data.x, data.y, data.dir)
 end
 
+function onBulletCallback(data, client)
+    local index = client:getIndex()
+    print("index = ", index)
+    print("client = ", client)
+    print("connect id = ", client:getConnectId())
+    table.insert(game_data.bullet_list, Bullet(data.x, data.y, data.dir))
+end
 
 function love.update(dt)
     server:update()
@@ -70,10 +83,16 @@ function love.draw()
     love.graphics.print("Tx (kB) " .. server:getTotalSentData() / 1000 .. " " .. server:getTotalSentData() / 1000 / (love.timer.getTime() - start_time), 10, 3 * spacing)
     
     for index, player in ipairs(game_data.clients) do
-        print("printed coords", player:getX(), player:getY(), index)
-        print(index)
         love.graphics.setColor(player:getColor())
         love.graphics.circle('fill', player:getX(), player:getY(), 5)
+    end
+
+    for index, bullet in ipairs(game_data.bullet_list) do
+        print("bullet rpint" , index, bullet)
+        if bullet ~= nil then
+            love.graphics.setColor(bullet:getColor())
+            bullet:draw()
+        end
     end
     
 end

@@ -1,10 +1,9 @@
-require "lib.classic"
-require "coord"
-Object = require "lib.classic"
+require "lib.mylove.coord"
+Object = require "lib.mylove.classic"
 
-Player = Object:extend()
+Bullet = Object:extend()
 
-function Player:new(x_start, y_start)
+function Bullet:new(x_start, y_start)
   self.coord = Coord(x_start, y_start)
   self.max_speed = 100
   self.color = {1,0,0}
@@ -16,21 +15,14 @@ function Player:new(x_start, y_start)
   self.tail_number = "N7261" .. math.floor(love.math.random(0,10))
 end
 
-function Player:update(dt)
-    if love.keyboard.isDown("up") then self.current_speed = self.max_speed else self.current_speed = 0 end
-
-    if love.keyboard.isDown("right") then
-        self.coord:rotate(dt * self.roation_speed)
-    elseif love.keyboard.isDown("left") then
-        self.coord:rotate(-dt * self.roation_speed)
-    end
+function Bullet:update(dt)
 
     self.coord:moveForward(self.current_speed * dt)
 
-    print("Player location ", self.coord.x, self.coord.y)
+    print("Bullet location ", self.coord.x, self.coord.y)
 end
 
-function Player:draw()
+function Bullet:draw()
     love.graphics.setColor(self.color)
     love.graphics.push()
     love.graphics.translate(self.coord.x, self.coord.y)
@@ -41,42 +33,36 @@ function Player:draw()
     love.graphics.setColor(1,1,1)
 end
 
-function Player:print()
+function Bullet:print()
   print(self.x)
 end
 
-function Player:getX()
+function Bullet:getX()
 	return self.coord.x
 end
 
-function Player:getY()
+function Bullet:getY()
 	return self.coord.y
 end
 
-function Player:getDir()
+function Bullet:getDir()
     return self.coord.dir
 end
 
-function Player:setXY(x, y)
+function Bullet:setXY(x, y)
 	self.coord.x = x
 	self.coord.y = y
 end
 
-function Player:setXYT(x, y, t)
+function Bullet:setXYT(x, y, t)
     self:setXY(x, y)
     self.coord.dir = t
 end
 
-function Player:setColorRandom()
+function Bullet:setColorRandom()
 	self.color = {love.math.random(), love.math.random(), love.math.random()}
 end
 
-function Player:getColor()
+function Bullet:getColor()
 	return self.color
-end
-
-function Player:keypressed(key)
-  if key == " " then
-    print("space is down")
-  end
 end
