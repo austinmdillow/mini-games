@@ -1,8 +1,9 @@
 local count = 0
 local sock = require "lib.sock.sock"
 
-
+Object = require "lib.mylove.classic"
 require "lib.mylove.player"
+require "lib.mylove.coord"
 
 local state = {
     local_player = Player(100,100),
@@ -10,11 +11,13 @@ local state = {
     remote_player = {0, 0, 0}
 }
 
+local FRAME_WIDTH, FRAME_HEIGHT = love.graphics.getDimensions()
+
 -- client.lua
 function love.load()
     -- Creating a new client on localhost:22122
     client = sock.newClient("localhost", 22122)
-    FRAME_WIDTH, FRAME_HEIGHT = love.graphics.getDimensions()
+    
     
     -- Creating a client to connect to some ip address
     -- client = sock.newClient("198.51.100.0", 22122)
@@ -30,8 +33,10 @@ function love.load()
     end)
 
     client:on("allCoords", onAllCoordsCallback)
+    client:on("allBullets", onAllBulletsCallback)
 
     client:connect()
+
     
 end
 
@@ -54,6 +59,14 @@ function love.update(dt)
 end
 
 function love.draw()
+    if state.remote_player[1] ~= nil then
+        love.graphics.circle('line', state.remote_player[1], state.remote_player[2], 10)
+    end
+
+    drawDebug()
+end
+
+function drawDebug()
     local fps = love.timer.getFPS()
 
     love.graphics.setColor({.1,.1,.1})
@@ -64,19 +77,10 @@ function love.draw()
     love.graphics.print("FPS " .. fps, FRAME_WIDTH - 150, 40)
     state.local_player:draw()
     love.graphics.rectangle('fill', 400, 400, 10, 10)
-
-    if state.remote_player[1] ~= nil then
-        love.graphics.circle('line', state.remote_player[1], state.remote_player[2], 10)
-    end
 end
 
 function love.keypressed(key)
-    client:send("hi", "msg")
-    count = count + 1
-    client:send("count", count)
-    print("down")
-
-    if key == " " then
+    if key == "space" then
         client:send("bullet", {
             x = state.local_player:getX(),
             y = state.local_player:getY(),
@@ -93,4 +97,8 @@ function onAllCoordsCallback(data, client)
         state.remote_player[2] = data[1].y
         print(data[1].x, data[1].y)
     end
+end
+
+function onAllBulletsCallback(data, client)
+
 end

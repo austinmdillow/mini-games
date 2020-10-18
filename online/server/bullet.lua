@@ -3,21 +3,29 @@ Object = require "lib.mylove.classic"
 
 Bullet = Object:extend()
 
-function Bullet:new(x_start, y_start)
-  self.coord = Coord(x_start, y_start)
-  self.max_speed = 100
-  self.color = {1,0,0}
-  self.path = {}
-  self.radius = 10
-  self.current_speed = 0
+function Bullet:new(x_start, y_start, dir_start)
+  if type(x_start) == "table" then
+    if x_start:is(Coord) then
+      self.coord = Coord(x_start.x, x_start.y, x_start.dir)
+    end
+  else
+    self.coord = Coord(x_start, y_start, dir_start)
+  end
+  print("TYPE", type(x_start))
+  
+  print(x_start, y_start, dir_start)
+  self.max_speed = 300
+  self.color = {0,1,0}
+  self.current_speed = self.max_speed
   self.roation_speed = 3
-  self.size = 2
-  self.tail_number = "N7261" .. math.floor(love.math.random(0,10))
+  self.rotation_visual = 0
+  self.size = 5
 end
 
 function Bullet:update(dt)
 
     self.coord:moveForward(self.current_speed * dt)
+    self.rotation_visual =  self.rotation_visual + self.roation_speed + dt
 
     print("Bullet location ", self.coord.x, self.coord.y)
 end
@@ -26,9 +34,8 @@ function Bullet:draw()
     love.graphics.setColor(self.color)
     love.graphics.push()
     love.graphics.translate(self.coord.x, self.coord.y)
-    love.graphics.rotate(self.coord.dir)
-    love.graphics.polygon('line', self.size * -10, self.size * -10, 0, 0, self.size * -10, self.size * 10, self.size * 30, 0)
-    love.graphics.circle('fill', 0, 0, 1)
+    love.graphics.rotate(self.coord.dir + self.rotation_visual)
+    love.graphics.rectangle('line', -1 * self.size / 2, -1 * self.size / 2, self.size, self.size)
     love.graphics.pop()
     love.graphics.setColor(1,1,1)
 end
