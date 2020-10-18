@@ -11,6 +11,7 @@ game_data = {
     y_pos = 0,
     clients = {}
 }
+local start_time = love.timer.getTime()
 
 function love.load()
     -- Creating a server on any IP, port 22122
@@ -25,13 +26,8 @@ function love.load()
         print("Connected to a client with id ", client, index)
         game_data.clients[index] = Player(100,100)
         game_data.clients[index]:setColorRandom()
+        start_time = love.timer.getTime()
     end)
-
-    server:on("greeting", function(msg, client)
-        print("what") 
-    end )
-
-    server:on("count", onCountFunction)
 
     server:on("update", onUpdateCallback)
 
@@ -39,45 +35,18 @@ function love.load()
         -- Send a message back to the connected client
         local msg = "failed"
     end)
-
-    function newBall(x, y)
-        return {
-            x = x,
-            y = y,
-            vx = 150,
-            vy = 150,
-            w = 15,
-            h = 15,
-        }
-    end
-
-    local marginX = 50
-
-    scores = {0, 0}
-
-    ball = newBall(love.graphics.getWidth()/2, love.graphics.getHeight()/2)
         
 end
 
 
 
-function onCountFunction(data, client)
-    -- print(data)
-    count = count + 1
-    print("local Count ", count)
-    print("remote count ", data)
-end
 
 function onUpdateCallback(data, client)
     local index = client:getIndex()
     print("index = ", index)
     print("client = ", client)
     print("connect id = ", client:getConnectId())
-    print(data.x, data.y)
-    game_data.clients[index]:setXY(data.x, data.y)
-    print(game_data.clients[index]:getX())
-
-
+    game_data.clients[index]:setXYT(data.x, data.y, data.dir)
 end
 
 
@@ -86,13 +55,19 @@ function love.update(dt)
     --server:send("hello", "it's the server")
     --server:sendToAll("gameStarting", true)
     --print("People:", dump(game_data.clients))
+    local send_data = {}
+    for idx, player in ipairs(game_data.clients) do
+        send_data[idx] = player.coord
+    end
+    server:sendToAll("allCoords", send_data)
 end
+
 
 function love.draw()
     local spacing = 20
     love.graphics.print("Count " .. server:getClientCount(), 10, 1 * spacing)
-    love.graphics.print("RX " .. server:getTotalSentData(), 10, 2 * spacing)
-    love.graphics.print("Tx " .. server:getTotalReceivedData(), 10, 3 * spacing)
+    love.graphics.print("RX (kB) " .. server:getTotalReceivedData() / 1000 .. " " .. server:getTotalReceivedData() / 1000 / (love.timer.getTime() - start_time), 10, 2 * spacing)
+    love.graphics.print("Tx (kB) " .. server:getTotalSentData() / 1000 .. " " .. server:getTotalSentData() / 1000 / (love.timer.getTime() - start_time), 10, 3 * spacing)
     
     for index, player in ipairs(game_data.clients) do
         print("printed coords", player:getX(), player:getY(), index)

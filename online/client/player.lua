@@ -46,11 +46,11 @@ function Player:print()
 end
 
 function Player:getX()
-  return self.coord.x
+	return self.coord.x
 end
 
 function Player:getY()
-  return self.coord.y
+	return self.coord.y
 end
 
 function Player:getDir()
@@ -58,8 +58,8 @@ function Player:getDir()
 end
 
 function Player:setXY(x, y)
-  self.coord.x = x
-  self.coord.y = y
+	self.coord.x = x
+	self.coord.y = y
 end
 
 function Player:setXYT(x, y, t)
@@ -68,11 +68,11 @@ function Player:setXYT(x, y, t)
 end
 
 function Player:setColorRandom()
-  self.color = {love.math.random(), love.math.random(), love.math.random()}
+	self.color = {love.math.random(), love.math.random(), love.math.random()}
 end
 
 function Player:getColor()
-  return self.color
+	return self.color
 end
 
 function Player:keypressed(key)
