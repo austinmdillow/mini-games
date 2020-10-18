@@ -1,6 +1,6 @@
 local count = 0
 local sock = require "lib.sock.sock"
-
+ 
 -- client.lua
 function love.load()
     -- Creating a new client on localhost:22122
