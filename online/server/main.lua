@@ -102,6 +102,8 @@ function love.update(dt)
         end
     end
 
+    checkCollisions()
+
     server:sendToAll("allBullets", game_data.bullet_list)
     
 end
@@ -154,14 +156,33 @@ end
 
 function outOfBounds(coord)
     if coord.x < 0 or coord.x > game_data.map_properties.width then
-        return true
+        return false
     end
 
     if coord.y < 0 or coord.y > game_data.map_properties.height then
-        return true
+        return false
     end
 
     return false
+end
+
+function checkCollisions()
+
+    for idx_bullet, bullet in ipairs(game_data.bullet_list) do
+        local bullet_x, bullet_y = bullet:getXY()
+        for idx, player in ipairs(game_data.clients) do
+            if player.coord:distanceToPoint(bullet_x, bullet_y) < player.size then
+                print("Collision")
+            end
+        end
+
+        for idx, enemy in pairs(game_data.enemy_list) do
+            if enemy.coord:distanceToPoint(bullet_x, bullet_y) < enemy.size then
+                print("Collision")
+            end
+        end
+
+    end
 end
 
 function love.keypressed(key)

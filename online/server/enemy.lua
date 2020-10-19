@@ -27,7 +27,7 @@ function Enemy:update(dt)
 
     self.coord:moveForward(self.current_speed * dt)
 
-    print("Enemy location ", self.coord.x, self.coord.y)
+    -- print("Enemy location ", self.coord.x, self.coord.y)
     if self:fire() then return "fire" end
 end
 

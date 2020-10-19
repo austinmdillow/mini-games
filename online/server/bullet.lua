@@ -11,7 +11,7 @@ function Bullet:new(x_start, y_start, dir_start)
   else
     self.coord = Coord(x_start, y_start, dir_start)
   end
-  print("TYPE", type(x_start))
+  --print("TYPE", type(x_start))
   
   print(x_start, y_start, dir_start)
   self.max_speed = 300
@@ -26,8 +26,6 @@ function Bullet:update(dt)
 
     self.coord:moveForward(self.current_speed * dt)
     self.rotation_visual =  self.rotation_visual + self.roation_speed + dt
-
-    print("Bullet location ", self.coord.x, self.coord.y)
 end
 
 function Bullet:draw()
@@ -50,6 +48,10 @@ end
 
 function Bullet:getY()
 	return self.coord.y
+end
+
+function Bullet:getXY()
+  return self.coord.x, self.coord.y
 end
 
 function Bullet:getDir()
