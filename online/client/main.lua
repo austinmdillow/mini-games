@@ -2,8 +2,10 @@ local count = 0
 local sock = require "lib.sock.sock"
 
 Object = require "lib.mylove.classic"
+require "lib.mylove.entity"
 require "lib.mylove.player"
 require "lib.mylove.coord"
+
 
 local state = {
     local_player = Player(100,100),
@@ -52,7 +54,7 @@ function love.update(dt)
     end
     client:send("update", {x = state.local_player:getX(), 
         y = state.local_player:getY(),
-        dir = state.local_player:getDir()
+        t = state.local_player:getT()
     })
 
     state.local_player:update(dt)
@@ -84,7 +86,7 @@ function love.keypressed(key)
         client:send("bullet", {
             x = state.local_player:getX(),
             y = state.local_player:getY(),
-            dir = state.local_player:getDir(),
+            t = state.local_player:getT(),
             bullet_type = 1
         })
     end

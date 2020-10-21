@@ -7,14 +7,15 @@ local my_count = 0
 
 Object = require "lib.mylove.classic"
 Camera = require "lib.hump.camera"
+require "lib.mylove.entity"
 require "lib.mylove.player"
 require "lib.mylove.coord"
 require "bullet"
 require "enemy"
+lovebird = require "lib.mylove.lovebird"
+require "lib.mylove.colors"
 
 game_data = {
-    x_pos = 0,
-    y_pos = 0,
     clients = {},
     enemy_list = {},
     current_enemy_number = 0,
@@ -60,21 +61,16 @@ end
 
 function onUpdateCallback(data, client)
     local index = client:getIndex()
-    --print("index = ", index)
-    --print("client = ", client)
-    --print("connect id = ", client:getConnectId())
-    game_data.clients[index]:setXYT(data.x, data.y, data.dir)
+    game_data.clients[index]:setXYT(data.x, data.y, data.t)
 end
 
 function onBulletCallback(data, client)
     local index = client:getIndex()
-    --print("index = ", index)
-    --print("client = ", client)
-    --print("connect id = ", client:getConnectId())
-    table.insert(game_data.bullet_list, Bullet(data.x, data.y, data.dir))
+    table.insert(game_data.bullet_list, Bullet(data.x, data.y, data.t))
 end
 
 function love.update(dt)
+    lovebird.update()
     server:update()
     --server:send("hello", "it's the server")
     --server:sendToAll("gameStarting", true)
@@ -98,7 +94,9 @@ function love.update(dt)
     for key, enemy in pairs(game_data.enemy_list) do
         local result = enemy:update(dt)
         if result == "fire" then
-            table.insert(game_data.bullet_list, Bullet(enemy.coord))
+            local tmp_bullet = Bullet(enemy.coord)
+            tmp_bullet:setTeamAndSource(-1, key)
+            table.insert(game_data.bullet_list, tmp_bullet)
         end
     end
 
@@ -113,15 +111,12 @@ function love.draw()
     camera:attach()
 
     for index, player in ipairs(game_data.clients) do
-        love.graphics.setColor(player:getColor())
-        love.graphics.circle('fill', player:getX(), player:getY(), 5)
+        player:draw()
     end
 
     for index, enemy in pairs(game_data.enemy_list) do
         enemy:draw()
-        --print(index, enemy)
     end
-    --print(#game_data.enemy_list)
 
     for index, bullet in ipairs(game_data.bullet_list) do
         --print("bullet rpint" , index, bullet)
@@ -131,7 +126,6 @@ function love.draw()
     end
     drawBoundaries()
     camera:detach()
-
     
     drawDebug()
     
@@ -156,40 +150,48 @@ end
 
 function outOfBounds(coord)
     if coord.x < 0 or coord.x > game_data.map_properties.width then
-        return false
+        return true
     end
 
     if coord.y < 0 or coord.y > game_data.map_properties.height then
-        return false
+        return true
     end
 
     return false
 end
 
 function checkCollisions()
-
+    local start_time_col = love.timer.getTime()
     for idx_bullet, bullet in ipairs(game_data.bullet_list) do
         local bullet_x, bullet_y = bullet:getXY()
         for idx, player in ipairs(game_data.clients) do
             if player.coord:distanceToPoint(bullet_x, bullet_y) < player.size then
-                print("Collision")
+                --print("Collision")
             end
         end
 
         for idx, enemy in pairs(game_data.enemy_list) do
-            if enemy.coord:distanceToPoint(bullet_x, bullet_y) < enemy.size then
-                print("Collision")
+            if enemy.team ~= bullet.team and enemy.coord:distanceToPoint(bullet_x, bullet_y) < enemy.size then
+                if enemy:damage(bullet.damage) then -- the bullet killed the enemy
+                    --table.remove(game_data.enemy_list, idx)
+                    game_data.enemy_list[idx] = nil
+                    print("KILLLLEEDDD")
+                end
             end
         end
 
     end
+    local end_time_col = love.timer.getTime()
+    print(end_time_col - start_time_col)
 end
 
 function love.keypressed(key)
     if key == "e" then
         game_data.current_enemy_number = game_data.current_enemy_number + 1
         --table.insert(game_data.enemy_list, game_data.current_enemy_number, Enemy(500,500))
-        game_data.enemy_list[tostring(game_data.current_enemy_number)] = Enemy(500, 500)
+        local tmp_enemy = Enemy(love.math.random(500), love.math.random(500))
+        tmp_enemy.id = game_data.current_enemy_number
+        game_data.enemy_list[game_data.current_enemy_number] = tmp_enemy
     end
 
     if key == "d" then

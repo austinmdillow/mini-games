@@ -4,9 +4,3 @@
 [submodule "online/lib/sock.lua"]
 	path = online/lib/sock.lua
 	url = https://github.com/camchenry/sock.lua.git
-[submodule "online/client/lib/mylove"]
-	path = online/client/lib/mylove
-	url = https://github.com/austinmdillow/mylove.git
-[submodule "online/server/lib/mylove"]
-	path = online/server/lib/mylove
-	url = https://github.com/austinmdillow/mylove.git
