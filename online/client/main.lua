@@ -10,6 +10,7 @@ require "lib.mylove.coord"
 local state = {
     local_player = Player(100,100),
     bullet_list = {},
+    ship_list = {},
     remote_player = {0, 0, 0}
 }
 
@@ -18,7 +19,7 @@ local FRAME_WIDTH, FRAME_HEIGHT = love.graphics.getDimensions()
 -- client.lua
 function love.load()
     -- Creating a new client on localhost:22122
-    client = sock.newClient("localhost", 22122)
+    client = sock.newClient("*", 22122)
     
     
     -- Creating a client to connect to some ip address
@@ -28,14 +29,17 @@ function love.load()
     client:on("connect", function(data)
         print("Client connected to the server.")
     end)
+
+    client:on("initData", onInitDataCallback)
     
     -- Called when the client disconnects from the server
     client:on("disconnect", function(data)
         print("Client disconnected from the server.")
     end)
 
-    client:on("allCoords", onAllCoordsCallback)
+    client:on("allShips", onAllShipsCallback)
     client:on("allBullets", onAllBulletsCallback)
+    client:on("singleBullet", onSingleBulletCallback)
 
     client:connect()
 
@@ -43,16 +47,11 @@ function love.load()
 end
 
 function love.update(dt)
+    state.bullet_list = {}
     client:update()
-    local mouseY = love.mouse.getY()
-    local mouseX = love.mouse.getX()
-    if mouseY == nil then
-        mouseY = 0
-    end
-    if mouseX == nil then
-        mouseX = 0
-    end
-    client:send("update", {x = state.local_player:getX(), 
+
+    client:send("update", {
+        x = state.local_player:getX(), 
         y = state.local_player:getY(),
         t = state.local_player:getT()
     })
@@ -63,6 +62,14 @@ end
 function love.draw()
     if state.remote_player[1] ~= nil then
         love.graphics.circle('line', state.remote_player[1], state.remote_player[2], 10)
+    end
+
+    for idx, bullet in ipairs(state.bullet_list) do
+        love.graphics.circle('fill', bullet.x, bullet.y, 5)
+    end
+
+    for idx, ship in ipairs(state.ship_list) do
+        love.graphics.circle('line', ship.x, ship.y, 9)
     end
 
     drawDebug()
@@ -82,6 +89,7 @@ function drawDebug()
 end
 
 function love.keypressed(key)
+    print(key)
     if key == "space" then
         client:send("bullet", {
             x = state.local_player:getX(),
@@ -93,14 +101,24 @@ function love.keypressed(key)
 end
 
 
-function onAllCoordsCallback(data, client)
+function onAllShipsCallback(data, client)
     if data[1] ~= nil then
         state.remote_player[1] = data[1].x
         state.remote_player[2] = data[1].y
-        print(data[1].x, data[1].y)
+        --print(data[1].x, data[1].y)
     end
+
+    state.ship_list = data
 end
 
 function onAllBulletsCallback(data, client)
+    state.bullet_list = data
+end
 
+function onSingleBulletCallback(data, client)
+    table.insert(state.bullet_list, data)
+end
+
+function onInitDataCallback(data, client)
+    print(data)
 end

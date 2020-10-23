@@ -18,6 +18,7 @@ function Player:new(x_start, y_start)
   self.collider_height = 32
   self.animations = {}
   self:initAnimations()
+  self.score = 0
 end
 
 function Player:initAnimations()

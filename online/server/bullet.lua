@@ -35,3 +35,7 @@ function Bullet:setTeamAndSource(team, source)
   self.team = team
   self.source = source
 end
+
+function Bullet:setId( new_id )
+  self.id = new_id
+end

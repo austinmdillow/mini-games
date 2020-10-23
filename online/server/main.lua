@@ -15,8 +15,8 @@ require "enemy"
 lovebird = require "lib.mylove.lovebird"
 require "lib.mylove.colors"
 
-game_data = {
-    clients = {},
+local game_data = {
+    client_list = {},
     enemy_list = {},
     current_enemy_number = 0,
     bullet_list = {},
@@ -24,6 +24,14 @@ game_data = {
         width = 2000,
         height = 1000
     }
+}
+
+local debug_data = {
+    rxtx_alpha = .1,
+    last_rx = 0,
+    rx_rate = 0,
+    last_tx = 0,
+    tx_rate = 0
 }
 
 local start_time = love.timer.getTime()
@@ -34,16 +42,7 @@ function love.load()
     server = sock.newServer("*", 22122)
     
     -- Called when someone connects to the server
-    server:on("connect", function(data, client)
-        -- Send a message back to the connected client
-        local index = client:getIndex()
-        local msg = "Hello from the server!"
-        client:send("hello", msg)
-        print("Connected to a client with id ", client, index)
-        game_data.clients[index] = Player(100,100)
-        game_data.clients[index]:setColorRandom()
-        start_time = love.timer.getTime()
-    end)
+    server:on("connect", onNewConnectionCallback)
 
     server:on("update", onUpdateCallback)
 
@@ -57,31 +56,40 @@ function love.load()
 end
 
 
-
-
 function onUpdateCallback(data, client)
+    --print(#game_data.client_list)
     local index = client:getIndex()
-    game_data.clients[index]:setXYT(data.x, data.y, data.t)
+    if game_data.client_list[index] ~= nil then
+        game_data.client_list[index]:setXYT(data.x, data.y, data.t)
+    else
+        print("NIL")
+    end
 end
 
 function onBulletCallback(data, client)
     local index = client:getIndex()
-    table.insert(game_data.bullet_list, Bullet(data.x, data.y, data.t))
+    local tmp_bullet = Bullet(data.x, data.y, data.t)
+    tmp_bullet.setId(client:getConnectId())
+    table.insert(game_data.bullet_list, tmp_bullet)
+end
+
+function onNewConnectionCallback(data, client)
+    -- Send a message back to the connected client
+    local index = client:getIndex()
+    local msg = "Hello from the server!"
+    client:send("initData", msg)
+    print("Connected to a client with id ", client:getConnectId(), client:getAddress(), index)
+    game_data.client_list[index] = Player(100,100)
+    game_data.client_list[index]:setColorRandom()
+    start_time = love.timer.getTime()
 end
 
 function love.update(dt)
     lovebird.update()
     server:update()
-    --server:send("hello", "it's the server")
-    --server:sendToAll("gameStarting", true)
-    --print("People:", dump(game_data.clients))
-    local send_data = {}
-    for idx, player in ipairs(game_data.clients) do
-        send_data[idx] = player.coord
-        local dx,dy = player.coord.x - camera.x, player.coord.y - camera.y
-        camera:move(dx/2, dy/2)
-    end
-    server:sendToAll("allCoords", send_data)
+    local tmp_player = game_data.client_list[1]
+    --local dx,dy = tmp_player.coord.x - camera.x, tmp_player.coord.y - camera.y
+    --camera:move(dx/2, dy/2)
 
     for idx, bullet in ipairs(game_data.bullet_list) do
         bullet:update(dt)
@@ -101,16 +109,58 @@ function love.update(dt)
     end
 
     checkCollisions()
+    sendclient_listData()
 
-    server:sendToAll("allBullets", game_data.bullet_list)
+    --server:sendToAll("allBullets", game_data.bullet_list)
     
+end
+
+function sendclient_listData()
+    local send_ships = {}
+    -- loop through players
+    for idx, player in ipairs(game_data.client_list) do
+        local packet = {
+            team = player.team,
+            x = player.coord:getX(),
+            y = player.coord:getY(),
+            color = player.color
+        }
+        table.insert(send_ships, packet)
+    end
+
+    for idx, enemy in pairs(game_data.enemy_list) do
+        local packet = {
+            team = enemy.team,
+            x = enemy.coord:getX(),
+            y = enemy.coord:getY(),
+            color = enemy.color
+        }
+        table.insert(send_ships, packet)
+    end
+
+    server:sendToAll("allShips", send_ships)
+
+    local send_bullets = {}
+
+
+    -- loop through bullets
+    for idx, bullet in ipairs(game_data.bullet_list) do
+        local packet = {
+            x = bullet.coord:getX(), --x
+            y = bullet.coord:getY(), --y
+            color = bullet.color --color
+        }
+        table.insert(send_bullets, packet)
+        --server:sendToAll("singleBullet", packet)
+    end
+    server:sendToAll("allBullets", send_bullets)
 end
 
 
 function love.draw()
     camera:attach()
 
-    for index, player in ipairs(game_data.clients) do
+    for index, player in ipairs(game_data.client_list) do
         player:draw()
     end
 
@@ -134,9 +184,17 @@ end
 function drawDebug()
     love.graphics.setColor(1,1,1)
     local spacing = 20
+    local new_rx_rate = ((server:getTotalReceivedData() - debug_data.last_rx) / 60 ) / 1000 -- calclate instant rate
+    local new_tx_rate = ((server:getTotalSentData() - debug_data.last_tx) / 60 ) / 1000
+    debug_data.rx_rate = new_rx_rate  * debug_data.rxtx_alpha + debug_data.rx_rate * (1 - debug_data.rxtx_alpha) -- moving average
+    debug_data.tx_rate = new_tx_rate  * debug_data.rxtx_alpha + debug_data.tx_rate * (1 - debug_data.rxtx_alpha)
+
     love.graphics.print("Count " .. server:getClientCount(), 10, 1 * spacing)
-    love.graphics.print("RX (kB) " .. server:getTotalReceivedData() / 1000 .. " " .. server:getTotalReceivedData() / 1000 / (love.timer.getTime() - start_time), 10, 2 * spacing)
+    love.graphics.print("RX (kB) " .. server:getTotalReceivedData() / 1000 .. " " .. debug_data.rx_rate, 10, 2 * spacing)
     love.graphics.print("Tx (kB) " .. server:getTotalSentData() / 1000 .. " " .. server:getTotalSentData() / 1000 / (love.timer.getTime() - start_time), 10, 3 * spacing)
+
+    debug_data.last_rx = server:getTotalReceivedData() -- update the amount of sent/received data
+    debug_data.last_tx = server:getTotalSentData()
 
     local x_offest = 100
     love.graphics.print("# bullets " .. #game_data.bullet_list, FRAME_WIDTH - x_offest, 1 * spacing)
@@ -164,7 +222,7 @@ function checkCollisions()
     local start_time_col = love.timer.getTime()
     for idx_bullet, bullet in ipairs(game_data.bullet_list) do
         local bullet_x, bullet_y = bullet:getXY()
-        for idx, player in ipairs(game_data.clients) do
+        for idx, player in ipairs(game_data.client_list) do
             if player.coord:distanceToPoint(bullet_x, bullet_y) < player.size then
                 --print("Collision")
             end
@@ -174,6 +232,8 @@ function checkCollisions()
             if enemy.team ~= bullet.team and enemy.coord:distanceToPoint(bullet_x, bullet_y) < enemy.size then
                 if enemy:damage(bullet.damage) then -- the bullet killed the enemy
                     --table.remove(game_data.enemy_list, idx)
+                    for player in client_list do
+                        if player:getConnectId() == 
                     game_data.enemy_list[idx] = nil
                     print("KILLLLEEDDD")
                 end
@@ -182,7 +242,7 @@ function checkCollisions()
 
     end
     local end_time_col = love.timer.getTime()
-    print(end_time_col - start_time_col)
+    --print(end_time_col - start_time_col)
 end
 
 function love.keypressed(key)
