@@ -19,7 +19,7 @@ local FRAME_WIDTH, FRAME_HEIGHT = love.graphics.getDimensions()
 -- client.lua
 function love.load()
     -- Creating a new client on localhost:22122
-    client = sock.newClient("*", 22122)
+    client = sock.newClient("192.168.0.10", 22122)
     
     
     -- Creating a client to connect to some ip address

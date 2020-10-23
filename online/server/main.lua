@@ -39,7 +39,7 @@ local FRAME_WIDTH, FRAME_HEIGHT = love.graphics.getDimensions()
 
 function love.load()
     -- Creating a server on any IP, port 22122
-    server = sock.newServer("*", 22122)
+    server = sock.newServer("192.168.0.10", 22122)
     
     -- Called when someone connects to the server
     server:on("connect", onNewConnectionCallback)
@@ -69,7 +69,7 @@ end
 function onBulletCallback(data, client)
     local index = client:getIndex()
     local tmp_bullet = Bullet(data.x, data.y, data.t)
-    tmp_bullet.setId(client:getConnectId())
+    tmp_bullet:setId(client:getConnectId())
     table.insert(game_data.bullet_list, tmp_bullet)
 end
 
@@ -232,8 +232,6 @@ function checkCollisions()
             if enemy.team ~= bullet.team and enemy.coord:distanceToPoint(bullet_x, bullet_y) < enemy.size then
                 if enemy:damage(bullet.damage) then -- the bullet killed the enemy
                     --table.remove(game_data.enemy_list, idx)
-                    for player in client_list do
-                        if player:getConnectId() == 
                     game_data.enemy_list[idx] = nil
                     print("KILLLLEEDDD")
                 end
