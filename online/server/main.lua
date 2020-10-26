@@ -4,19 +4,24 @@
 local sock = require "lib.sock.sock"
 local count = 0
 local my_count = 0
+local start_time = 0
 
 Object = require "lib.mylove.classic"
 Camera = require "lib.hump.camera"
 require "lib.mylove.entity"
+require "lib.mylove.ship"
 require "lib.mylove.player"
 require "lib.mylove.coord"
 require "bullet"
 require "enemy"
 lovebird = require "lib.mylove.lovebird"
 require "lib.mylove.colors"
+require "serverCallbacks"
 
 local game_data = {
+    mode = "single",
     client_list = {},
+    local_player = nil,
     enemy_list = {},
     current_enemy_number = 0,
     bullet_list = {},
@@ -38,58 +43,41 @@ local start_time = love.timer.getTime()
 local FRAME_WIDTH, FRAME_HEIGHT = love.graphics.getDimensions()
 
 function love.load()
-    -- Creating a server on any IP, port 22122
-    server = sock.newServer("192.168.0.10", 22122)
-    
-    -- Called when someone connects to the server
-    server:on("connect", onNewConnectionCallback)
+    if game_data.mode == "single" then
+        game_data.local_player = Player(200, 200)
+    elseif game_data.mode == "online" then
+        -- Creating a server on any IP, port 22122
+        server = sock.newServer("192.168.0.10", 22122)
+        
+        -- Called when someone connects to the server
+        server:on("connect", onNewConnectionCallback)
 
-    server:on("update", onUpdateCallback)
+        server:on("update", onUpdateCallback)
 
-    server:on("bullet", onBulletCallback)
+        server:on("bullet", onBulletCallback)
 
-    server:on("disconnect", function(data, client)
-        -- Send a message back to the connected client
-        local msg = "failed"
-    end)
+        server:on("disconnect", function(data, client)
+            -- Send a message back to the connected client
+            local msg = "failed"
+        end)
+    end
     camera = Camera(400,400)
 end
 
 
-function onUpdateCallback(data, client)
-    --print(#game_data.client_list)
-    local index = client:getIndex()
-    if game_data.client_list[index] ~= nil then
-        game_data.client_list[index]:setXYT(data.x, data.y, data.t)
-    else
-        print("NIL")
-    end
-end
-
-function onBulletCallback(data, client)
-    local index = client:getIndex()
-    local tmp_bullet = Bullet(data.x, data.y, data.t)
-    tmp_bullet:setId(client:getConnectId())
-    table.insert(game_data.bullet_list, tmp_bullet)
-end
-
-function onNewConnectionCallback(data, client)
-    -- Send a message back to the connected client
-    local index = client:getIndex()
-    local msg = "Hello from the server!"
-    client:send("initData", msg)
-    print("Connected to a client with id ", client:getConnectId(), client:getAddress(), index)
-    game_data.client_list[index] = Player(100,100)
-    game_data.client_list[index]:setColorRandom()
-    start_time = love.timer.getTime()
-end
 
 function love.update(dt)
-    lovebird.update()
-    server:update()
-    local tmp_player = game_data.client_list[1]
-    --local dx,dy = tmp_player.coord.x - camera.x, tmp_player.coord.y - camera.y
-    --camera:move(dx/2, dy/2)
+    --lovebird.update()
+    if game_data.mode == "online" then
+        server:update()
+    end
+
+    if game_data.mode =="single" then
+        game_data.local_player:update(dt)
+        local dx,dy = game_data.local_player.coord.x - camera.x, game_data.local_player:getY() - camera.y
+        camera:move(dx/2, dy/2)
+    end
+    
 
     for idx, bullet in ipairs(game_data.bullet_list) do
         bullet:update(dt)
@@ -109,9 +97,11 @@ function love.update(dt)
     end
 
     checkCollisions()
-    sendclient_listData()
 
-    --server:sendToAll("allBullets", game_data.bullet_list)
+    if game_data.mode == "online" then
+        sendclient_listData()
+    end
+
     
 end
 
@@ -160,8 +150,12 @@ end
 function love.draw()
     camera:attach()
 
-    for index, player in ipairs(game_data.client_list) do
-        player:draw()
+    if game_data.mode == "online" then
+        for index, ship in ipairs(game_data.client_list) do
+            ship:draw()
+        end
+    elseif game_data.mode == "single" then
+        game_data.local_player:draw()
     end
 
     for index, enemy in pairs(game_data.enemy_list) do
@@ -177,11 +171,15 @@ function love.draw()
     drawBoundaries()
     camera:detach()
     
-    drawDebug()
+    if game_data.mode == "server" then
+        drawServerDebug()
+    elseif game_data.mode == "single" then
+        
+    end
     
 end
 
-function drawDebug()
+function drawServerDebug()
     love.graphics.setColor(1,1,1)
     local spacing = 20
     local new_rx_rate = ((server:getTotalReceivedData() - debug_data.last_rx) / 60 ) / 1000 -- calclate instant rate
@@ -252,7 +250,7 @@ function love.keypressed(key)
         game_data.enemy_list[game_data.current_enemy_number] = tmp_enemy
     end
 
-    if key == "d" then
-        game_data.enemy_list["1"] = nil
+    if game_data.mode == "single" then
+        local result = game_data.local_player:keypressed(key)
     end
 end
