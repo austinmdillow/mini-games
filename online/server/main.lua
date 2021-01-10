@@ -99,6 +99,8 @@ function love.update(dt)
     end
 
     checkCollisions()
+    generateEnemies(dt)
+    updateHud(dt)
 
     if game_data.mode == "online" then
         sendclient_listData()
@@ -197,6 +199,17 @@ function checkCollisions()
     end
     local end_time_col = love.timer.getTime()
     --print(end_time_col - start_time_col)
+end
+
+function generateEnemies(dt)
+    local random_num = love.math.randomNormal(1/dt/3, 0)
+    print(random_num, 1/dt)
+    if random_num > 1 / dt then
+        game_data.current_enemy_number = game_data.current_enemy_number + 1
+        local tmp_enemy = Enemy(love.math.random(500), love.math.random(500))
+        tmp_enemy.id = game_data.current_enemy_number
+        game_data.enemy_list[game_data.current_enemy_number] = tmp_enemy
+    end
 end
 
 function love.keypressed(key)
