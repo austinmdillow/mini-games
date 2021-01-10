@@ -3,6 +3,7 @@ require "lib.mylove.coord"
 require "lib.mylove.entity"
 require "lib.mylove.colors"
 require "bullet"
+require "enemy"
 
 local FRAME_WIDTH, FRAME_HEIGHT = love.graphics.getDimensions()
 local PLAYER = {
@@ -19,7 +20,9 @@ local GAME_DATA = {
   score = 0
 }
 
-local bullet_list = {}
+bullet_list = {}
+
+local enemy_list = {}
 
 
 function love.load()
@@ -64,7 +67,11 @@ function love.update(dt)
       table.remove(bullet_list, idx)
       print("death")
     end
-  end   
+  end
+  
+  for idx, enemy in pairs(enemy_list) do
+    enemy:update(dt)
+  end
 
 end
 
@@ -81,10 +88,20 @@ function love.draw()
     bullet:draw()
   end
 
+  for idx, enemy in pairs(enemy_list) do
+    enemy:draw()
+  end
+
 end
 
 function love.keypressed(key)
   if key == "space" then 
     table.insert(bullet_list, Bullet(PLAYER.x_pos, PLAYER.y_pos))
+  end 
+
+  if key == "e" then 
+    local enemy_x = FRAME_WIDTH - 200 
+    local enemy_y = love.math.randomNormal(10, 100)
+    table.insert(enemy_list, Enemy(enemy_x, enemy_y))
   end 
 end
