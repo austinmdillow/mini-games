@@ -10,9 +10,12 @@ function Bullet:new(x_start, y_start, dir_start)
   self.team = nil
   self.source_id = nil
   self.damage = 45
+  self.time_alive = 0
+  self.time_to_death = 2
 end
 
 function Bullet:update(dt)
+    self.time_alive = self.time_alive + dt
     self.coord:moveForward(self.max_speed * dt)
     self.rotation_visual = self.rotation_visual + self.roation_speed + dt
 end
@@ -38,4 +41,9 @@ end
 
 function Bullet:setId( new_id )
   self.source_id = new_id
+end
+
+-- the bullet has been around for too long
+function Bullet:dead()
+ return self.time_alive > self.time_to_death
 end

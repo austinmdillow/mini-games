@@ -9,19 +9,22 @@ local start_time = 0
 Object = require "lib.mylove.classic"
 Camera = require "lib.hump.camera"
 require "lib.mylove.entity"
-require "lib.mylove.ship"
-require "lib.mylove.player"
+require "ship"
+require "player"
 require "lib.mylove.coord"
 require "bullet"
 require "enemy"
 lovebird = require "lib.mylove.lovebird"
 require "lib.mylove.colors"
 require "serverCallbacks"
+require("debugging")
+require "hud"
 
-local game_data = {
+game_data = {
     mode = "single",
     client_list = {},
     local_player = nil,
+    score = 0,
     enemy_list = {},
     current_enemy_number = 0,
     bullet_list = {},
@@ -40,7 +43,7 @@ local debug_data = {
 }
 
 local start_time = love.timer.getTime()
-local FRAME_WIDTH, FRAME_HEIGHT = love.graphics.getDimensions()
+FRAME_WIDTH, FRAME_HEIGHT = love.graphics.getDimensions()
 
 function love.load()
     if game_data.mode == "single" then
@@ -72,18 +75,17 @@ function love.update(dt)
         server:update()
     end
 
-    if game_data.mode =="single" then
+    if game_data.mode == "single" then
         game_data.local_player:update(dt)
         local dx,dy = game_data.local_player.coord.x - camera.x, game_data.local_player:getY() - camera.y
         camera:move(dx/2, dy/2)
     end
     
 
-    for idx, bullet in ipairs(game_data.bullet_list) do
+    for idx, bullet in pairs(game_data.bullet_list) do
         bullet:update(dt)
-        if outOfBounds(bullet.coord) then
+        if outOfBounds(bullet.coord) or bullet:dead() then
             table.remove(game_data.bullet_list, idx)
-            --print("removed")
         end
     end
 
@@ -104,6 +106,125 @@ function love.update(dt)
 
     
 end
+
+
+
+
+function love.draw()
+    camera:attach()
+
+    if game_data.mode == "online" then
+        for index, ship in ipairs(game_data.client_list) do
+            ship:draw()
+        end
+    elseif game_data.mode == "single" then
+        game_data.local_player:draw()
+    end
+
+    for index, enemy in pairs(game_data.enemy_list) do
+        enemy:draw()
+    end
+
+    for index, bullet in pairs(game_data.bullet_list) do
+        --print("bullet rpint" , index, bullet)
+        if bullet ~= nil then
+            bullet:draw()
+        end
+    end
+    drawBoundaries()
+    camera:detach()
+
+    drawHUD()
+    
+    if game_data.mode == "server" then
+        drawServerDebug()
+    elseif game_data.mode == "single" then
+        drawDebugInfo()
+    end
+    
+end
+
+
+
+function drawBoundaries()
+    love.graphics.setColor(1,1,1)
+    love.graphics.polygon('line', 0,0, game_data.map_properties.width,0, game_data.map_properties.width,game_data.map_properties.height, 0,game_data.map_properties.height)
+end
+
+
+function outOfBounds(coord)
+    if coord.x < 0 or coord.x > game_data.map_properties.width then
+        return true
+    end
+
+    if coord.y < 0 or coord.y > game_data.map_properties.height then
+        return true
+    end
+
+    return false
+end
+
+function checkCollisions()
+    local start_time_col = love.timer.getTime()
+    for idx_bullet, bullet in pairs(game_data.bullet_list) do
+        local bullet_x, bullet_y = bullet:getXY()
+
+        for idx, player in ipairs(game_data.client_list) do
+            if player.coord:distanceToPoint(bullet_x, bullet_y) < player.size then
+                print("Collision")
+                game_data.bullet_list[idx_bullet] = nil
+            end
+        end
+
+        if bullet.source ~= game_data.local_player then
+            if game_data.local_player.coord:distanceToPoint(bullet_x, bullet_y) < game_data.local_player.hitbox + bullet.size then
+                game_data.local_player:damage(bullet.damage)
+                game_data.bullet_list[idx_bullet] = nil
+            end 
+        end
+
+        for idx, enemy in pairs(game_data.enemy_list) do
+            if enemy.team ~= bullet.team and enemy.coord:distanceToPoint(bullet_x, bullet_y) < enemy.hitbox + bullet.size then
+                if enemy:damage(bullet.damage) then -- the bullet killed the enemy
+                    game_data.enemy_list[idx] = nil
+                    game_data.bullet_list[idx_bullet] = nil
+                    print("KILLLLEEDDD")
+                    game_data.score = game_data.score + enemy.difficulty
+                end
+            end
+        end
+
+    end
+    local end_time_col = love.timer.getTime()
+    --print(end_time_col - start_time_col)
+end
+
+function love.keypressed(key)
+    if key == "e" then
+        game_data.current_enemy_number = game_data.current_enemy_number + 1
+        --table.insert(game_data.enemy_list, game_data.current_enemy_number, Enemy(500,500))
+        local tmp_enemy = Enemy(love.math.random(500), love.math.random(500))
+        tmp_enemy.id = game_data.current_enemy_number
+        game_data.enemy_list[game_data.current_enemy_number] = tmp_enemy
+    end
+
+    if game_data.mode == "single" then
+        local result = game_data.local_player:keypressed(key)
+        if result == "fire" then
+            local tmp_bullet = Bullet(game_data.local_player.coord)
+            tmp_bullet:setTeamAndSource(game_data.local_player.team, game_data.local_player)
+            table.insert(game_data.bullet_list, tmp_bullet)
+        end
+
+    end
+    for idx, b in pairs(game_data.bullet_list) do
+        print(idx, b)
+    end
+end
+
+
+
+-- server functions
 
 function sendclient_listData()
     local send_ships = {}
@@ -147,38 +268,6 @@ function sendclient_listData()
 end
 
 
-function love.draw()
-    camera:attach()
-
-    if game_data.mode == "online" then
-        for index, ship in ipairs(game_data.client_list) do
-            ship:draw()
-        end
-    elseif game_data.mode == "single" then
-        game_data.local_player:draw()
-    end
-
-    for index, enemy in pairs(game_data.enemy_list) do
-        enemy:draw()
-    end
-
-    for index, bullet in ipairs(game_data.bullet_list) do
-        --print("bullet rpint" , index, bullet)
-        if bullet ~= nil then
-            bullet:draw()
-        end
-    end
-    drawBoundaries()
-    camera:detach()
-    
-    if game_data.mode == "server" then
-        drawServerDebug()
-    elseif game_data.mode == "single" then
-        
-    end
-    
-end
-
 function drawServerDebug()
     love.graphics.setColor(1,1,1)
     local spacing = 20
@@ -196,61 +285,4 @@ function drawServerDebug()
 
     local x_offest = 100
     love.graphics.print("# bullets " .. #game_data.bullet_list, FRAME_WIDTH - x_offest, 1 * spacing)
-end
-
-function drawBoundaries()
-    love.graphics.setColor(1,1,1)
-    love.graphics.polygon('line', 0,0, game_data.map_properties.width,0, game_data.map_properties.width,game_data.map_properties.height, 0,game_data.map_properties.height)
-end
-
-
-function outOfBounds(coord)
-    if coord.x < 0 or coord.x > game_data.map_properties.width then
-        return true
-    end
-
-    if coord.y < 0 or coord.y > game_data.map_properties.height then
-        return true
-    end
-
-    return false
-end
-
-function checkCollisions()
-    local start_time_col = love.timer.getTime()
-    for idx_bullet, bullet in ipairs(game_data.bullet_list) do
-        local bullet_x, bullet_y = bullet:getXY()
-        for idx, player in ipairs(game_data.client_list) do
-            if player.coord:distanceToPoint(bullet_x, bullet_y) < player.size then
-                --print("Collision")
-            end
-        end
-
-        for idx, enemy in pairs(game_data.enemy_list) do
-            if enemy.team ~= bullet.team and enemy.coord:distanceToPoint(bullet_x, bullet_y) < enemy.size then
-                if enemy:damage(bullet.damage) then -- the bullet killed the enemy
-                    --table.remove(game_data.enemy_list, idx)
-                    game_data.enemy_list[idx] = nil
-                    print("KILLLLEEDDD")
-                end
-            end
-        end
-
-    end
-    local end_time_col = love.timer.getTime()
-    --print(end_time_col - start_time_col)
-end
-
-function love.keypressed(key)
-    if key == "e" then
-        game_data.current_enemy_number = game_data.current_enemy_number + 1
-        --table.insert(game_data.enemy_list, game_data.current_enemy_number, Enemy(500,500))
-        local tmp_enemy = Enemy(love.math.random(500), love.math.random(500))
-        tmp_enemy.id = game_data.current_enemy_number
-        game_data.enemy_list[game_data.current_enemy_number] = tmp_enemy
-    end
-
-    if game_data.mode == "single" then
-        local result = game_data.local_player:keypressed(key)
-    end
 end
