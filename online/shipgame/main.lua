@@ -8,7 +8,9 @@ local start_time = 0
 
 Object = require "lib.mylove.classic"
 Camera = require "lib.hump.camera"
-require "lib.hump.gamestates"
+Gamestate = require "lib.hump.gamestate"
+
+require "lib.hump.gamestate"
 require "lib.mylove.entity"
 require "ship"
 require "player"
@@ -20,6 +22,8 @@ require "lib.mylove.colors"
 require "serverCallbacks"
 require("debugging")
 require "hud"
+
+local main_menu = require("states.main_menu")
 
 game_data = {
     mode = "single",
@@ -66,6 +70,8 @@ function love.load()
         end)
     end
     camera = Camera(400,400)
+    Gamestate.registerEvents()
+    Gamestate.switch(main_menu)
 end
 
 
