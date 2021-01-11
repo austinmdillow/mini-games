@@ -6,6 +6,10 @@ end
 
 function main_menu:update(dt)
 
+  if love.keyboard.isDown("p") then
+    Gamestate.switch(gameplay)
+  end
+
 end
 
 

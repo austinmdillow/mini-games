@@ -32,6 +32,6 @@ end
 function Enemy:followCoord(dt, target_coord)
     local angle_error = self.coord:angleToCoord(target_coord) - self.coord:getT()
     self:rateLimitedTurn(dt, angle_error + love.math.random()* 5 * math.pi / 180)
-    print(angle_error)
+    --print(angle_error)
     self.coord:moveForward(self.max_speed * dt)
 end

@@ -67,7 +67,7 @@ function Player:draw()
 end
 
 function Player:keypressed(key)
-  if key == "space" then
+  if key == " " then
     if self:fire() then return "fire" end
   end
 end
