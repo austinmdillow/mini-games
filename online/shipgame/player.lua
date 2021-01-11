@@ -67,7 +67,11 @@ function Player:draw()
 end
 
 function Player:keypressed(key)
-  if key == " " then
-    if self:fire() then return "fire" end
+  if key == "space" then
+    if self:fire() then
+      local tmp_bullet = Bullet(game_data.local_player.coord)
+      tmp_bullet:setTeamAndSource(game_data.local_player.team, game_data.local_player)
+      table.insert(game_data.bullet_list, tmp_bullet)
+    end
   end
 end

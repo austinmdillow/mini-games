@@ -37,6 +37,7 @@ function gameplay:update(dt)
     checkCollisions()
     generateEnemies(dt)
     updateHud(dt)
+    checkEndLevel()
 
     if game_data.mode == "online" then
         sendclient_listData()
@@ -92,13 +93,16 @@ function gameplay:keypressed(key)
 
     if game_data.mode == "single" then
         local result = game_data.local_player:keypressed(key)
-        if result == "fire" then
-            local tmp_bullet = Bullet(game_data.local_player.coord)
-            tmp_bullet:setTeamAndSource(game_data.local_player.team, game_data.local_player)
-            table.insert(game_data.bullet_list, tmp_bullet)
-        end
-
     end
+
+    if key == "s" then
+        print("saving")
+        SaveData.save(save_data, "saveplace.txt")
+    end
+end
+
+function checkEndLevel()
+
 end
 
 return gameplay

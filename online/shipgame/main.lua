@@ -9,6 +9,7 @@ local start_time = 0
 Object = require "lib.mylove.classic"
 Camera = require "lib.hump.camera"
 Gamestate = require "lib.hump.gamestate"
+SaveData = require("lib.savedata.saveData")
 
 require "lib.hump.gamestate"
 require "lib.mylove.entity"
@@ -38,6 +39,10 @@ game_data = {
         width = 2000,
         height = 1000
     }
+}
+
+save_data = {
+    score = 0
 }
 
 local debug_data = {
