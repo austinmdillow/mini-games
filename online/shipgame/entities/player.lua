@@ -2,7 +2,9 @@ Player = Ship:extend()
 
 function Player:new(x_start, y_start)
   Player.super.new(self, x_start, y_start, dir_start)
-  self.max_speed = 200
+  self.max_speed = 250
+  self.cruise_speed = 150
+  self.min_speed = 50
   self.color = {1,0,0}
   self.radius = 10
   self.current_speed = 0
@@ -25,13 +27,15 @@ function Player:update(dt)
     if love.keyboard.isDown("up") then 
       self.current_speed = self.max_speed 
     elseif love.keyboard.isDown("down") then
-      self.current_speed = self.max_speed / 3
-    else self.current_speed = self.max_speed/2 end
+      self.current_speed = self.min_speed
+    else 
+      self.current_speed = self.cruise_speed
+    end
 
     if love.keyboard.isDown("right") then
-        self.coord:rotate(dt * self.roation_speed)
+        self.coord:rotate(dt * (self.roation_speed + (self.cruise_speed - self.current_speed) / 150))
     elseif love.keyboard.isDown("left") then
-        self.coord:rotate(-dt * self.roation_speed)
+        self.coord:rotate(-dt * (self.roation_speed + (self.cruise_speed - self.current_speed) / 150))
     end
 
     self.coord:moveForward(self.current_speed * dt)
