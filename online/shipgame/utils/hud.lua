@@ -23,6 +23,7 @@ function drawHUD()
   love.graphics.print(string.format("Score: %d", game_data.score), start_x, start_y + shield_bar_y_offset * 2)
 
   drawRadar()
+  drawWeaponStats(400, 20)
 end
 
 function updateHud(dt)
@@ -58,5 +59,11 @@ function drawRadar()
   end
   love.graphics.pop() --POP #2
   love.graphics.pop() -- pop #1
+end
 
+function drawWeaponStats(x_pos, y_pos)
+  love.graphics.setColor(1,0,0)
+  love.graphics.print(game_data.local_player.equipped_weapon:getAmmo(), x_pos, y_pos)
+  local overheated, heat_value = game_data.local_player.equipped_weapon:getOverheat()
+  love.graphics.print(heat_value, x_pos, y_pos + 20)
 end

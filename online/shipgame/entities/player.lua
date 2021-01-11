@@ -8,12 +8,12 @@ function Player:new(x_start, y_start)
   self.current_speed = 0
   self.roation_speed = 3
   self.size = 5
-  self.fire_rate = 5 -- bullets per second
   self.team = 0
   self.shield_enabled = true
   self.shield_health = 100
   self.shield_recharge_rate = 5
   self.shield_max = 110
+  self.equipped_weapon = Gun()
 end
 
 function Player:reset()
@@ -39,6 +39,8 @@ function Player:update(dt)
     if self.shield_enabled then
       self.shield_health = math.min(self.shield_max, self.shield_health + self.shield_recharge_rate * dt)
     end
+
+    self.equipped_weapon:update(dt)
 end
 
 function Player:damage(amount)
@@ -73,7 +75,7 @@ end
 
 function Player:keypressed(key)
   if key == "space" and not love.keyboard.isDown("up") then
-    if self:fire() then
+    if self.equipped_weapon:fire() then
       local tmp_bullet = Bullet(game_data.local_player.coord)
       tmp_bullet:setTeamAndSource(game_data.local_player.team, game_data.local_player)
       table.insert(game_data.bullet_list, tmp_bullet)
