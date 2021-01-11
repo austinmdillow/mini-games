@@ -55,3 +55,7 @@ function Ship:rateLimitedTurn(dt, angle) -- the desired amount of turning
   end
   self.coord:rotate(rotation_amount)
 end
+
+function Ship:dead()
+  return self.current_health < 0
+end

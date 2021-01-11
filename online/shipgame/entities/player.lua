@@ -16,6 +16,11 @@ function Player:new(x_start, y_start)
   self.shield_max = 110
 end
 
+function Player:reset()
+  self.shield_health = 0
+  self.current_health = 100
+end
+
 function Player:update(dt)
     if love.keyboard.isDown("up") then 
       self.current_speed = self.max_speed 
@@ -67,7 +72,7 @@ function Player:draw()
 end
 
 function Player:keypressed(key)
-  if key == "space" then
+  if key == "space" and not love.keyboard.isDown("up") then
     if self:fire() then
       local tmp_bullet = Bullet(game_data.local_player.coord)
       tmp_bullet:setTeamAndSource(game_data.local_player.team, game_data.local_player)

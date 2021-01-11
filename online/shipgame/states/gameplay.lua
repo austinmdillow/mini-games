@@ -1,6 +1,11 @@
 gameplay = {}
 
 function gameplay:enter()
+    game_data.level_score = 0 --reset the score for this level
+    game_data.local_player:reset() -- give the player back their health
+    game_data.bullet_list = {} -- empty out the agents in the field
+    game_data.enemy_list = {}
+    game_data.local_player:setXYT(500, 500, 0)
 
 end
 
@@ -37,7 +42,7 @@ function gameplay:update(dt)
     checkCollisions()
     generateEnemies(dt)
     updateHud(dt)
-    checkEndLevel()
+    checkEndLevel(1)
 
     if game_data.mode == "online" then
         sendclient_listData()
@@ -97,11 +102,19 @@ function gameplay:keypressed(key)
 
     if key == "s" then
         print("saving")
-        SaveData.save(save_data, "saveplace.txt")
+        local tmp_save_data = {}
+        tmp_save_data.score = game_data.score
+        print(SaveData.save(tmp_save_data, "savefile"))
     end
 end
 
-function checkEndLevel()
+function checkEndLevel(level_number)
+
+    if game_data.local_player:dead() then
+        print("Player has died")
+        Gamestate.switch(death_screen)
+    end
+    
 
 end
 

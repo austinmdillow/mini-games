@@ -10,28 +10,31 @@ Object = require "lib.mylove.classic"
 Camera = require "lib.hump.camera"
 Gamestate = require "lib.hump.gamestate"
 SaveData = require("lib.savedata.saveData")
+lovebird = require "lib.mylove.lovebird"
 
 require "lib.hump.gamestate"
 require "lib.mylove.entity"
-require "ship"
-require "player"
+require "lib.menuengine"
+require "entities.ship"
+require "entities.player"
 require "lib.mylove.coord"
-require "bullet"
-require "enemy"
-lovebird = require "lib.mylove.lovebird"
+require "entities.bullet"
+require "entities.enemy"
 require "lib.mylove.colors"
 require "serverCallbacks"
-require("debugging")
-require "hud"
+require "utils.debugging"
+require "utils.hud"
 
 local main_menu = require("states.main_menu")
 local gameplay = require("states.gameplay")
+local death_screen = require("states.death_screen")
 
 game_data = {
     mode = "single",
     client_list = {},
     local_player = nil,
     score = 0,
+    level_score = 0,
     enemy_list = {},
     current_enemy_number = 0,
     bullet_list = {},
@@ -41,8 +44,12 @@ game_data = {
     }
 }
 
+-- default save values that will be loaded and written
 save_data = {
-    score = 0
+    score = 0,
+    level_stats = {
+        {0, 0, 0}
+    }
 }
 
 local debug_data = {
@@ -83,16 +90,14 @@ end
 
 
 function love.update(dt)
-    
-
-    
+     
 end
 
 
 
 
 function love.draw()
-    love.graphics.setColor(1,1,1)
+
 end
 
 
@@ -159,8 +164,9 @@ function generateEnemies(dt)
     end
 end
 
+-- Global actions for a key press
 function love.keypressed(key)
-    print("press")
+
 end
 
 
