@@ -8,7 +8,6 @@ local start_time = 0
 
 Object = require "lib.mylove.classic"
 Camera = require "lib.hump.camera"
-require "lib.hump.gamestates"
 require "lib.mylove.entity"
 require "ship"
 require "player"
@@ -204,7 +203,6 @@ end
 
 function generateEnemies(dt)
     local random_num = love.math.randomNormal(1/dt/3, 0)
-    print(random_num, 1/dt)
     if random_num > 1 / dt then
         game_data.current_enemy_number = game_data.current_enemy_number + 1
         local tmp_enemy = Enemy(love.math.random(500), love.math.random(500))
@@ -214,6 +212,7 @@ function generateEnemies(dt)
 end
 
 function love.keypressed(key)
+    print("inside")
     if key == "e" then
         game_data.current_enemy_number = game_data.current_enemy_number + 1
         --table.insert(game_data.enemy_list, game_data.current_enemy_number, Enemy(500,500))
