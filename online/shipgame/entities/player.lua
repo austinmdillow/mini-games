@@ -16,6 +16,15 @@ function Player:new(x_start, y_start)
   self.shield_recharge_rate = 5
   self.shield_max = 110
   self.equipped_weapon = Gun()
+  self.partimg=love.graphics.newImage("assets/particle.png")
+  self.pSystem = love.graphics.newParticleSystem(self.partimg, 40)
+  self.pSystem:setParticleLifetime(3, 4) -- Particles live at least 2s and at most 5s.
+	self.pSystem:setEmissionRate(10)
+  self.pSystem:setSizeVariation(1)
+  self.pSystem:setSizes(3)
+  self.pSystem:setSpeed(100,100)
+  self.pSystem:setSpin(1,1)
+  self.pSystem:setColors(255, 255, 255, 255, 255, 255, 255, 0) -- Fade to black.
 end
 
 function Player:reset()
@@ -45,6 +54,10 @@ function Player:update(dt)
     end
 
     self.equipped_weapon:update(dt)
+    self.pSystem:update(dt)
+    self.pSystem:moveTo(self.coord.x, self.coord.y)
+
+    self.pSystem:setDirection(self.coord:getT() + math.pi)
 end
 
 function Player:damage(amount)
@@ -73,7 +86,9 @@ function Player:draw()
     love.graphics.rotate(self.coord:getT())
     love.graphics.polygon('line', self.size * -1, self.size * -1, 0, 0, self.size * -1, self.size * 1, self.size * 3, 0)
     love.graphics.circle('fill', -5, 0, 4 * self.current_speed / self.max_speed)
+
     love.graphics.pop()
+    love.graphics.draw(self.pSystem, 0,0)
     love.graphics.setColor(1,1,1)
 end
 

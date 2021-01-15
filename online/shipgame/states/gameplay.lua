@@ -52,7 +52,7 @@ end
 
 
 function gameplay:draw()
-  camera:attach()
+  --camera:attach()
 
   if game_data.mode == "online" then
       for index, ship in ipairs(game_data.client_list) do
@@ -73,7 +73,7 @@ function gameplay:draw()
         end
     end
     drawBoundaries()
-    camera:detach()
+    --camera:detach()
 
     drawHUD()
 

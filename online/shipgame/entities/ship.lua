@@ -11,10 +11,13 @@ function Ship:new(x_start, y_start)
   self.last_fire_time = love.timer.getTime() -- last time since a bullet was fired
   self.fire_rate = 2 -- bullets per second
   self.hitbox = self.size * 3
+
 end
 
 function Ship:update(dt)
     self.coord:moveForward(self.current_speed * dt)
+    self.pSystem:update(dt)
+    pSystem:moveTo(self.coord.x, self.coord.y)
 end
 
 function Ship:draw()
