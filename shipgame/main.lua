@@ -1,10 +1,5 @@
 --love.filesystem.setRequirePath( "..?.lua;?/init.lua" )
 
--- SERVER
-local sock = require "lib.sock.sock"
-local count = 0
-local my_count = 0
-local start_time = 0
 
 Object = require "lib.mylove.classic"
 Camera = require "lib.hump.camera"
@@ -172,7 +167,7 @@ end
 
 
 
--- server functions
+--[[ -- server functions
 
 function sendclient_listData()
     local send_ships = {}
@@ -233,4 +228,4 @@ function drawServerDebug()
 
     local x_offest = 100
     love.graphics.print("# bullets " .. #game_data.bullet_list, FRAME_WIDTH - x_offest, 1 * spacing)
-end
+end ]]

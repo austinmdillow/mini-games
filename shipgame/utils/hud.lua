@@ -61,9 +61,24 @@ function drawRadar()
   love.graphics.pop() -- pop #1
 end
 
+
 function drawWeaponStats(x_pos, y_pos)
+  local x_loc = FRAME_WIDTH - 200
+  local y_loc = 300
+  love.graphics.push() --push #1
+  love.graphics.translate(x_loc, y_loc)
+
   love.graphics.setColor(1,0,0)
   love.graphics.print(game_data.local_player.equipped_weapon:getAmmo(), x_pos, y_pos)
   local overheated, heat_value = game_data.local_player.equipped_weapon:getOverheat()
   love.graphics.print(heat_value, x_pos, y_pos + 20)
+
+  if overheated == true then
+    love.graphics.setColor(COLORS.red)
+  else
+    love.graphics.setColor(1,1,1)
+  end
+  love.graphics.rectangle('fill', 0, 0, heat_value * 100, 10)
+
+  love.graphics.pop() -- pop #1
 end
