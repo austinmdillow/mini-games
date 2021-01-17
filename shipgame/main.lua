@@ -25,6 +25,8 @@ local main_menu = require("states.main_menu")
 local gameplay = require("states.gameplay")
 local death_screen = require("states.death_screen")
 
+VERSION = "0.1"
+
 game_data = {
     mode = "single",
     client_list = {},
@@ -44,7 +46,11 @@ game_data = {
 save_data = {
     score = 0,
     level_stats = {
-        {0, 0, 0}
+        {
+            kills = 5,
+            completed = false,
+            score = 0
+        }
     }
 }
 
@@ -81,6 +87,7 @@ function love.load()
     camera = Camera(400,400)
     Gamestate.registerEvents()
     Gamestate.switch(main_menu)
+    print(save_data.level_stats[1].kills)
 end
 
 
@@ -141,6 +148,7 @@ function checkCollisions()
                     game_data.enemy_list[idx] = nil
                     game_data.bullet_list[idx_bullet] = nil
                     print("KILLLLEEDDD")
+                    game_data.level_score = game_data.level_score + enemy.difficulty
                     game_data.score = game_data.score + enemy.difficulty
                 end
             end

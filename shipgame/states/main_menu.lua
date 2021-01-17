@@ -54,7 +54,7 @@ end
 
 
 function main_menu:enter()
-  print(VERSION)
+  print("Version " .. VERSION)
 
   love.graphics.setFont(love.graphics.newFont(20))
 

@@ -6,6 +6,7 @@ function gameplay:enter()
     game_data.bullet_list = {} -- empty out the agents in the field
     game_data.enemy_list = {}
     game_data.local_player:setXYT(500, 500, 0)
+    game_data.level_kills = 0
 
 end
 
@@ -113,6 +114,12 @@ function checkEndLevel(level_number)
     if game_data.local_player:dead() then
         print("Player has died")
         Gamestate.switch(death_screen)
+    end
+
+    if level_number == 1 then
+        if game_data.level_score > 10 then -- reached enough kills
+            Gamestate.switch(main_menu)
+        end
     end
     
 

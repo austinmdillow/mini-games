@@ -100,4 +100,8 @@ function Player:keypressed(key)
       table.insert(game_data.bullet_list, tmp_bullet)
     end
   end
+
+  if key == "u" then
+    self.equipped_weapon:setUnlimitedAmmo(not self.equipped_weapon:getUnlimitedAmmo())
+  end
 end

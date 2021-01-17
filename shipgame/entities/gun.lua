@@ -2,7 +2,7 @@ Gun = Object:extend()
 
 
 function Gun:new()
-  self.ammo = 100
+  self.ammo = 10
   self.max_ammo = nil
   self.unlimited_ammo = true
   self.fire_rate = 10
@@ -23,7 +23,7 @@ function Gun:fire()
     if self.ammo > 0 or self.unlimited_ammo then -- if we have ammo
       if not self:getOverheat() then -- if the gun isn't overheated
         self.current_heat = self.current_heat + 1
-        if self.unlimited_ammo == true then
+        if self.unlimited_ammo == false then
           self.ammo = self.ammo - 1
         end
         self.last_fire_time = love.timer.getTime()
@@ -54,4 +54,18 @@ end
 
 function Gun:getAmmo()
   return self.ammo
+end
+
+function Gun:getUnlimitedAmmo()
+  return self.unlimited_ammo
+end
+
+function Gun:setUnlimitedAmmo(b)
+  if b == true then
+    self.unlimited_ammo = true
+  elseif b == false then
+    self.unlimited_ammo = false
+  else
+    print("ERROR: unknown value to setUnlimitedAmmo")
+  end
 end

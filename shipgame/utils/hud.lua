@@ -20,10 +20,11 @@ function drawHUD()
   love.graphics.print(string.format("%d / %d", game_data.local_player.current_health, game_data.local_player.max_health), start_x + health_width / 2 - 20, start_y + shield_bar_y_offset + 4)
   love.graphics.rectangle('line', start_x, start_y + shield_bar_y_offset, health_width * game_data.local_player.current_health / game_data.local_player.max_health, bar_thickness)
 
-  love.graphics.print(string.format("Score: %d", game_data.score), start_x, start_y + shield_bar_y_offset * 2)
+  love.graphics.print(string.format("Total Score: %d", game_data.score), start_x, start_y + shield_bar_y_offset * 2)
+  love.graphics.print(string.format("Level Score: %d", game_data.level_score), start_x, start_y + shield_bar_y_offset * 3)
 
   drawRadar()
-  drawWeaponStats(400, 20)
+  drawWeaponStats()
 end
 
 function updateHud(dt)
@@ -62,23 +63,35 @@ function drawRadar()
 end
 
 
-function drawWeaponStats(x_pos, y_pos)
+function drawWeaponStats()
   local x_loc = FRAME_WIDTH - 200
-  local y_loc = 300
+  local y_loc = 150
+  local overheat_bar_width = 80 -- width of the overheat bar
   love.graphics.push() --push #1
   love.graphics.translate(x_loc, y_loc)
 
   love.graphics.setColor(1,0,0)
-  love.graphics.print(game_data.local_player.equipped_weapon:getAmmo(), x_pos, y_pos)
+  love.graphics.print(game_data.local_player.equipped_weapon:getAmmo(), x_loc, y_loc)
   local overheated, heat_value = game_data.local_player.equipped_weapon:getOverheat()
-  love.graphics.print(heat_value, x_pos, y_pos + 20)
+  --love.graphics.print(heat_value, x_pos, y_pos + 20)
 
+  -- Draw overheat info
   if overheated == true then
     love.graphics.setColor(COLORS.red)
   else
     love.graphics.setColor(1,1,1)
   end
-  love.graphics.rectangle('fill', 0, 0, heat_value * 100, 10)
+
+  if game_data.local_player.equipped_weapon:getUnlimitedAmmo() == true then
+    current_ammo = "∞"
+  else
+    current_ammo = game_data.local_player.equipped_weapon:getAmmo()
+  end
+  love.graphics.print(current_ammo, -30 ,-8)
+
+  love.graphics.rectangle('fill', 0, 0, heat_value * overheat_bar_width, 10)
+  love.graphics.rectangle('line', 0, 0, overheat_bar_width, 10)
+
 
   love.graphics.pop() -- pop #1
 end

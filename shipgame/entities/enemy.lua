@@ -6,7 +6,7 @@ function Enemy:new(x_start, y_start, dir_start)
     self.color = {1,1,0}
     self.radius = 10
     self.current_speed = 0
-    self.roation_speed = 90 * math.pi / 180 -- deg / s
+    self.roation_speed = 20 * math.pi / 180 -- deg / s
     self.size = 10
     self.last_fire_time = love.timer.getTime() -- last time since a bullet was fired
     self.fire_rate = 1 -- bullets per second
