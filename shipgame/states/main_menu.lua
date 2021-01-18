@@ -24,7 +24,7 @@ local function loadFromSave()
   loadSave()
   main_menu:setText("Loaded game from save!")
 end
-
+,,
 -- Options
 local function options()
 
