@@ -11,6 +11,7 @@ function Ship:new(x_start, y_start)
   self.last_fire_time = love.timer.getTime() -- last time since a bullet was fired
   self.fire_rate = 2 -- bullets per second
   self.hitbox = self.size * 3
+  self.sprite_image = nil
 
 end
 
@@ -21,13 +22,25 @@ function Ship:update(dt)
 end
 
 function Ship:draw()
-    love.graphics.setColor(self.color)
-    love.graphics.push()
-    love.graphics.translate(self.coord.x, self.coord.y)
-    love.graphics.rotate(self.coord:getT())
-    love.graphics.polygon('line', self.size * -1, self.size * -1, 0, 0, self.size * -1, self.size * 1, self.size * 3, 0)
-    love.graphics.pop()
+  love.graphics.push() -- push 1
+  
+  love.graphics.translate(self.coord.x, self.coord.y)
+  love.graphics.rotate(self.coord:getT())
+
+  if self.sprite_image ~= nil then
     love.graphics.setColor(1,1,1)
+    love.graphics.scale(0.2, 0.2)
+    love.graphics.draw(self.sprite_image, self.sprite_image:getWidth()/2, -self.sprite_image:getHeight()/2, math.pi/2)
+  else
+    love.graphics.setColor(self.color)
+    love.graphics.polygon('line', self.size * -1, self.size * -1, 0, 0, self.size * -1, self.size * 1, self.size * 3, 0)
+    love.graphics.circle('fill', -5, 0, 4 * self.current_speed / self.max_speed)
+  end
+  
+  love.graphics.pop() -- pop 1
+  if self.pSystem ~= nil then
+    love.graphics.draw(self.pSystem, 0,0)
+  end
 end
 
 function Ship:fire()

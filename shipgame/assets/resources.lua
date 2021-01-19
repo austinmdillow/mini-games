@@ -4,5 +4,6 @@ sprites = {}
 --sprites.player_img = love.graphics.newImage("assets/sp.png")
 sprites.coin_image = love.graphics.newImage("assets/coin_item-1.png")
 sprites.player_image = love.graphics.newImage("assets/Spaceship_01_ORANGE.png")
+sprites.enemy_image = love.graphics.newImage("assets/Spaceship_02_RED.png")
 
 ITEM_PIX_WIDTH = 32

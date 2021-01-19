@@ -85,20 +85,7 @@ function Player:damage(amount)
 end
 
 function Player:draw()
-    love.graphics.setColor(self.color)
-    love.graphics.push()
-    love.graphics.translate(self.coord.x, self.coord.y)
-    love.graphics.rotate(self.coord:getT())
-    love.graphics.polygon('line', self.size * -1, self.size * -1, 0, 0, self.size * -1, self.size * 1, self.size * 3, 0)
-    love.graphics.circle('fill', -5, 0, 4 * self.current_speed / self.max_speed)
-    love.graphics.setColor(1,1,1)
-    love.graphics.push()
-    love.graphics.scale(0.2, 0.2)
-    love.graphics.draw(self.sprite_image, self.sprite_image:getWidth()/2, -self.sprite_image:getHeight()/2, math.pi/2)
-    love.graphics.pop()
-    love.graphics.pop()
-    love.graphics.draw(self.pSystem, 0,0)
-    love.graphics.setColor(1,1,1)
+  Player.super.draw(self)
 end
 
 function Player:keypressed(key)

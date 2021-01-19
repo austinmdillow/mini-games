@@ -57,13 +57,7 @@ end
 function gameplay:draw()
   camera:attach()
 
-    if game_data.mode == "online" then
-        for index, ship in ipairs(game_data.client_list) do
-            ship:draw()
-        end
-    elseif game_data.mode == "single" then
-        game_data.local_player:draw()
-    end
+    game_data.local_player:draw()
 
     -- Draw the Enemies
     for index, enemy in pairs(game_data.enemy_list) do

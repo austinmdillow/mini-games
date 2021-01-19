@@ -13,6 +13,7 @@ function Enemy:new(x_start, y_start, dir_start)
     self.id = nil
     self.team = -1
     self.difficulty = 1
+    self.sprite_image = sprites.enemy_image
 end
 
 function Enemy:update(dt)
