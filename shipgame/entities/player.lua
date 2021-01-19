@@ -17,14 +17,16 @@ function Player:new(x_start, y_start)
   self.shield_max = 110
   self.equipped_weapon = Gun()
   self.partimg=love.graphics.newImage("assets/particle.png")
-  self.pSystem = love.graphics.newParticleSystem(self.partimg, 40)
-  self.pSystem:setParticleLifetime(3, 4) -- Particles live at least 2s and at most 5s.
+  self.pSystem = love.graphics.newParticleSystem(self.partimg, 255)
+  self.pSystem:setParticleLifetime(1, 2) -- Particles live at least 2s and at most 5s.
 	self.pSystem:setEmissionRate(10)
   self.pSystem:setSizeVariation(1)
   self.pSystem:setSizes(3)
   self.pSystem:setSpeed(100,100)
   self.pSystem:setSpin(1,1)
   self.pSystem:setColors(255, 255, 255, 255, 255, 255, 255, 0) -- Fade to black.
+
+  self.sprite_image = sprites.player_image
 end
 
 function Player:reset()
@@ -47,6 +49,9 @@ function Player:update(dt)
         self.coord:rotate(-dt * (self.roation_speed + (self.cruise_speed - self.current_speed) / 150))
     end
 
+
+    self.pSystem:setEmissionRate(self.current_speed / 10)
+    self.pSystem:setSpeed(100,self.current_speed * 2)
     self.coord:moveForward(self.current_speed * dt)
     
     if self.shield_enabled then
@@ -86,7 +91,11 @@ function Player:draw()
     love.graphics.rotate(self.coord:getT())
     love.graphics.polygon('line', self.size * -1, self.size * -1, 0, 0, self.size * -1, self.size * 1, self.size * 3, 0)
     love.graphics.circle('fill', -5, 0, 4 * self.current_speed / self.max_speed)
-
+    love.graphics.setColor(1,1,1)
+    love.graphics.push()
+    love.graphics.scale(0.2, 0.2)
+    love.graphics.draw(self.sprite_image, self.sprite_image:getWidth()/2, -self.sprite_image:getHeight()/2, math.pi/2)
+    love.graphics.pop()
     love.graphics.pop()
     love.graphics.draw(self.pSystem, 0,0)
     love.graphics.setColor(1,1,1)

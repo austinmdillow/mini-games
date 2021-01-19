@@ -4,7 +4,7 @@ function Bullet:new(x_start, y_start, dir_start)
   Bullet.super.new(self, x_start, y_start, dir_start)
 
   self.rotation_visual = 0
-  self.max_speed = 300
+  self.max_speed = 800
   self.size = 10
   self.color = COLORS.green
   self.team = nil
