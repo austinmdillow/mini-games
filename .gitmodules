@@ -1,3 +1,6 @@
 [submodule "RPG/lib/anim8"]
 	path = RPG/lib/anim8
 	url = https://github.com/kikito/anim8.git
+[submodule "shipgame/lib/mylove"]
+	path = shipgame/lib/mylove
+	url = https://github.com/austinmdillow/mylove.git

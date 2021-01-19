@@ -7,27 +7,33 @@ Gamestate = require "lib.hump.gamestate"
 SaveData = require("lib.savedata.saveData")
 lovebird = require "lib.mylove.lovebird"
 
+require "lib.mylove.colors"
 require "lib.hump.gamestate"
 require "lib.mylove.entity"
 require "lib.menuengine"
+require "lib.mylove.coord"
+
 require "entities.ship"
 require "entities.player"
-require "lib.mylove.coord"
 require "entities.bullet"
 require "entities.enemy"
 require "entities.gun"
-require "lib.mylove.colors"
+require "entities.item"
+
 require "utils.serverCallbacks"
 require "utils.debugging"
 require "utils.hud"
 
+require "assets.resources"
+
+-- all gamestates
 local main_menu = require("states.main_menu")
 local gameplay = require("states.gameplay")
 local death_screen = require("states.death_screen")
 
-VERSION = "0.1"
+VERSION = "0.1" -- not used at all
 
-game_data = {
+game_data = { -- where we store all global variables related to gameplay
     mode = "single",
     client_list = {},
     local_player = nil,
@@ -36,6 +42,7 @@ game_data = {
     enemy_list = {},
     current_enemy_number = 0,
     bullet_list = {},
+    item_list = {},
     map_properties = {
         width = 2000,
         height = 1000
@@ -97,10 +104,8 @@ function love.update(dt)
 end
 
 
-
-
 function love.draw()
-
+    drawDebugInfo()
 end
 
 
@@ -149,11 +154,17 @@ function checkCollisions()
                     game_data.bullet_list[idx_bullet] = nil
                     print("KILLLLEEDDD")
                     game_data.level_score = game_data.level_score + enemy.difficulty
-                    game_data.score = game_data.score + enemy.difficulty
                 end
             end
         end
 
+    end
+
+    for idx_item, item in pairs(game_data.item_list) do
+        if item.coord:distanceToCoord(game_data.local_player.coord) < item.size + game_data.local_player.size then
+            game_data.item_list[idx_item] = nil
+            game_data.level_score = game_data.level_score + 1
+        end
     end
     local end_time_col = love.timer.getTime()
 end

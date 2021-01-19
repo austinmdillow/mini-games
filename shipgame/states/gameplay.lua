@@ -2,11 +2,13 @@ gameplay = {}
 
 function gameplay:enter()
     game_data.level_score = 0 --reset the score for this level
+    game_data.level_kills = 0 -- not used
     game_data.local_player:reset() -- give the player back their health
     game_data.bullet_list = {} -- empty out the agents in the field
     game_data.enemy_list = {}
+    game_data.item_list = {}
     game_data.local_player:setXYT(500, 500, 0)
-    game_data.level_kills = 0
+    
 
 end
 
@@ -51,27 +53,31 @@ function gameplay:update(dt)
 
 end
 
-
+-- Drawing time
 function gameplay:draw()
   camera:attach()
 
-  if game_data.mode == "online" then
-      for index, ship in ipairs(game_data.client_list) do
-          ship:draw()
-      end
-  elseif game_data.mode == "single" then
-      game_data.local_player:draw()
-  end
+    if game_data.mode == "online" then
+        for index, ship in ipairs(game_data.client_list) do
+            ship:draw()
+        end
+    elseif game_data.mode == "single" then
+        game_data.local_player:draw()
+    end
 
+    -- Draw the Enemies
     for index, enemy in pairs(game_data.enemy_list) do
         enemy:draw()
     end
 
+    -- Draw the bullets
     for index, bullet in pairs(game_data.bullet_list) do
-      --print("bullet rpint" , index, bullet)
-        if bullet ~= nil then
-             bullet:draw()
-        end
+        bullet:draw()
+    end
+
+    -- Draw the items
+    for index, item in pairs(game_data.item_list) do
+        item:draw()
     end
     drawBoundaries()
     camera:detach()
@@ -81,7 +87,7 @@ function gameplay:draw()
     if game_data.mode == "server" then
         drawServerDebug()
     elseif game_data.mode == "single" then
-        drawDebugInfo()
+        --drawDebugInfo()
     end
 
 
@@ -107,6 +113,10 @@ function gameplay:keypressed(key)
         tmp_save_data.score = game_data.score
         print(SaveData.save(tmp_save_data, "savefile"))
     end
+
+    if key == "i" then
+        table.insert(game_data.item_list, Item(100, 100))
+    end
 end
 
 function checkEndLevel(level_number)
@@ -118,6 +128,7 @@ function checkEndLevel(level_number)
 
     if level_number == 1 then
         if game_data.level_score > 10 then -- reached enough kills
+            game_data.score = game_data.score + game_data.level_score
             Gamestate.switch(main_menu)
         end
     end
