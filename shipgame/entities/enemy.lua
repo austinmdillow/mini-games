@@ -8,15 +8,13 @@ function Enemy:new(x_start, y_start, dir_start)
     self.current_speed = 0
     self.roation_speed = 45 * math.pi / 180 -- deg / s
     self.size = 10
-    self.last_fire_time = love.timer.getTime() -- last time since a bullet was fired
-    self.fire_rate = 1 -- bullets per second
-    self.id = nil
     self.team = -1
     self.difficulty = 1
-    self.sprite_image = sprites.enemy_image
+    self.sprite_image = nil
 end
 
 function Enemy:update(dt)
+    Enemy.super.update(self, dt)
     if false then self.current_speed = self.max_speed else self.current_speed = 0 end
 
     if false then
@@ -28,6 +26,12 @@ function Enemy:update(dt)
     if self:fire() then return "fire" end
 
     self:followCoord(dt, game_data.local_player.coord)
+end
+
+function Enemy:draw()
+    Enemy.super.draw(self)
+    love.graphics.setColor(1,1,1)
+    love.graphics.rectangle('fill', self:getX(), self:getY(), 100 *self.current_health / self.max_health, 10)
 end
 
 function Enemy:followCoord(dt, target_coord)

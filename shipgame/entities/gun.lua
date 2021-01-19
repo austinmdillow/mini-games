@@ -1,18 +1,18 @@
 Gun = Object:extend()
 
 
-function Gun:new()
+function Gun:new(fire_rate, damage, cooldown_rate)
   self.ammo = 10
   self.max_ammo = nil
   self.unlimited_ammo = true
-  self.fire_rate = 10
+  self.fire_rate = fire_rate or 5
   self.last_fire_time = love.timer.getTime()
-  self.damage = 30
-  self.cooldown_rate = 2
+  self.damage = damage or 30
+  self.cooldown_rate = cooldown_rate or 2
   self.current_heat = 0
   self.max_heat = 10
   self.overheated = false
-  self.overheat_capable = false
+  self.overheat_capable = true
   
 end
 

@@ -12,13 +12,18 @@ function Ship:new(x_start, y_start)
   self.fire_rate = 2 -- bullets per second
   self.hitbox = self.size * 3
   self.sprite_image = nil
+  self.equipped_weapon = Gun()
+  self.pSystem = love.graphics.newParticleSystem(sprites.particle_image, 255)
+  self:setupParticleSystem()
 
 end
 
 function Ship:update(dt)
-    self.coord:moveForward(self.current_speed * dt)
-    self.pSystem:update(dt)
-    pSystem:moveTo(self.coord.x, self.coord.y)
+    self.equipped_weapon:update(dt)
+    if self.pSystem ~= nil then
+      self.pSystem:update(dt)
+      self.pSystem:moveTo(self.coord.x, self.coord.y)
+    end
 end
 
 function Ship:draw()
@@ -44,10 +49,11 @@ function Ship:draw()
 end
 
 function Ship:fire()
-  local current_time = love.timer.getTime()
-  if (current_time - self.last_fire_time) > 1 / self.fire_rate then
-      self.last_fire_time = current_time
-      return true
+  if self.equipped_weapon:fire() then
+    local tmp_bullet = Bullet(self.coord)
+    tmp_bullet:setTeamAndSource(self.team, self)
+    table.insert(game_data.bullet_list, tmp_bullet)
+    return true -- if we were able to fire the weapon
   end
   return false
 end
@@ -74,4 +80,14 @@ end
 
 function Ship:dead()
   return self.current_health < 0
+end
+
+function Ship:setupParticleSystem()
+  self.pSystem:setParticleLifetime(1, 2) -- Particles live at least 2s and at most 5s.
+	self.pSystem:setEmissionRate(10)
+  self.pSystem:setSizeVariation(1)
+  self.pSystem:setSizes(3)
+  self.pSystem:setSpeed(100,100)
+  self.pSystem:setSpin(1,1)
+  self.pSystem:setColors(255, 255, 255, 255, 255, 255, 255, 0) -- Fade to black.
 end

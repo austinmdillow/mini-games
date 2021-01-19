@@ -15,16 +15,6 @@ function Player:new(x_start, y_start)
   self.shield_health = 100
   self.shield_recharge_rate = 5
   self.shield_max = 110
-  self.equipped_weapon = Gun()
-  self.partimg=love.graphics.newImage("assets/particle.png")
-  self.pSystem = love.graphics.newParticleSystem(self.partimg, 255)
-  self.pSystem:setParticleLifetime(1, 2) -- Particles live at least 2s and at most 5s.
-	self.pSystem:setEmissionRate(10)
-  self.pSystem:setSizeVariation(1)
-  self.pSystem:setSizes(3)
-  self.pSystem:setSpeed(100,100)
-  self.pSystem:setSpin(1,1)
-  self.pSystem:setColors(255, 255, 255, 255, 255, 255, 255, 0) -- Fade to black.
 
   self.sprite_image = sprites.player_image
 end
@@ -58,7 +48,7 @@ function Player:update(dt)
       self.shield_health = math.min(self.shield_max, self.shield_health + self.shield_recharge_rate * dt)
     end
 
-    self.equipped_weapon:update(dt)
+    
     self.pSystem:update(dt)
     self.pSystem:moveTo(self.coord.x, self.coord.y)
 
@@ -84,17 +74,9 @@ function Player:damage(amount)
   end
 end
 
-function Player:draw()
-  Player.super.draw(self)
-end
-
 function Player:keypressed(key)
   if key == "space" and not love.keyboard.isDown("up") then
-    if self.equipped_weapon:fire() then
-      local tmp_bullet = Bullet(game_data.local_player.coord)
-      tmp_bullet:setTeamAndSource(game_data.local_player.team, game_data.local_player)
-      table.insert(game_data.bullet_list, tmp_bullet)
-    end
+    self:fire()
   end
 
   if key == "u" then

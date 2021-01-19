@@ -17,6 +17,7 @@ require "entities.ship"
 require "entities.player"
 require "entities.bullet"
 require "entities.enemy"
+require "entities.enemy_fighter"
 require "entities.gun"
 require "entities.item"
 
@@ -133,12 +134,12 @@ function checkCollisions()
     for idx_bullet, bullet in pairs(game_data.bullet_list) do
         local bullet_x, bullet_y = bullet:getXY()
 
-        for idx, player in ipairs(game_data.client_list) do
+--[[    for idx, player in ipairs(game_data.client_list) do
             if player.coord:distanceToPoint(bullet_x, bullet_y) < player.size then
                 print("Collision")
                 game_data.bullet_list[idx_bullet] = nil
             end
-        end
+        end ]]
 
         if bullet.source ~= game_data.local_player then
             if game_data.local_player.coord:distanceToPoint(bullet_x, bullet_y) < game_data.local_player.hitbox + bullet.size then
@@ -148,10 +149,12 @@ function checkCollisions()
         end
 
         for idx, enemy in pairs(game_data.enemy_list) do
+            
+            -- there was a hit
             if enemy.team ~= bullet.team and enemy.coord:distanceToPoint(bullet_x, bullet_y) < enemy.hitbox + bullet.size then
+                game_data.bullet_list[idx_bullet] = nil
                 if enemy:damage(bullet.damage) then -- the bullet killed the enemy
                     game_data.enemy_list[idx] = nil
-                    game_data.bullet_list[idx_bullet] = nil
                     print("KILLLLEEDDD")
                     game_data.level_score = game_data.level_score + enemy.difficulty
                 end

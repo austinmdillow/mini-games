@@ -97,6 +97,15 @@ function gameplay:keypressed(key)
         game_data.enemy_list[game_data.current_enemy_number] = tmp_enemy
     end
 
+    if key == "q" then
+        game_data.current_enemy_number = game_data.current_enemy_number + 1
+        --table.insert(game_data.enemy_list, game_data.current_enemy_number, Enemy(500,500))
+        local tmp_enemy = EnemyFighter(love.math.random(500), love.math.random(500))
+        tmp_enemy.id = game_data.current_enemy_number
+        game_data.enemy_list[game_data.current_enemy_number] = tmp_enemy
+        print(tmp_enemy.sprite_image)
+    end
+
     if game_data.mode == "single" then
         local result = game_data.local_player:keypressed(key)
     end
