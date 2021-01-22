@@ -8,47 +8,41 @@ function gameplay:enter()
     game_data.enemy_list = {}
     game_data.item_list = {}
     game_data.local_player:setXYT(500, 500, 0)
-    
-
+    gameplay.spawner = Spawner("level_one")
 end
 
 function gameplay:update(dt)
 
     --lovebird.update()
-    if game_data.mode == "online" then
-        server:update()
-    end
 
-    if game_data.mode == "single" then
+    if (not game_data.gameplay_paused) then
         game_data.local_player:update(dt)
         local dx,dy = game_data.local_player.coord.x - camera.x, game_data.local_player:getY() - camera.y
         camera:move(dx/2, dy/2)
-    end
-    
-
-    for idx, bullet in pairs(game_data.bullet_list) do
-        bullet:update(dt)
-        if outOfBounds(bullet.coord) or bullet:dead() then
-            table.remove(game_data.bullet_list, idx)
+        
+        for idx, bullet in pairs(game_data.bullet_list) do
+            bullet:update(dt)
+            if outOfBounds(bullet.coord) or bullet:dead() then
+                table.remove(game_data.bullet_list, idx)
+            end
         end
-    end
-
-    for key, enemy in pairs(game_data.enemy_list) do
-        local result = enemy:update(dt)
-        if result == "fire" then
-            local tmp_bullet = Bullet(enemy.coord)
-            tmp_bullet:setTeamAndSource(-1, key)
-            table.insert(game_data.bullet_list, tmp_bullet)
+        local enemy_count = 0
+        for key, enemy in pairs(game_data.enemy_list) do
+            local result = enemy:update(dt)
+            if result == "fire" then
+                local tmp_bullet = Bullet(enemy.coord)
+                tmp_bullet:setTeamAndSource(-1, key)
+                table.insert(game_data.bullet_list, tmp_bullet)
+            end
+            enemy_count = enemy_count + 1 -- count the number of enemies
         end
-    end
+        game_data.enemies_alive = enemy_count -- update the number of enemies alive
 
-    checkCollisions()
-    generateEnemies(dt)
-    updateHud(dt)
-    checkEndLevel(1)
-
-    if game_data.mode == "online" then
-        sendclient_listData()
+        -- updatee other odds and ends
+        checkCollisions()
+        gameplay.spawner:update(dt)
+        updateHud(dt)
+        checkEndLevel(1)
     end
 
 end
@@ -120,6 +114,10 @@ function gameplay:keypressed(key)
     if key == "i" then
         table.insert(game_data.item_list, Item(100, 100))
     end
+
+    if key == "p" then
+        game_data.gameplay_paused = not game_data.gameplay_paused
+    end
 end
 
 function checkEndLevel(level_number)
@@ -135,8 +133,6 @@ function checkEndLevel(level_number)
             Gamestate.switch(main_menu)
         end
     end
-    
-
 end
 
 return gameplay

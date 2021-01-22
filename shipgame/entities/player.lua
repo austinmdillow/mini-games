@@ -2,7 +2,7 @@ Player = Ship:extend()
 
 function Player:new(x_start, y_start)
   Player.super.new(self, x_start, y_start, dir_start)
-  self.max_speed = 250
+  self.max_speed = 550
   self.cruise_speed = 150
   self.min_speed = 50
   self.color = {1,0,0}
@@ -15,6 +15,8 @@ function Player:new(x_start, y_start)
   self.shield_health = 100
   self.shield_recharge_rate = 5
   self.shield_max = 110
+  self.equipped_weapon = Gun(10, 80)
+  self.invincible = false
 
   self.sprite_image = sprites.player_image
 end
@@ -25,6 +27,7 @@ function Player:reset()
 end
 
 function Player:update(dt)
+    Player.super.update(self, dt)
     if love.keyboard.isDown("up") then 
       self.current_speed = self.max_speed 
     elseif love.keyboard.isDown("down") then
@@ -34,14 +37,13 @@ function Player:update(dt)
     end
 
     if love.keyboard.isDown("right") then
-        self.coord:rotate(dt * (self.roation_speed + (self.cruise_speed - self.current_speed) / 150))
+        self.coord:rotate(dt * (self.roation_speed + (self.cruise_speed - self.current_speed) / 100))
     elseif love.keyboard.isDown("left") then
         self.coord:rotate(-dt * (self.roation_speed + (self.cruise_speed - self.current_speed) / 150))
     end
 
 
-    self.pSystem:setEmissionRate(self.current_speed / 10)
-    self.pSystem:setSpeed(100,self.current_speed * 2)
+    
     self.coord:moveForward(self.current_speed * dt)
     
     if self.shield_enabled then
@@ -57,6 +59,9 @@ end
 
 function Player:damage(amount)
   -- take damage to shield first
+  if self.invincible then
+    return false
+  end
   if self.shield_enabled then
     local shield_residual = self.shield_health - amount -- how much is left in the shield after a hit
     self.shield_health = math.max(0, shield_residual)
@@ -81,5 +86,9 @@ function Player:keypressed(key)
 
   if key == "u" then
     self.equipped_weapon:setUnlimitedAmmo(not self.equipped_weapon:getUnlimitedAmmo())
+  end
+
+  if key == "i" then
+    self.invincible = not self.invincible
   end
 end

@@ -21,6 +21,8 @@ end
 function Ship:update(dt)
     self.equipped_weapon:update(dt)
     if self.pSystem ~= nil then
+      self.pSystem:setEmissionRate(self.current_speed / 10)
+      self.pSystem:setSpeed(100,self.current_speed * 2)
       self.pSystem:update(dt)
       self.pSystem:moveTo(self.coord.x, self.coord.y)
     end
@@ -90,4 +92,8 @@ function Ship:setupParticleSystem()
   self.pSystem:setSpeed(100,100)
   self.pSystem:setSpin(1,1)
   self.pSystem:setColors(255, 255, 255, 255, 255, 255, 255, 0) -- Fade to black.
+end
+
+function Ship:getSpeed()
+  return self.current_speed
 end

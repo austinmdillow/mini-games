@@ -22,6 +22,7 @@ function drawHUD()
 
   love.graphics.print(string.format("Total Score: %d", game_data.score), start_x, start_y + shield_bar_y_offset * 2)
   love.graphics.print(string.format("Level Score: %d", game_data.level_score), start_x, start_y + shield_bar_y_offset * 3)
+  love.graphics.print(string.format("Enemies Alive: %d", game_data.enemies_alive), start_x, start_y + shield_bar_y_offset * 4)
 
   drawRadar()
   drawWeaponStats()

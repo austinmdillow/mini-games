@@ -24,6 +24,7 @@ require "entities.item"
 require "utils.serverCallbacks"
 require "utils.debugging"
 require "utils.hud"
+require "utils.spawner"
 
 require "assets.resources"
 
@@ -42,12 +43,14 @@ game_data = { -- where we store all global variables related to gameplay
     level_score = 0,
     enemy_list = {},
     current_enemy_number = 0,
+    enemies_alive = 0,
     bullet_list = {},
     item_list = {},
     map_properties = {
         width = 2000,
         height = 1000
-    }
+    },
+    gameplay_paused = false
 }
 
 -- default save values that will be loaded and written
@@ -170,16 +173,6 @@ function checkCollisions()
         end
     end
     local end_time_col = love.timer.getTime()
-end
-
-function generateEnemies(dt)
-    local random_num = love.math.randomNormal(1/dt/3, 0)
-    if random_num > 1 / dt then
-        game_data.current_enemy_number = game_data.current_enemy_number + 1
-        local tmp_enemy = Enemy(love.math.random(500), love.math.random(500))
-        tmp_enemy.id = game_data.current_enemy_number
-        game_data.enemy_list[game_data.current_enemy_number] = tmp_enemy
-    end
 end
 
 -- Global actions for a key press
