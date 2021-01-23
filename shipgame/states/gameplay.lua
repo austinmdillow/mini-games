@@ -51,9 +51,11 @@ end
 
 -- Drawing time
 function gameplay:draw()
-  camera:attach()
+    camera:attach()
+    love.graphics.setColor(1,1,1, .7)
+    love.graphics.draw(background)
 
-  screen:apply(dt)
+    screen:apply(dt)
 
     game_data.local_player:draw()
 

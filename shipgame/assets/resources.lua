@@ -8,4 +8,6 @@ sprites.enemy_image = love.graphics.newImage("assets/Spaceship_02_RED.png")
 sprites.enemy_fighter_image = love.graphics.newImage("assets/Spaceship_02_RED.png")
 sprites.particle_image = love.graphics.newImage("assets/particle.png")
 
+background = love.graphics.newImage("assets/space.jpg")
+
 ITEM_PIX_WIDTH = 32
