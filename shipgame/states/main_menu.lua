@@ -17,6 +17,7 @@ end
 
 local function levelSelect()
   main_menu:setText("Start Game was selected!")
+  game_data.current_level = game_data.current_level + 1
 
 end
 
@@ -55,6 +56,11 @@ end
 
 function main_menu:enter()
   print("Version " .. VERSION)
+  for idx, level in pairs(save_data.level_stats) do
+    for k, v in pairs(level) do
+      print(idx, k, v)
+    end
+  end
 
   love.graphics.setFont(love.graphics.newFont(20))
 

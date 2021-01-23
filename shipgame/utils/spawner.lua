@@ -4,10 +4,39 @@
 Spawner = Object:extend()
 
 spawn_sequences = {
-  level_one = {
+  { 
+    level = 1,
     {
       wave_num = 1,
-      total_enemies = 5,
+      total_enemies = 2,
+      type = "fighter",
+      spawn_location = {
+        x = 400,
+        y = 10,
+        t = 0
+      },
+      time_spacing = .6,
+      max_alive = 3
+    },
+    {
+      wave_num = 2,
+      total_enemies = 3,
+      type = "fighter",
+      spawn_location = {
+        x = 400,
+        y = 10,
+        t = 0
+      },
+      time_spacing = 3,
+      max_alive = 3
+    }
+  },
+
+  { 
+    level = 2,
+    {
+      wave_num = 1,
+      total_enemies = 2,
       type = "default",
       spawn_location = {
         x = 400,
@@ -35,6 +64,7 @@ spawn_sequences = {
 function Spawner:new(level)
   self.current_level = level
   self.current_wave = 1
+  assert(spawn_sequences[self.current_level].level == level)
   self.sequence = spawn_sequences[self.current_level][self.current_wave]
   self.last_spawn_time = 0
   self.wave_spawns = 0
@@ -43,7 +73,12 @@ end
 
 function Spawner:spawn(enemy_obj, type)
   game_data.current_enemy_number = game_data.current_enemy_number + 1
-  local tmp_enemy = Enemy(love.math.random(500), love.math.random(500))
+  local tmp_enemy = nil
+  if self.sequence.type == "fighter" then
+    tmp_enemy = EnemyFighter(love.math.random(500), love.math.random(500))
+  else
+    tmp_enemy = Enemy(love.math.random(500), love.math.random(500))
+  end
   tmp_enemy.id = game_data.current_enemy_number
   game_data.enemy_list[game_data.current_enemy_number] = tmp_enemy
   self.wave_spawns = self.wave_spawns + 1

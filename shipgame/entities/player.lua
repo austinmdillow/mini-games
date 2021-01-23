@@ -3,14 +3,16 @@ Player = Ship:extend()
 function Player:new(x_start, y_start)
   Player.super.new(self, x_start, y_start, dir_start)
   self.max_speed = 550
-  self.cruise_speed = 150
+  self.cruise_speed = 250
   self.min_speed = 50
+  self.boost = 100
+  self.over_boosted = false
   self.color = {1,0,0}
   self.radius = 10
   self.current_speed = 0
   self.roation_speed = 3
   self.size = 5
-  self.team = 0
+  self.team = Teams.blue
   self.shield_enabled = true
   self.shield_health = 100
   self.shield_recharge_rate = 5
@@ -28,7 +30,10 @@ end
 
 function Player:update(dt)
     Player.super.update(self, dt)
-    if love.keyboard.isDown("up") then 
+    self:updateBoost(dt)
+
+    if love.keyboard.isDown("up") and not self.over_boosted then
+      self.boost = self.boost - 100*dt
       self.current_speed = self.max_speed 
     elseif love.keyboard.isDown("down") then
       self.current_speed = self.min_speed
@@ -43,18 +48,30 @@ function Player:update(dt)
     end
 
 
-    
-    self.coord:moveForward(self.current_speed * dt)
-    
     if self.shield_enabled then
       self.shield_health = math.min(self.shield_max, self.shield_health + self.shield_recharge_rate * dt)
     end
 
     
+
+    self.coord:moveForward(self.current_speed * dt)
     self.pSystem:update(dt)
     self.pSystem:moveTo(self.coord.x, self.coord.y)
 
     self.pSystem:setDirection(self.coord:getT() + math.pi)
+end
+
+function Player:updateBoost(dt)
+  if self.boost < 1 then
+    self.over_boosted = true
+  end
+
+  -- if we need to refill
+  if self.boost < 100 then
+      self.boost = math.min(100, self.boost + dt * 25)
+  else
+    self.over_boosted = false
+  end
 end
 
 function Player:damage(amount)

@@ -6,9 +6,9 @@ function Enemy:new(x_start, y_start, dir_start)
     self.color = {1,1,0}
     self.radius = 10
     self.current_speed = 0
-    self.roation_speed = 45 * math.pi / 180 -- deg / s
+    self.roation_speed = 90 * math.pi / 180 -- deg / s
     self.size = 10
-    self.team = -1
+    self.team = Teams.red
     self.difficulty = 1
     self.sprite_image = nil
 end
@@ -23,9 +23,10 @@ function Enemy:update(dt)
         self.coord:rotate(-dt * self.roation_speed)
     end
 
-    if self:fire() then return "fire" end
+    
 
     self:followCoord(dt, game_data.local_player.coord)
+    if self:fire() then return "fire" end
 end
 
 function Enemy:draw()

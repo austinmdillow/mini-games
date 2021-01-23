@@ -92,6 +92,7 @@ function drawWeaponStats()
 
   love.graphics.rectangle('fill', 0, 0, heat_value * overheat_bar_width, 10)
   love.graphics.rectangle('line', 0, 0, overheat_bar_width, 10)
+  love.graphics.rectangle('line', 0, 20, game_data.local_player.boost, 10)
 
 
   love.graphics.pop() -- pop #1

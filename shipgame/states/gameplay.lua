@@ -8,12 +8,13 @@ function gameplay:enter()
     game_data.enemy_list = {}
     game_data.item_list = {}
     game_data.local_player:setXYT(500, 500, 0)
-    gameplay.spawner = Spawner("level_one")
+    gameplay.spawner = Spawner(game_data.current_level)
 end
 
 function gameplay:update(dt)
 
     --lovebird.update()
+    screen:update(dt)
 
     if (not game_data.gameplay_paused) then
         game_data.local_player:update(dt)
@@ -32,7 +33,7 @@ function gameplay:update(dt)
             local result = enemy:update(dt)
             if result == "fire" then
                 local tmp_bullet = Bullet(enemy.coord)
-                tmp_bullet:setTeamAndSource(-1, key)
+                tmp_bullet:setTeamAndSource(enemy.team, key)
                 table.insert(game_data.bullet_list, tmp_bullet)
             end
             enemy_count = enemy_count + 1 -- count the number of enemies
@@ -51,6 +52,8 @@ end
 -- Drawing time
 function gameplay:draw()
   camera:attach()
+
+  screen:apply(dt)
 
     game_data.local_player:draw()
 
@@ -83,7 +86,7 @@ function gameplay:draw()
 end
 
 function gameplay:keypressed(key)
-    print("key press")
+    print("key press", key)
     if key == "e" then
         game_data.current_enemy_number = game_data.current_enemy_number + 1
         --table.insert(game_data.enemy_list, game_data.current_enemy_number, Enemy(500,500))
@@ -119,6 +122,10 @@ function gameplay:keypressed(key)
     if key == "p" then
         game_data.gameplay_paused = not game_data.gameplay_paused
     end
+
+    if key == "escape" then
+        Gamestate.switch(main_menu)
+    end
 end
 
 function checkEndLevel(level_number)
@@ -133,7 +140,58 @@ function checkEndLevel(level_number)
             game_data.score = game_data.score + game_data.level_score
             Gamestate.switch(main_menu)
         end
+
+        if gameplay.spawner:completed() then
+            save_data.level_stats[game_data.current_level].completed = true
+            save_data.level_stats[game_data.current_level].kills = game_data.level_kills
+            save_data.level_stats[game_data.current_level].score = game_data.level_score
+            Gamestate.switch(main_menu)
+        end
+
     end
+end
+
+function checkCollisions()
+    local start_time_col = love.timer.getTime()
+    for idx_bullet, bullet in pairs(game_data.bullet_list) do
+        local bullet_x, bullet_y = bullet:getXY()
+
+        if bullet.source ~= game_data.local_player then
+            if game_data.local_player.coord:distanceToPoint(bullet_x, bullet_y) < game_data.local_player.hitbox + bullet.size then
+                game_data.local_player:damage(bullet.damage)
+                screen:shake(20)
+                game_data.bullet_list[idx_bullet] = nil
+            end 
+        end
+
+        for idx, enemy in pairs(game_data.enemy_list) do
+            
+            -- there was a hit
+            if enemy.team ~= bullet.team and enemy.coord:distanceToPoint(bullet_x, bullet_y) < enemy.hitbox + bullet.size then
+                game_data.bullet_list[idx_bullet] = nil
+                if enemy:damage(bullet.damage) then -- the bullet killed the enemy
+                    game_data.enemy_list[idx] = nil
+                    screen:shake(50)
+                    print("KILLLLEEDDD")
+                    game_data.level_score = game_data.level_score + enemy.difficulty
+                end
+            end
+        end
+
+    end
+
+    for idx_item, item in pairs(game_data.item_list) do
+        if item.coord:distanceToCoord(game_data.local_player.coord) < item.size + game_data.local_player.size then
+            game_data.item_list[idx_item] = nil
+            game_data.level_score = game_data.level_score + 1
+        end
+    end
+    local end_time_col = love.timer.getTime()
+end
+
+function drawBoundaries()
+    love.graphics.setColor(1,1,1)
+    love.graphics.polygon('line', 0,0, game_data.map_properties.width,0, game_data.map_properties.width,game_data.map_properties.height, 0,game_data.map_properties.height)
 end
 
 return gameplay
