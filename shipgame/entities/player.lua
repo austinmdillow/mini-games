@@ -35,11 +35,11 @@ function Player:update(dt)
     else 
       self.current_speed = self.cruise_speed
     end
-
+    local rotation_speed_const = 1
     if love.keyboard.isDown("right") then
-        self.coord:rotate(dt * (self.roation_speed + (self.cruise_speed - self.current_speed) / 100))
+        self.coord:rotate(dt * (self.roation_speed + rotation_speed_const * (self.cruise_speed - self.current_speed) / self.cruise_speed))
     elseif love.keyboard.isDown("left") then
-        self.coord:rotate(-dt * (self.roation_speed + (self.cruise_speed - self.current_speed) / 150))
+        self.coord:rotate(-dt * (self.roation_speed + rotation_speed_const * (self.cruise_speed - self.current_speed) / self.cruise_speed))
     end
 
 
