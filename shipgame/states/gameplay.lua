@@ -18,7 +18,8 @@ function gameplay:update(dt)
     if (not game_data.gameplay_paused) then
         game_data.local_player:update(dt)
         local dx,dy = game_data.local_player.coord.x - camera.x, game_data.local_player:getY() - camera.y
-        camera:move(dx/2, dy/2)
+        --camera:move(dx/2, dy/2)
+        camera:lockPosition(game_data.local_player.coord.x, game_data.local_player.coord.y, camera.smoother)
         
         for idx, bullet in pairs(game_data.bullet_list) do
             bullet:update(dt)

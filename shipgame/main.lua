@@ -3,6 +3,8 @@
 
 Object = require "lib.mylove.classic"
 Camera = require "lib.hump.camera"
+smoothie = Camera.smooth.damped(.1)
+ 
 Gamestate = require "lib.hump.gamestate"
 SaveData = require("lib.savedata.saveData")
 lovebird = require "lib.mylove.lovebird"
@@ -96,6 +98,7 @@ function love.load()
         end)
     end
     camera = Camera(400,400)
+    camera.smoother = Camera.smooth.damped(3)
     Gamestate.registerEvents()
     Gamestate.switch(main_menu)
     print(save_data.level_stats[1].kills)
