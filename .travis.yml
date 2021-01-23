@@ -1,5 +1,6 @@
-language: bash
-sudo: false
+language: shell
+os: linux
+dist: xenial
 install: true
 addons:
   apt:
