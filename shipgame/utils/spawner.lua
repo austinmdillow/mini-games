@@ -100,13 +100,13 @@ function Spawner:update(dt)
         self.current_wave = self.current_wave + 1
         self.sequence = spawn_sequences[self.current_level][self.current_wave]
       end
-      print("seq, ", self.sequence, level, self.current_wave)
+      --print("seq, ", self.sequence, level, self.current_wave)
     end
 
 end
 
 function Spawner:getWave()
-  return self.wave_num
+  return self.current_wave
 end
 
 function Spawner:completed()

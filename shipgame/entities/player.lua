@@ -31,6 +31,9 @@ end
 function Player:update(dt)
     Player.super.update(self, dt)
     self:updateBoost(dt)
+    if outOfBounds(self.coord) then
+      self:damage(dt*20)
+    end
 
     if love.keyboard.isDown("up") and not self.over_boosted then
       self.boost = self.boost - 100*dt

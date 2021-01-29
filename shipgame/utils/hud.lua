@@ -26,6 +26,7 @@ function drawHUD()
 
   drawRadar()
   drawWeaponStats()
+  drawLevelInfo()
 end
 
 function updateHud(dt)
@@ -96,4 +97,13 @@ function drawWeaponStats()
 
 
   love.graphics.pop() -- pop #1
+end
+
+
+function drawLevelInfo()
+  local level_num = gameplay.spawner:getWave()
+  print( gameplay.spawner)
+  if level_num ~= nil then
+    love.graphics.print(level_num, FRAME_WIDTH / 2, 10)
+  end
 end
