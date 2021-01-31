@@ -21,9 +21,13 @@ require "entities.player"
 require "entities.bullet"
 require "entities.enemy"
 require "entities.enemy_fighter"
-require "entities.gun"
 require "entities.item"
 require "entities.definitions"
+
+require "weapons.gun"
+require "weapons.machinegun"
+require "weapons.shotgun"
+
 
 require "utils.serverCallbacks"
 require "utils.debugging"

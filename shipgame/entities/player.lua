@@ -17,7 +17,7 @@ function Player:new(x_start, y_start)
   self.shield_health = 100
   self.shield_recharge_rate = 5
   self.shield_max = 110
-  self.equipped_weapon = Gun(10, 80)
+  self.equipped_weapon = Gun(2, 80)
   self.invincible = false
 
   self.sprite_image = sprites.player_image
@@ -62,6 +62,11 @@ function Player:update(dt)
     self.pSystem:moveTo(self.coord.x, self.coord.y)
 
     self.pSystem:setDirection(self.coord:getT() + math.pi)
+
+    if love.keyboard.isDown("space") and self.equipped_weapon:is(MachineGun) then
+      print("Machine")
+      self:fire()
+    end
 end
 
 function Player:updateBoost(dt)
@@ -110,5 +115,16 @@ function Player:keypressed(key)
 
   if key == "i" then
     self.invincible = not self.invincible
+  end
+
+  if key == "1" then
+    self.equipped_weapon = Gun(2,80)
+  end
+  if key == "2" then
+    self.equipped_weapon = Machinegun()
+  end
+  if key == "3" then
+    self.equipped_weapon = Shotgun(2,80)
+    print(self.equipped_weapon)
   end
 end

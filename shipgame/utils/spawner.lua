@@ -80,7 +80,7 @@ function Spawner:spawn(enemy_obj, type)
     tmp_enemy = Enemy(love.math.random(500), love.math.random(500))
   end
   tmp_enemy.id = game_data.current_enemy_number
-  game_data.enemy_list[game_data.current_enemy_number] = tmp_enemy
+  table.insert(game_data.enemy_list, tmp_enemy)
   self.wave_spawns = self.wave_spawns + 1
   self.level_spawns = self.level_spawns + 1
   self.last_spawn_time = 0

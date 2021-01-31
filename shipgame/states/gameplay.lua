@@ -102,8 +102,7 @@ function gameplay:keypressed(key)
         --table.insert(game_data.enemy_list, game_data.current_enemy_number, Enemy(500,500))
         local tmp_enemy = EnemyFighter(love.math.random(500), love.math.random(500))
         tmp_enemy.id = game_data.current_enemy_number
-        game_data.enemy_list[game_data.current_enemy_number] = tmp_enemy
-        print(tmp_enemy.sprite_image)
+        table.instert(game_data.enemy_list, tmp_enemy)
     end
 
     if game_data.mode == "single" then
@@ -138,7 +137,7 @@ function checkEndLevel(level_number)
     end
 
     if level_number == 1 then
-        if game_data.level_score > 10 then -- reached enough kills
+        if game_data.level_score > 10 and false then -- depricated
             game_data.score = game_data.score + game_data.level_score
             Gamestate.switch(main_menu)
         end
@@ -147,6 +146,7 @@ function checkEndLevel(level_number)
             save_data.level_stats[game_data.current_level].completed = true
             save_data.level_stats[game_data.current_level].kills = game_data.level_kills
             save_data.level_stats[game_data.current_level].score = game_data.level_score
+            game_data.current_level = game_data.current_level + 1
             Gamestate.switch(main_menu)
         end
 

@@ -10,7 +10,7 @@ function EnemyFighter:new(x_start, y_start, dir_start)
     self.size = 10
     self.difficulty = 2
     self.sprite_image = sprites.enemy_fighter_image
-    self.equipped_weapon = Gun(10, 10, 2)
+    self.equipped_weapon = Gun(5, 10, 2)
 end
 
 

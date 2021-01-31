@@ -39,6 +39,8 @@ end
 -- DRAW
 function main_menu:draw()
     main_menu_engine:draw()
+
+    love.graphics.print("Level: " .. game_data.current_level, FRAME_WIDTH / 2 - 10, 10)
     local current_time = love.timer.getTime()
     love.graphics.print(current_time, 100, 50)
 

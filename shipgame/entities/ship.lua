@@ -51,10 +51,12 @@ function Ship:draw()
 end
 
 function Ship:fire()
-  if self.equipped_weapon:fire() then
-    local tmp_bullet = Bullet(self.coord)
-    tmp_bullet:setTeamAndSource(self.team, self)
-    table.insert(game_data.bullet_list, tmp_bullet)
+  local fire_result = self.equipped_weapon:fire(self.coord) -- get the bullet object from the equipped gun
+  if fire_result ~= nil then -- if we actually fired something
+    for idx, tmp_bullet in pairs(fire_result) do -- loop through the bullet list we get back (if there are multiple)
+      tmp_bullet:setTeamAndSource(self.team, self)
+      table.insert(game_data.bullet_list, tmp_bullet)
+    end
     return true -- if we were able to fire the weapon
   end
   return false
@@ -62,12 +64,6 @@ end
 
 function Ship:setColorRandom()
 	self.color = {love.math.random(), love.math.random(), love.math.random()}
-end
-
-function Ship:keypressed(key)
-  if key == " " then
-    print("space is down")
-  end
 end
 
 function Ship:rateLimitedTurn(dt, angle) -- the desired amount of turning
