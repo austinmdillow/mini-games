@@ -11,10 +11,12 @@ SaveData = require("lib.savedata.saveData")
 lovebird = require "lib.mylove.lovebird"
 
 require "lib.mylove.colors"
-require "lib.hump.gamestate"
+require "lib.mylove.intersections"
 require "lib.mylove.entity"
-require "lib.menuengine"
 require "lib.mylove.coord"
+require "lib.hump.gamestate"
+require "lib.menuengine"
+
 
 require "entities.ship"
 require "entities.player"
@@ -33,6 +35,7 @@ require "utils.serverCallbacks"
 require "utils.debugging"
 require "utils.hud"
 require "utils.spawner"
+require "utils.upgrade_node"
 
 require "assets.resources"
 
@@ -40,6 +43,7 @@ require "assets.resources"
 local main_menu = require("states.main_menu")
 local gameplay = require("states.gameplay")
 local death_screen = require("states.death_screen")
+local upgrade_menu = require("states.upgrade_menu")
 
 VERSION = "0.1" -- not used at all
 

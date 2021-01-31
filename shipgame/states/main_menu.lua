@@ -16,9 +16,13 @@ local function startGame()
 end
 
 local function levelSelect()
-  main_menu:setText("Start Game was selected!")
+  main_menu:setText("Level Select was selected!")
   game_data.current_level = game_data.current_level + 1
+end
 
+local function upgradeSelect()
+  main_menu:setText("Upgrade was selected!")
+  Gamestate.push(upgrade_menu)
 end
 
 local function loadFromSave()
@@ -69,6 +73,7 @@ function main_menu:enter()
   main_menu_engine = menuengine.new(300,300)
   main_menu_engine:addEntry("Start Game", startGame)
   main_menu_engine:addEntry("Levels", levelSelect)
+  main_menu_engine:addEntry("Upgrades", upgradeSelect)
   main_menu_engine:addEntry("Load Game", loadFromSave)
   main_menu_engine:addEntry("Options", options)
   main_menu_engine:addSep()
