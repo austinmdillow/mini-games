@@ -30,15 +30,10 @@ function gameplay:update(dt)
         end
         local enemy_count = 0
         for key, enemy in pairs(game_data.enemy_list) do
-            local result = enemy:update(dt)
-            if result == "fire" then
-                local tmp_bullet = Bullet(enemy.coord)
-                tmp_bullet:setTeamAndSource(enemy.team, key)
-                table.insert(game_data.bullet_list, tmp_bullet)
-            end
-            enemy_count = enemy_count + 1 -- count the number of enemies
+            local result = enemy:update(dt) -- result not used
+            enemy_count = enemy_count + 1 -- count the number of enemies for debugging
         end
-        game_data.enemies_alive = enemy_count -- update the number of enemies alive
+        game_data.enemies_alive = enemy_count -- update the number of enemies alive for debugging
 
         -- updatee other odds and ends
         checkCollisions()

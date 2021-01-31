@@ -7,8 +7,9 @@ smoothie = Camera.smooth.damped(.1)
 screen = require "lib.shack.shack"
  
 Gamestate = require "lib.hump.gamestate"
-SaveData = require("lib.savedata.saveData")
+SaveData = require "lib.savedata.saveData"
 lovebird = require "lib.mylove.lovebird"
+Timer = require "lib.hump.timer"
 
 require "lib.mylove.colors"
 require "lib.mylove.intersections"

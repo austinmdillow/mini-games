@@ -21,6 +21,20 @@ function Player:new(x_start, y_start)
   self.invincible = false
 
   self.sprite_image = sprites.player_image
+  self.timer = Timer.new()
+  self.damage_color = {1,0,0,0}
+  
+  
+end
+
+function Player:grow()
+  print("in grow")
+  self.timer:tween(1, self.damage_color, {1, 0, 0, 1}, 'in-out-quad', self:shrink())
+end
+
+function Player:shrink()
+  print("in shrink")
+      self.timer:tween(1, self.damage_color, {1, 0, 0, 0}, 'in-out-quad')
 end
 
 function Player:reset()
@@ -30,6 +44,7 @@ end
 
 function Player:update(dt)
     Player.super.update(self, dt)
+    self.timer:update(dt)
     self:updateBoost(dt)
     if outOfBounds(self.coord) then
       self:damage(dt*20)
@@ -63,10 +78,16 @@ function Player:update(dt)
 
     self.pSystem:setDirection(self.coord:getT() + math.pi)
 
-    if love.keyboard.isDown("space") and self.equipped_weapon:is(MachineGun) then
+    if love.keyboard.isDown("space") and self.equipped_weapon:is(Machinegun) then
       print("Machine")
       self:fire()
     end
+end
+
+function Player:draw()
+  Player.super.draw(self)
+  love.graphics.setColor(self.damage_color)
+  love.graphics.circle('fill', self.coord.x, self.coord.y, 200)
 end
 
 function Player:updateBoost(dt)
@@ -96,12 +117,16 @@ function Player:damage(amount)
   else -- if we dont have a shield
     self.current_health = self.current_health - amount
   end
+  self:grow()
 
   if self.current_health <= 0 then
     return true
   else
     return false
   end
+
+  
+
 end
 
 function Player:keypressed(key)

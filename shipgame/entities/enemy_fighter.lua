@@ -7,7 +7,7 @@ function EnemyFighter:new(x_start, y_start, dir_start)
     self.radius = 10
     self.current_speed = 0
     self.roation_speed = 45 * math.pi / 180 -- deg / s
-    self.size = 10
+    self.size = 40
     self.difficulty = 2
     self.sprite_image = sprites.enemy_fighter_image
     self.equipped_weapon = Gun(5, 10, 2)

@@ -1,5 +1,7 @@
 Ship = Entity:extend()
 
+local hitbox_debug = true
+
 function Ship:new(x_start, y_start)
   Ship.super.new(self, x_start, y_start, dir_start)
   self:setColor(COLORS.red)
@@ -7,10 +9,10 @@ function Ship:new(x_start, y_start)
   self.radius = 10
   self.current_speed = 0
   self.roation_speed = 3
-  self.size = 5
+  self.size = 10
   self.last_fire_time = love.timer.getTime() -- last time since a bullet was fired
   self.fire_rate = 2 -- bullets per second
-  self.hitbox = self.size * 3
+  self.hitbox = self.size * 2
   self.sprite_image = nil
   self.equipped_weapon = Gun()
   self.pSystem = love.graphics.newParticleSystem(sprites.particle_image, 255)
@@ -44,6 +46,10 @@ function Ship:draw()
     love.graphics.circle('fill', -5, 0, 4 * self.current_speed / self.max_speed)
   end
   
+  if hitbox_debug then
+    love.graphics.setColor(COLORS.red)
+    love.graphics.circle('line', 0, 0, self.hitbox)
+  end
   love.graphics.pop() -- pop 1
   if self.pSystem ~= nil then
     love.graphics.draw(self.pSystem, 0,0)

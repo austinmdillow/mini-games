@@ -5,7 +5,7 @@ function Bullet:new(damage, x_start, y_start, dir_start)
   self:setColor(COLORS.green)
 
   self.rotation_visual = 0
-  self.max_speed = 100
+  self.max_speed = 800
   self.size = 10
   self.team = nil
   self.source_id = nil

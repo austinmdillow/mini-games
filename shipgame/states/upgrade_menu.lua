@@ -1,6 +1,6 @@
 upgrade_menu = {}
 
-upgrade_progression = {
+local upgrade_progression = {
   speed_1 = {
     x = 100,
     y = 100,
@@ -15,6 +15,31 @@ upgrade_progression = {
     title = "Speed number 2",
     previous = "speed_1",
     cost = 23
+  },
+  armor_1 = {
+    x = 400,
+    y = 400,
+    title = "armor 1",
+    previous = nil,
+    next = "armor_2",
+    cost = 23,
+    target = "max_health",
+    multiplier = 1.2
+  },
+  armor_2 = {
+    x = 600,
+    y = 200,
+    title = "armor 2",
+    previous = "armor_1",
+    prerequisite = "crafting_1",
+    cost = 23
+  },
+  crafting_1 = {
+    x = 800,
+    y = 200,
+    title = "Crafting ability",
+    previous = nil,
+    cost = 100
   }
 }
 
@@ -25,6 +50,7 @@ function upgrade_menu:init()
     local tmp_upgrade = Upgrade(attributes.x, attributes.y)
     tmp_upgrade:setTitle(attributes.title)
     tmp_upgrade:setCost(attributes.cost)
+    tmp_upgrade:setResult(attributes.target, attributes.multiplier, attributes.adder)
     print(attributes.next)
     --table.insert(upgrade_list, tmp_upgrade)
     upgrade_list[key] = tmp_upgrade

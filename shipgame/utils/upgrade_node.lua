@@ -81,6 +81,15 @@ function Upgrade:setNext(upgrade)
   self.next = upgrade
 end
 
+function Upgrade:setResult(target, multiplier, adder)
+  if target ~= nil then
+    local m = multiplier or 1
+    local a = adder or 0
+    print(target, m, a)
+    game_data.local_player[target] = game_data.local_player[target] * m + a
+  end
+end
+
 function Upgrade:isUnlocked()
   return self.unlocked
 end

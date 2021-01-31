@@ -46,7 +46,6 @@ function drawRadar()
   love.graphics.push() -- push #1
   love.graphics.translate(FRAME_WIDTH - radar_size, FRAME_HEIGHT - radar_size)
   love.graphics.setColor(COLORS.green)
-  print("green " .. COLORS.green[2])
   love.graphics.circle('fill', 0, 0, radar_size)
 
   love.graphics.scale(.1)

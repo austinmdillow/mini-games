@@ -3,7 +3,7 @@ Enemy = Ship:extend()
 function Enemy:new(x_start, y_start, dir_start)
     Enemy.super.new(self, x_start, y_start, dir_start)
     self:setColor({1,1,0})
-    
+
     self.max_speed = 320
     self.radius = 10
     self.current_speed = 0
