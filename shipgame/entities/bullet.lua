@@ -2,11 +2,11 @@ Bullet = Entity:extend()
 
 function Bullet:new(damage, x_start, y_start, dir_start)
   Bullet.super.new(self, x_start, y_start, dir_start)
+  self:setColor(COLORS.green)
 
   self.rotation_visual = 0
-  self.max_speed = 800
+  self.max_speed = 100
   self.size = 10
-  self.color = COLORS.green
   self.team = nil
   self.source_id = nil
   self.damage = damage or 10 -- default
@@ -17,7 +17,7 @@ end
 function Bullet:update(dt)
     self.time_alive = self.time_alive + dt
     self.coord:moveForward(self.max_speed * dt)
-    self.rotation_visual = self.rotation_visual + self.roation_speed + dt
+    self.rotation_visual = self.rotation_visual + self.rotation_speed * dt
 end
 
 function Bullet:draw()

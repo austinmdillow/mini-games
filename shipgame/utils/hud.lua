@@ -46,9 +46,9 @@ function drawRadar()
   love.graphics.push() -- push #1
   love.graphics.translate(FRAME_WIDTH - radar_size, FRAME_HEIGHT - radar_size)
   love.graphics.setColor(COLORS.green)
+  print("green " .. COLORS.green[2])
   love.graphics.circle('fill', 0, 0, radar_size)
 
-  love.graphics.push() -- push #2
   love.graphics.scale(.1)
 
   love.graphics.setColor(COLORS.blue)
@@ -60,7 +60,6 @@ function drawRadar()
       love.graphics.circle('fill', enemy:getX() - game_data.local_player:getX(), enemy:getY() - game_data.local_player:getY(), dot_size)
     end
   end
-  love.graphics.pop() --POP #2
   love.graphics.pop() -- pop #1
 end
 

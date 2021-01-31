@@ -2,12 +2,12 @@ Player = Ship:extend()
 
 function Player:new(x_start, y_start)
   Player.super.new(self, x_start, y_start, dir_start)
+  self:setColor(COLORS.red)
   self.max_speed = 550
   self.cruise_speed = 250
   self.min_speed = 50
   self.boost = 100
   self.over_boosted = false
-  self.color = {1,0,0}
   self.radius = 10
   self.current_speed = 0
   self.roation_speed = 3

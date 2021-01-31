@@ -14,6 +14,7 @@ function Gun:new(fire_rate, damage, cooldown_rate)
   self.overheated = false
   self.overheat_capable = true
   self.label = "gun default"
+  self.color = {1,0,0}
   
 end
 
