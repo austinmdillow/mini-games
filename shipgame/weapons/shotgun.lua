@@ -39,6 +39,8 @@ function Shotgun:fire(ship_coord)
           local tmp_bullet = Bullet(self.damage, ship_coord)
           local rotation = i * self.spread - self.spread * (self.shots + 1) /2
           tmp_bullet:rotate(rotation)
+          --tmp_bullet.color = COLORS.periwinkle
+          tmp_bullet.roation_speed = 4
           table.insert(bullet_list, tmp_bullet)
         end
         return bullet_list
