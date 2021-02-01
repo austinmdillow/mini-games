@@ -34,6 +34,14 @@ local upgrade_progression = {
     prerequisite = "crafting_1",
     cost = 23
   },
+  armor_3 = {
+    x = 700,
+    y = 500,
+    title = "armor 3",
+    previous = "armor_1",
+    prerequisite = "crafting_1",
+    cost = 23
+  },
   crafting_1 = {
     x = 800,
     y = 200,
@@ -46,30 +54,26 @@ local upgrade_progression = {
 upgrade_list = {}
 
 function upgrade_menu:init()
-  for key, attributes in pairs(upgrade_progression) do
-    local tmp_upgrade = Upgrade(attributes.x, attributes.y)
-    tmp_upgrade:setTitle(attributes.title)
-    tmp_upgrade:setCost(attributes.cost)
-    tmp_upgrade:setResult(attributes.target, attributes.multiplier, attributes.adder)
-    print(attributes.next)
+  for key, progrssion in pairs(upgrade_progression) do
+    local tmp_upgrade = Upgrade(progrssion.x, progrssion.y)
+    tmp_upgrade:setTitle(progrssion.title)
+    tmp_upgrade:setCost(progrssion.cost)
+    tmp_upgrade:setResult(progrssion.target, progrssion.multiplier, progrssion.adder)
+    print(progrssion.next)
     --table.insert(upgrade_list, tmp_upgrade)
     upgrade_list[key] = tmp_upgrade
   end
 
-  for key, attributes in pairs(upgrade_progression) do
-    if attributes.next ~= nil then
-      assert(upgrade_list[attributes.next] ~= nil) -- the next upgrade object was never created
-      upgrade_list[key].next = upgrade_list[attributes.next]
-    end
-    if attributes.previous ~= nil then
-      assert(upgrade_list[attributes.previous] ~= nil) -- the previous upgrade object was never created
-      upgrade_list[key].previous = upgrade_list[attributes.previous]
+  for key, progrssion in pairs(upgrade_progression) do
+    if progrssion.next ~= nil then
+      assert(upgrade_list[progrssion.next] ~= nil) -- the next upgrade object was never created
+      table.insert(upgrade_list[key].next, upgrade_list[progrssion.next]) -- add the next object to the current object
+      table.insert(upgrade_list[progrssion.next].previous, upgrade_list[key])
     end
   end
 
   for key, upgrade in pairs(upgrade_list) do
     print(key, upgrade)
-
   end
 end
 
@@ -81,18 +85,18 @@ end
 
 function upgrade_menu:draw()
   love.graphics.setColor(COLORS.orange)
-  love.graphics.print("Upgrades People", 10, 10)
+  love.graphics.print("U", 10, 10)
 
   for key, upgrade in pairs(upgrade_list) do
     upgrade:draw()
     love.graphics.setColor(COLORS.yellow)
 
     local lead_in = 50
-    if upgrade.next ~= nil then
+    for _, next_upgrade in pairs(upgrade.next) do
       local start_x = upgrade:getX() + upgrade.width
       local start_y = upgrade:getY() + upgrade.height / 2
-      local end_x = upgrade.next:getX()
-      local end_y = upgrade.next:getY() + upgrade.next.height / 2
+      local end_x = next_upgrade:getX()
+      local end_y = next_upgrade:getY() + next_upgrade.height / 2
       local curve = love.math.newBezierCurve({start_x,start_y, start_x + lead_in,start_y, end_x - lead_in, end_y, end_x,end_y})
       love.graphics.line(curve:render())
     end

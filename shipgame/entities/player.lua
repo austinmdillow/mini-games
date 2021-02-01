@@ -7,6 +7,7 @@ function Player:new(x_start, y_start)
   self.cruise_speed = 250
   self.min_speed = 50
   self.boost = 100
+  self.max_boost = 400
   self.over_boosted = false
   self.radius = 10
   self.current_speed = 0
@@ -52,11 +53,11 @@ function Player:update(dt)
 
     if love.keyboard.isDown("up") and not self.over_boosted then
       self.boost = self.boost - 100*dt
-      self.current_speed = self.max_speed 
+      self.current_speed = math.min(self.current_speed + 500 * dt, self.max_speed)
     elseif love.keyboard.isDown("down") then
       self.current_speed = self.min_speed
     else 
-      self.current_speed = self.cruise_speed
+      self.current_speed = math.max(self.current_speed - 200*dt, self.cruise_speed)
     end
     local rotation_speed_const = 1
     if love.keyboard.isDown("right") then
@@ -96,8 +97,8 @@ function Player:updateBoost(dt)
   end
 
   -- if we need to refill
-  if self.boost < 100 then
-      self.boost = math.min(100, self.boost + dt * 25)
+  if self.boost < self.max_boost then
+      self.boost = math.min(self.max_boost, self.boost + dt * 25)
   else
     self.over_boosted = false
   end

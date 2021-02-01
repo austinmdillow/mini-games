@@ -2,13 +2,14 @@ Upgrade = Object:extend()
 
 
 function Upgrade:new(x_home, y_home)
+  self.drift_time = 0 -- keep track of time for the sin functions
   self.x_home = x_home
   self.y_home = y_home
   self.x = self.x_home + 100
   self.x_vel = 0
   self.y = self.y_home
-  self.previous = nil -- what is needed for this unlock
-  self.nex_homet = nil -- what this upgrade will unlock
+  self.previous = {} -- what is needed for this unlock
+  self.next = {} -- what this upgrade will unlock
   self.cost = 100 -- how much this upgrade will cost
   self.title = "default upgrade"
   self.description = "This is a placeholder for a more detailed description"
@@ -22,11 +23,10 @@ function Upgrade:new(x_home, y_home)
 end
 
 function Upgrade:update(dt)
-  if dt < 1 / 30 then -- make sure we don't do these calcs in a paused state
-    self.x_vel = self.x_vel + .1*love.math.randomNormal(10, self.x_home - self.x) * dt
-    --self.x = self.x + self.x_vel * dt
-    self.x = self.x_home + self.oscillation_amount_x * math.cos(love.timer.getTime() + self.oscillation_offset_x)
-    self.y = self.y_home + self.oscillation_amount_y * math.cos(love.timer.getTime() + self.oscillation_offset_y)
+  self.drift_time = self.drift_time + dt
+  if dt < 1 / 5 then -- make sure we don't do these calcs in a paused state
+    self.x = self.x_home + self.oscillation_amount_x * math.cos(self.drift_time + self.oscillation_offset_x)
+    self.y = self.y_home + self.oscillation_amount_y * math.cos(self.drift_time + self.oscillation_offset_y)
   end
 end
 
@@ -57,19 +57,21 @@ end
 
 function Upgrade:mousereleased(x,y, mouse_btn)
   if self:pointInBox_home() then
+    print(self)
     print("Upgrade: mouse released inside ", self.title)
-    print(self.previous, self.nex_homet)
+    print(self.previous, self.next)
 
     -- check if unlock is available
-    if self.previous == nil or self.previous:isUnlocked() then
+    if self:hasPreviousUnlocked() then
       local title = "Confirm Upgrade"
-      local message = "Are you sure you want to spend " .. self.cost .. " coins to upgrade?"
-      local buttons = {"Hell yeah!", "No thanks", escapebutton = 0, enterbutton = 0}
-      local pressedbutton = love.window.showMessageBox(title, message, buttons, "warning")
-      print(pressedbutton)
-      if pressedbutton == 1 then
-        self.unlocked = true
-      end
+        local message = "Are you sure you want to spend " .. self.cost .. " coins to upgrade?"
+        local buttons = {"Hell yeah!", "No thanks", escapebutton = 0, enterbutton = 0}
+        local pressedbutton = love.window.showMessageBox(title, message, buttons, "warning")
+        print(pressedbutton)
+        if pressedbutton == 1 then
+          self.unlocked = true
+        end
+        return
     end
   end
 end
@@ -89,9 +91,9 @@ function Upgrade:setPrevious(upgrade)
   self.previous = upgrade
 end
 
-function Upgrade:setNex_homet(upgrade)
+function Upgrade:setNext(upgrade)
   assert(upgrade:is(Upgrade))
-  self.nex_homet = upgrade
+  self.next = upgrade
 end
 
 function Upgrade:setResult(target, multiplier, adder)
@@ -107,6 +109,19 @@ function Upgrade:isUnlocked()
   return self.unlocked
 end
 
+function Upgrade:hasPreviousUnlocked()
+  if next(self.previous) == nil then
+    return true
+  end
+
+  for i, prev in pairs(self.previous) do
+      if prev:isUnlocked() then
+        return true
+      end
+  end
+  return false -- if we got here then this upgrade doesn't have any previous unlocked
+end
+
 function Upgrade:getPosition()
   return self:getX(), self:getY()
 end
@@ -117,4 +132,13 @@ end
 
 function Upgrade:getX()
   return self.x
+end
+
+-- print all of the upgrades that this one connects to
+function Upgrade:printConnections()
+  
+end
+
+function Upgrade:__toString()
+  print(self.title .. self.cost)
 end

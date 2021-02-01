@@ -47,6 +47,7 @@ function drawRadar()
   love.graphics.translate(FRAME_WIDTH - radar_size, FRAME_HEIGHT - radar_size)
   love.graphics.setColor(COLORS.green)
   love.graphics.circle('fill', 0, 0, radar_size)
+  love.graphics.print(game_data.local_player.current_speed, -radar_size, -radar_size)
 
   love.graphics.scale(.1)
 
