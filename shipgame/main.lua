@@ -50,11 +50,11 @@ VERSION = "0.1" -- not used at all
 
 game_data = { -- where we store all global variables related to gameplay
     mode = "single",
-    client_list = {},
+    --client_list = {},
     local_player = nil,
     score = 0,
     current_level = 1,
-    level_score = 0,
+    --level_score = 0,
     enemy_list = {},
     current_enemy_number = 0,
     enemies_alive = 0,

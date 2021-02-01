@@ -117,7 +117,6 @@ function Player:damage(amount)
   else -- if we dont have a shield
     self.current_health = self.current_health - amount
   end
-  self:grow()
 
   if self.current_health <= 0 then
     return true
