@@ -57,21 +57,20 @@ end
 
 function Upgrade:mousereleased(x,y, mouse_btn)
   if self:pointInBox_home() then
-    print(self)
-    print("Upgrade: mouse released inside ", self.title)
-    print(self.previous, self.next)
+    --print("Upgrade: mouse released inside ", self)
+    self:printConnections()
 
     -- check if unlock is available
     if self:hasPreviousUnlocked() then
       local title = "Confirm Upgrade"
-        local message = "Are you sure you want to spend " .. self.cost .. " coins to upgrade?"
-        local buttons = {"Hell yeah!", "No thanks", escapebutton = 0, enterbutton = 0}
-        local pressedbutton = love.window.showMessageBox(title, message, buttons, "warning")
-        print(pressedbutton)
-        if pressedbutton == 1 then
-          self.unlocked = true
-        end
-        return
+      local message = "Are you sure you want to spend " .. self.cost .. " coins to upgrade?"
+      local buttons = {"Hell yeah!", "No thanks", escapebutton = 0, enterbutton = 0}
+      local pressedbutton = love.window.showMessageBox(title, message, buttons, "warning")
+      print(pressedbutton)
+      if pressedbutton == 1 then
+        self.unlocked = true
+      end
+      return
     end
   end
 end
@@ -136,9 +135,17 @@ end
 
 -- print all of the upgrades that this one connects to
 function Upgrade:printConnections()
-  
+  print("Listing Upgrade Connections for ", self)
+  print("Next")
+  for _, next_upgrade in pairs(self.next) do
+    print(next_upgrade)
+  end
+  print("Prev")
+  for _, previous_upgrade in pairs(self.previous) do
+    print(previous_upgrade)
+  end
 end
 
-function Upgrade:__toString()
-  print(self.title .. self.cost)
+function Upgrade:__tostring()
+  return "Upgrade:" .. self.title .. ", costing: " .. self.cost
 end
