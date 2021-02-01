@@ -1,20 +1,33 @@
 Upgrade = Object:extend()
 
 
-function Upgrade:new(x, y)
-  self.x = x
-  self.y = y
+function Upgrade:new(x_home, y_home)
+  self.x_home = x_home
+  self.y_home = y_home
+  self.x = self.x_home + 100
+  self.x_vel = 0
+  self.y = self.y_home
   self.previous = nil -- what is needed for this unlock
-  self.next = nil -- what this upgrade will unlock
+  self.nex_homet = nil -- what this upgrade will unlock
   self.cost = 100 -- how much this upgrade will cost
   self.title = "default upgrade"
   self.description = "This is a placeholder for a more detailed description"
   self.width = 100
   self.height = 150
   self.unlocked = false
+  self.oscillation_offset_x = love.math.random(2 * math.pi)
+  self.oscillation_offset_y = love.math.random(2 * math.pi)
+  self.oscillation_amount_x = love.math.random(-10, 10)
+  self.oscillation_amount_y = love.math.random(-10, 10)
 end
 
 function Upgrade:update(dt)
+  if dt < 1 / 30 then -- make sure we don't do these calcs in a paused state
+    self.x_vel = self.x_vel + .1*love.math.randomNormal(10, self.x_home - self.x) * dt
+    --self.x = self.x + self.x_vel * dt
+    self.x = self.x_home + self.oscillation_amount_x * math.cos(love.timer.getTime() + self.oscillation_offset_x)
+    self.y = self.y_home + self.oscillation_amount_y * math.cos(love.timer.getTime() + self.oscillation_offset_y)
+  end
 end
 
 function Upgrade:draw()
@@ -31,21 +44,21 @@ function Upgrade:draw()
   end
   love.graphics.rectangle('line', 0, 0, self.width, self.height)
 
-  -- draw text
+  -- draw tex_homet
   love.graphics.setColor(COLORS.blue)
   love.graphics.print(self.title, 10, 10)
   love.graphics.pop()
 end
 
-function Upgrade:pointInBox()
-  local tx, ty = love.mouse.getPosition()
-  return PointWithinRectangle(self.x, self.y, self.width, self.height, tx, ty)
+function Upgrade:pointInBox_home()
+  local tx_home, ty = love.mouse.getPosition()
+  return PointWithinRectangle(self.x, self.y, self.width, self.height, tx_home, ty)
 end 
 
 function Upgrade:mousereleased(x,y, mouse_btn)
-  if self:pointInBox() then
+  if self:pointInBox_home() then
     print("Upgrade: mouse released inside ", self.title)
-    print(self.previous, self.next)
+    print(self.previous, self.nex_homet)
 
     -- check if unlock is available
     if self.previous == nil or self.previous:isUnlocked() then
@@ -76,9 +89,9 @@ function Upgrade:setPrevious(upgrade)
   self.previous = upgrade
 end
 
-function Upgrade:setNext(upgrade)
+function Upgrade:setNex_homet(upgrade)
   assert(upgrade:is(Upgrade))
-  self.next = upgrade
+  self.nex_homet = upgrade
 end
 
 function Upgrade:setResult(target, multiplier, adder)
@@ -92,4 +105,16 @@ end
 
 function Upgrade:isUnlocked()
   return self.unlocked
+end
+
+function Upgrade:getPosition()
+  return self:getX(), self:getY()
+end
+
+function Upgrade:getY()
+  return self.y
+end
+
+function Upgrade:getX()
+  return self.x
 end

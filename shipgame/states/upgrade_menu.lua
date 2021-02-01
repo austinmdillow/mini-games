@@ -89,10 +89,10 @@ function upgrade_menu:draw()
 
     local lead_in = 50
     if upgrade.next ~= nil then
-      local start_x = upgrade.x + upgrade.width
-      local start_y = upgrade.y + upgrade.height / 2
-      local end_x = upgrade.next.x
-      local end_y = upgrade.next.y + upgrade.next.height / 2
+      local start_x = upgrade:getX() + upgrade.width
+      local start_y = upgrade:getY() + upgrade.height / 2
+      local end_x = upgrade.next:getX()
+      local end_y = upgrade.next:getY() + upgrade.next.height / 2
       local curve = love.math.newBezierCurve({start_x,start_y, start_x + lead_in,start_y, end_x - lead_in, end_y, end_x,end_y})
       love.graphics.line(curve:render())
     end

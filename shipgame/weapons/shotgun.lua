@@ -4,11 +4,11 @@ function Shotgun:new()
   Shotgun.super.new(self)
   self.ammo = 100
   self.max_ammo = nil
-  self.max_speed = 500
+  self.max_speed = 100
   self.unlimited_ammo = true
   self.fire_rate = 4
   self.last_fire_time = love.timer.getTime()
-  self.damage = 60
+  self.damage = 50
   self.cooldown_rate = 1
   self.current_heat = 0
   self.max_heat = 4
