@@ -62,6 +62,15 @@ function Upgrade:mousereleased(x,y, mouse_btn)
     --print("Upgrade: mouse released inside ", self)
     self:printConnections()
 
+    if not self:hasPreviousUnlocked() then
+      print("Prior upgrade needs to be unlocked")
+      return
+    end
+
+    if self.cost > game_data.coins then
+      print("Item costs " .. self.cost ..", need " .. self.cost - game_data.coins .. " more")
+      return
+    end
     -- check if unlock is available
     if self:hasPreviousUnlocked() then
       local title = "Confirm Upgrade"
@@ -70,6 +79,7 @@ function Upgrade:mousereleased(x,y, mouse_btn)
       local pressedbutton = love.window.showMessageBox(title, message, buttons, "warning")
       print(pressedbutton)
       if pressedbutton == 1 then
+        game_data.coins = game_data.coins - self.cost
         self.unlocked = true
       end
       return

@@ -53,6 +53,7 @@ game_data = { -- where we store all global variables related to gameplay
     --client_list = {},
     local_player = nil,
     score = 0,
+    coins = 100,
     current_level = 1,
     --level_score = 0,
     enemy_list = {},

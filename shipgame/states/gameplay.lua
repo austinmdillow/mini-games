@@ -121,6 +121,12 @@ function gameplay:keypressed(key)
     if key == "escape" then
         Gamestate.switch(main_menu)
     end
+
+    if key == "[" then
+        for idx_item, item in pairs(game_data.item_list) do
+            print(idx_item, item)
+        end
+    end
 end
 
 function checkEndLevel(level_number)
@@ -183,6 +189,7 @@ function checkCollisions()
         if item.coord:distanceToCoord(game_data.local_player.coord) < item.size + game_data.local_player.size then
             game_data.item_list[idx_item] = nil
             game_data.level_score = game_data.level_score + 1
+            game_data.coins = game_data.coins + 1
         end
     end
     local end_time_col = love.timer.getTime()
