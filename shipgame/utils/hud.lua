@@ -105,3 +105,11 @@ function drawLevelInfo()
     love.graphics.print(level_num, FRAME_WIDTH / 2, 10)
   end
 end
+
+
+
+
+function drawUpgradeHud()
+  love.graphics.setColor(COLORS.olive)
+  love.graphics.rectangle('fill', 0, 0, FRAME_WIDTH, 40)
+end

@@ -70,6 +70,7 @@ function main_menu:enter()
 
   love.graphics.setFont(love.graphics.newFont(20))
 
+  -- add all of the different menus
   main_menu_engine = menuengine.new(300,300)
   main_menu_engine:addEntry("Start Game", startGame)
   main_menu_engine:addEntry("Levels", levelSelect)

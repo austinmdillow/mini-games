@@ -14,7 +14,7 @@ function Gun:new(fire_rate, damage, cooldown_rate)
   self.overheated = false
   self.overheat_capable = true
   self.label = "gun default"
-  self.color = {1,0,0}
+  self.color = {1,0,0} -- not used as the gun shouldn't be drawn
   
 end
 
@@ -28,13 +28,14 @@ function Gun:fire(ship_coord)
           self.ammo = self.ammo - 1
         end
         self.last_fire_time = love.timer.getTime()
-        return {Bullet(self.damage, ship_coord)}
+        return {Bullet(self.damage, ship_coord)} -- return a default bullet
       end
     end
   end
   return nil
 end
 
+-- returns the overheated state and the percentage of overheat level
 function Gun:getOverheat()
   return self.overheated, self.current_heat / self.max_heat
 end
@@ -43,12 +44,14 @@ function Gun:update(dt)
   self:updateOverheat(dt)
 end
 
+-- called every loop in order to update the overheat levels
 function Gun:updateOverheat(dt)
   self.current_heat = math.max(self.current_heat - dt * self.cooldown_rate, 0)
   if self.current_heat >= self.max_heat then
     self.overheated = true
   end
 
+  -- disbales the overheated flag
   if self.overheated and self.current_heat == 0 then
     self.overheated = false
   end
@@ -73,5 +76,5 @@ function Gun:setUnlimitedAmmo(b)
 end
 
 function Gun:__tostring()
-  return self.ammo .. ", " .. self.label
+  return self.label .. ": ammo = " .. self.ammo
 end

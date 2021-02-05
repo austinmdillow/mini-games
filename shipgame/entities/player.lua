@@ -18,27 +18,28 @@ function Player:new(x_start, y_start)
   self.shield_health = 100
   self.shield_recharge_rate = 5
   self.shield_max = 110
-  self.equipped_weapon = Gun(2, 80)
+  self.equipped_weapon = Gun(2, 80) -- currently a default gun, may want to change
   self.invincible = false
 
   self.sprite_image = sprites.player_image
-  self.timer = Timer.new()
-  self.damage_color = {1,0,0,0}
+  self.timer = Timer.new() -- not sure if this is used
+  self.damage_color = {1,0,0,0} -- not used
   
   
 end
 
-function Player:grow()
+function Player:grow() -- not used
   print("in grow")
   self.timer:tween(1, self.damage_color, {1, 0, 0, 1}, 'in-out-quad', self:shrink())
 end
 
-function Player:shrink()
+function Player:shrink() -- not used
   print("in shrink")
       self.timer:tween(1, self.damage_color, {1, 0, 0, 0}, 'in-out-quad')
 end
 
-function Player:reset()
+-- called before the player starts a new level and such
+function Player:reset() -- need to add info
   self.shield_health = 0
   self.current_health = 100
 end

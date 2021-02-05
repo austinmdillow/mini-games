@@ -6,14 +6,13 @@ local upgrade_progression = {
     y = 100,
     title = "speed number 1",
     cost = 4,
-    next = "speed_2"
+    next = {"speed_2"}
 
   },
   speed_2 = {
     x = 400,
     y = 200,
     title = "Speed number 2",
-    previous = "speed_1",
     cost = 23
   },
   armor_1 = {
@@ -21,7 +20,7 @@ local upgrade_progression = {
     y = 400,
     title = "armor 1",
     previous = nil,
-    next = "armor_2",
+    next = {"armor_2", "armor_3"},
     cost = 23,
     target = "max_health",
     multiplier = 1.2
@@ -30,7 +29,6 @@ local upgrade_progression = {
     x = 600,
     y = 200,
     title = "armor 2",
-    previous = "armor_1",
     prerequisite = "crafting_1",
     cost = 23
   },
@@ -38,7 +36,6 @@ local upgrade_progression = {
     x = 700,
     y = 500,
     title = "armor 3",
-    previous = "armor_1",
     prerequisite = "crafting_1",
     cost = 23
   },
@@ -54,6 +51,21 @@ local upgrade_progression = {
 upgrade_list = {}
 
 function upgrade_menu:init()
+  
+  upgrade_menu.window_x = -100
+  upgrade_menu.window_y = 1
+  upgrade_menu.camera = Camera(FRAME_WIDTH / 2, FRAME_HEIGHT / 2)
+  upgrade_menu.grabbed = false
+  upgrade_menu.camera.smoother = Camera.smooth.damped(10)
+
+  upgrade_menu.mouse_start_x, upgrade_menu.mouse_start_y = 0, 0
+
+  upgrade_menu.window_x_max = 500 + FRAME_WIDTH / 2
+  upgrade_menu.window_x_min = 0 + FRAME_WIDTH / 2
+  upgrade_menu.window_y_max = 100 + FRAME_HEIGHT / 2
+  upgrade_menu.window_y_min = -100 + FRAME_HEIGHT / 2
+
+
   for key, progrssion in pairs(upgrade_progression) do
     local tmp_upgrade = Upgrade(progrssion.x, progrssion.y)
     tmp_upgrade:setTitle(progrssion.title)
@@ -66,9 +78,12 @@ function upgrade_menu:init()
 
   for key, progrssion in pairs(upgrade_progression) do
     if progrssion.next ~= nil then
-      assert(upgrade_list[progrssion.next] ~= nil) -- the next upgrade object was never created
-      table.insert(upgrade_list[key].next, upgrade_list[progrssion.next]) -- add the next object to the current object
-      table.insert(upgrade_list[progrssion.next].previous, upgrade_list[key])
+      for _,next_key in pairs(progrssion.next) do
+        assert(upgrade_list[next_key] ~= nil) -- the next upgrade object was never created
+        table.insert(upgrade_list[key].next, upgrade_list[next_key]) -- add the next object to the current object
+        table.insert(upgrade_list[next_key].previous, upgrade_list[key]) -- add the current object to the next objects previous list
+      end
+
     end
   end
 
@@ -78,40 +93,75 @@ function upgrade_menu:init()
 end
 
 function upgrade_menu:update(dt)
+  --upgrade_menu.camera:lockPosition(upgrade_menu.window_x, upgrade_menu.window_y, camera.smoother)
   for key, upgrade in pairs(upgrade_list) do
     upgrade:update(dt)
+  end
+
+  if love.mouse.isDown(1) then -- if the mouse is down
+    if not upgrade_menu.grabbed then -- we are grabbing for the first time
+      -- set the coordinates of the grabbed location (reference frame is irrelevant)
+      upgrade_menu.mouse_start_x, upgrade_menu.mouse_start_y = love.mouse.getPosition()
+      upgrade_menu.grabbed = true
+    end
+    print(upgrade_menu.camera:position())
+    local mouse_x, mouse_y = love.mouse.getPosition() -- get the new mouse coordinates
+    upgrade_menu.camera:move(upgrade_menu.mouse_start_x - mouse_x, upgrade_menu.mouse_start_y - mouse_y) -- compare to the last frame
+    upgrade_menu.mouse_start_x, upgrade_menu.mouse_start_y = mouse_x, mouse_y -- update for the next comparision 
+
+    -- limit how far we can look around the frame
+    local camera_x, camera_y = upgrade_menu.camera:position()
+    upgrade_menu.camera:lookAt( math.max(upgrade_menu.window_x_min, math.min(upgrade_menu.window_x_max, camera_x)) 
+    , math.max(upgrade_menu.window_y_min, math.min(upgrade_menu.window_y_max, camera_y))  )
+
+  else
+    upgrade_menu.grabbed = false -- if the mouse isn't down, then set grabbed to true
   end
 end
 
 function upgrade_menu:draw()
+  upgrade_menu.camera:attach() -- attach the camera for dragging arond
+
+
   love.graphics.setColor(COLORS.orange)
-  love.graphics.print("U", 10, 10)
+  love.graphics.print("Up", 10, 10)
 
   for key, upgrade in pairs(upgrade_list) do
     upgrade:draw()
     love.graphics.setColor(COLORS.yellow)
-
-    local lead_in = 50
-    for _, next_upgrade in pairs(upgrade.next) do
-      local start_x = upgrade:getX() + upgrade.width
-      local start_y = upgrade:getY() + upgrade.height / 2
-      local end_x = next_upgrade:getX()
-      local end_y = next_upgrade:getY() + next_upgrade.height / 2
-      local curve = love.math.newBezierCurve({start_x,start_y, start_x + lead_in,start_y, end_x - lead_in, end_y, end_x,end_y})
-      love.graphics.line(curve:render())
-    end
+    upgrade_menu:drawConnections(upgrade)
+    
   end
+
+  upgrade_menu.camera:detach() -- detach the cameras
+
+  drawUpgradeHud()
 end
 
 function upgrade_menu:mousereleased(x,y, mouse_btn)
   for key, upgrade in pairs(upgrade_list) do
-    upgrade:mousereleased(x,y, mouse_btn)
+    local mouse_x, mouse_y = upgrade_menu.camera:mousePosition()
+    upgrade:mousereleased(mouse_x, mouse_y, mouse_btn) -- pass the released coordinates to the individual upgrade objects
   end
 end
 
 function upgrade_menu:keypressed(key)
   if key == "escape" then
     Gamestate.pop()
+  end
+end
+
+-- draws the connections from the passed upgrade to the next ones
+function upgrade_menu:drawConnections(upgrade)
+-- draw the arrows between the boxes
+  local lead_in = 50
+  for _, next_upgrade in pairs(upgrade.next) do
+    local start_x = upgrade:getX() + upgrade.width
+    local start_y = upgrade:getY() + upgrade.height / 2
+    local end_x = next_upgrade:getX()
+    local end_y = next_upgrade:getY() + next_upgrade.height / 2
+    local curve = love.math.newBezierCurve({start_x,start_y, start_x + lead_in,start_y, end_x - lead_in, end_y, end_x,end_y})
+    love.graphics.line(curve:render())
   end
 end
 

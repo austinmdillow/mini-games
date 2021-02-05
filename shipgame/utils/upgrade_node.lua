@@ -5,7 +5,7 @@ function Upgrade:new(x_home, y_home)
   self.drift_time = 0 -- keep track of time for the sin functions
   self.x_home = x_home
   self.y_home = y_home
-  self.x = self.x_home + 100
+  self.x = self.x_home
   self.x_vel = 0
   self.y = self.y_home
   self.previous = {} -- what is needed for this unlock
@@ -23,8 +23,10 @@ function Upgrade:new(x_home, y_home)
 end
 
 function Upgrade:update(dt)
-  self.drift_time = self.drift_time + dt
+  
   if dt < 1 / 5 then -- make sure we don't do these calcs in a paused state
+    -- osciallate in a sinusoidal pattern
+    self.drift_time = self.drift_time + dt
     self.x = self.x_home + self.oscillation_amount_x * math.cos(self.drift_time + self.oscillation_offset_x)
     self.y = self.y_home + self.oscillation_amount_y * math.cos(self.drift_time + self.oscillation_offset_y)
   end
@@ -50,13 +52,13 @@ function Upgrade:draw()
   love.graphics.pop()
 end
 
-function Upgrade:pointInBox_home()
-  local tx_home, ty = love.mouse.getPosition()
-  return PointWithinRectangle(self.x, self.y, self.width, self.height, tx_home, ty)
+function Upgrade:pointInBox_home(x, y)
+  print(self.x, self.y, self.width, self.height, x, y)
+  return PointWithinRectangle(self.x, self.y, self.width, self.height, x, y)
 end 
 
 function Upgrade:mousereleased(x,y, mouse_btn)
-  if self:pointInBox_home() then
+  if self:pointInBox_home(x, y) then
     --print("Upgrade: mouse released inside ", self)
     self:printConnections()
 
