@@ -39,6 +39,7 @@ require "utils.spawner"
 require "utils.upgrade_node"
 require "utils.upgrade_manager"
 
+
 require "assets.resources"
 
 -- all gamestates
@@ -46,6 +47,7 @@ local main_menu = require("states.main_menu")
 local gameplay = require("states.gameplay")
 local death_screen = require("states.death_screen")
 local upgrade_menu = require("states.upgrade_menu")
+local level_menu = require("states.level_menu")
 
 upgrade_manager = UpgradeManager()
 
@@ -134,7 +136,7 @@ end
 
 
 function love.draw()
-    drawDebugInfo()
+    
 end
 
 

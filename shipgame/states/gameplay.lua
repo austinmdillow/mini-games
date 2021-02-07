@@ -83,6 +83,7 @@ function gameplay:draw()
         --drawDebugInfo()
     end
 
+    drawDebugInfo()
 
 end
 

@@ -145,6 +145,7 @@ function upgrade_menu:draw()
   upgrade_menu.camera:detach() -- detach the cameras
 
   drawUpgradeHud()
+  drawDebugInfo()
 end
 
 function upgrade_menu:mousereleased(x,y, mouse_btn)

@@ -17,7 +17,8 @@ end
 
 local function levelSelect()
   main_menu:setText("Level Select was selected!")
-  game_data.current_level = game_data.current_level + 1
+  Gamestate.push(level_menu)
+  --game_data.current_level = game_data.current_level + 1
 end
 
 local function upgradeSelect()
