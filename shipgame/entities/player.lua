@@ -3,7 +3,8 @@ Player = Ship:extend()
 function Player:new(x_start, y_start)
   Player.super.new(self, x_start, y_start, dir_start)
   self:setColor(COLORS.red)
-  self.max_speed = 550
+  self.max_speed_base = 550
+  self.max_speed = self.max_speed_base
   self.cruise_speed = 250
   self.min_speed = 50
   self.boost = 100
@@ -42,6 +43,9 @@ end
 function Player:reset() -- need to add info
   self.shield_health = 0
   self.current_health = 100
+  print("Upgrade mods")
+  print(upgrade_manager:getModifiers("speed"))
+  self.max_speed = self.max_speed_base * upgrade_manager:getModifiers("speed")
 end
 
 function Player:update(dt)

@@ -53,7 +53,6 @@ function Upgrade:draw()
 end
 
 function Upgrade:pointInBox_home(x, y)
-  print(self.x, self.y, self.width, self.height, x, y)
   return PointWithinRectangle(self.x, self.y, self.width, self.height, x, y)
 end 
 
@@ -62,14 +61,19 @@ function Upgrade:mousereleased(x,y, mouse_btn)
     --print("Upgrade: mouse released inside ", self)
     self:printConnections()
 
-    if not self:hasPreviousUnlocked() then
-      print("Prior upgrade needs to be unlocked")
-      return
+    if self.unlocked == true then
+      print("Already unlocked")
+      return false
     end
 
-    if self.cost > game_data.coins then
+    if not self:hasPreviousUnlocked() then -- check prerequisites met
+      print("Prior upgrade needs to be unlocked")
+      return false
+    end
+
+    if self.cost > game_data.coins then -- check that player has enough money
       print("Item costs " .. self.cost ..", need " .. self.cost - game_data.coins .. " more")
-      return
+      return false
     end
     -- check if unlock is available
     if self:hasPreviousUnlocked() then
@@ -77,14 +81,14 @@ function Upgrade:mousereleased(x,y, mouse_btn)
       local message = "Are you sure you want to spend " .. self.cost .. " coins to upgrade?"
       local buttons = {"Hell yeah!", "No thanks", escapebutton = 0, enterbutton = 0}
       local pressedbutton = love.window.showMessageBox(title, message, buttons, "warning")
-      print(pressedbutton)
       if pressedbutton == 1 then
         game_data.coins = game_data.coins - self.cost
         self.unlocked = true
       end
-      return
+      return true
     end
   end
+  return false
 end
 
 function Upgrade:setTitle(title)
@@ -107,13 +111,21 @@ function Upgrade:setNext(upgrade)
   self.next = upgrade
 end
 
-function Upgrade:setResult(target, multiplier, adder)
-  if target ~= nil then
-    local m = multiplier or 1
-    local a = adder or 0
-    print(target, m, a)
-    game_data.local_player[target] = game_data.local_player[target] * m + a
+function Upgrade:setResult(flag, multiplier, increase)
+  if flag ~= nil then
+    self.flag = flag
+    self.multiplier = multiplier or 1
+    self.increase = increase or 0
   end
+end
+
+function Upgrade:calculateIncrease(existing)
+  local e = existing or 0
+  return e * self.multiplier + self.increase
+end
+
+function Upgrade:getModifiers()
+  return self.multiplier, self.increase
 end
 
 function Upgrade:isUnlocked()

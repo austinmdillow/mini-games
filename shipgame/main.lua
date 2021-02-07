@@ -37,6 +37,7 @@ require "utils.debugging"
 require "utils.hud"
 require "utils.spawner"
 require "utils.upgrade_node"
+require "utils.upgrade_manager"
 
 require "assets.resources"
 
@@ -45,6 +46,8 @@ local main_menu = require("states.main_menu")
 local gameplay = require("states.gameplay")
 local death_screen = require("states.death_screen")
 local upgrade_menu = require("states.upgrade_menu")
+
+upgrade_manager = UpgradeManager()
 
 VERSION = "0.1" -- not used at all
 
@@ -65,7 +68,13 @@ game_data = { -- where we store all global variables related to gameplay
         width = 2000,
         height = 1000
     },
-    gameplay_paused = false
+    gameplay_paused = false,
+    unlocks = {
+        magnetism = {
+            unlocked = false,
+            amount = 0
+        }
+    }
 }
 
 -- default save values that will be loaded and written

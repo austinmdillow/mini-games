@@ -24,6 +24,18 @@ end
 function Item:update(dt)
   if self.time_to_die ~= nil and love.timer.getTime() - self.drop_time > self.time_to_die then
     cleanMe()
+  end
+  if upgrade_manager:isUnlocked("magnetism") then
+    local mod_m, mod_a = upgrade_manager:getModifiers("magnetism")
+    local force = mod_m * mod_a
+    local distance = self.coord:distanceToCoord(game_data.local_player.coord)
+    local range = 300
+    if distance < range then
+      local dx, dy = self.coord:normalVectorToCoord(game_data.local_player.coord)
+      local speed = (distance - range) * (force)/ (-range) * dt
+      print(speed)
+      self.coord:setXY(dx + self.coord:getX(), dy + self.coord:getY())
+    end
   end 
 end
 

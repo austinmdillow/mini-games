@@ -35,6 +35,10 @@ function gameplay:update(dt)
         end
         game_data.enemies_alive = enemy_count -- update the number of enemies alive for debugging
 
+        for key, item in pairs(game_data.item_list) do
+            item:update(dt)
+        end
+
         -- updatee other odds and ends
         checkCollisions()
         gameplay.spawner:update(dt)
@@ -178,6 +182,7 @@ function checkCollisions()
                     screen:shake(50)
                     print("KILLLLEEDDD")
                     game_data.level_score = game_data.level_score + enemy.difficulty
+                    table.insert(game_data.item_list, Item(enemy:getXY()))
                 end
             end
         end

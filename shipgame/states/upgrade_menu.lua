@@ -5,15 +5,19 @@ local upgrade_progression = {
     x = 100,
     y = 100,
     title = "speed number 1",
-    cost = 4,
-    next = {"speed_2"}
+    cost = 5,
+    next = {"speed_2"},
+    flag = "speed",
+    multiplier = 1.2
 
   },
   speed_2 = {
     x = 400,
     y = 200,
     title = "Speed number 2",
-    cost = 23
+    cost = 10,
+    flag = "speed",
+    multiplier = 1.2
   },
   armor_1 = {
     x = 400,
@@ -21,8 +25,8 @@ local upgrade_progression = {
     title = "armor 1",
     previous = nil,
     next = {"armor_2", "armor_3"},
-    cost = 23,
-    target = "max_health",
+    cost = 4,
+    flag = "max_health",
     multiplier = 1.2
   },
   armor_2 = {
@@ -40,11 +44,30 @@ local upgrade_progression = {
     cost = 23
   },
   crafting_1 = {
-    x = 800,
-    y = 200,
+    x = 100,
+    y = 600,
     title = "Crafting ability",
+    next = {"magnet_1"},
     previous = nil,
-    cost = 100
+    cost = 5
+  },
+  magnet_1 = {
+    x = 400,
+    y = 620,
+    title = "Attract Coins",
+    cost = 1,
+    next = {"magnet_2"},
+    flag = "magnetism",
+    increase = 100
+  },
+  magnet_2 = {
+    x = 600,
+    y = 620,
+    title = "Attract Coins",
+    cost = 1,
+    flag = "magnetism",
+    previous = "magnet_1",
+    multiplier = 1.2
   }
 }
 
@@ -65,27 +88,7 @@ function upgrade_menu:init()
   upgrade_menu.window_y_max = 100 + FRAME_HEIGHT / 2
   upgrade_menu.window_y_min = -100 + FRAME_HEIGHT / 2
 
-
-  for key, progrssion in pairs(upgrade_progression) do
-    local tmp_upgrade = Upgrade(progrssion.x, progrssion.y)
-    tmp_upgrade:setTitle(progrssion.title)
-    tmp_upgrade:setCost(progrssion.cost)
-    tmp_upgrade:setResult(progrssion.target, progrssion.multiplier, progrssion.adder)
-    print(progrssion.next)
-    --table.insert(upgrade_list, tmp_upgrade)
-    upgrade_list[key] = tmp_upgrade
-  end
-
-  for key, progrssion in pairs(upgrade_progression) do
-    if progrssion.next ~= nil then
-      for _,next_key in pairs(progrssion.next) do
-        assert(upgrade_list[next_key] ~= nil) -- the next upgrade object was never created
-        table.insert(upgrade_list[key].next, upgrade_list[next_key]) -- add the next object to the current object
-        table.insert(upgrade_list[next_key].previous, upgrade_list[key]) -- add the current object to the next objects previous list
-      end
-
-    end
-  end
+  upgrade_manager:loadUpgrades(upgrade_progression)
 
   for key, upgrade in pairs(upgrade_list) do
     print(key, upgrade)
@@ -94,9 +97,7 @@ end
 
 function upgrade_menu:update(dt)
   --upgrade_menu.camera:lockPosition(upgrade_menu.window_x, upgrade_menu.window_y, camera.smoother)
-  for key, upgrade in pairs(upgrade_list) do
-    upgrade:update(dt)
-  end
+  upgrade_manager:update(dt) -- updates all nodes in the list
 
   if love.mouse.isDown(1) then -- if the mouse is down
     if not upgrade_menu.grabbed then -- we are grabbing for the first time
@@ -104,7 +105,6 @@ function upgrade_menu:update(dt)
       upgrade_menu.mouse_start_x, upgrade_menu.mouse_start_y = love.mouse.getPosition()
       upgrade_menu.grabbed = true
     end
-    print(upgrade_menu.camera:position())
     local mouse_x, mouse_y = love.mouse.getPosition() -- get the new mouse coordinates
     upgrade_menu.camera:move(upgrade_menu.mouse_start_x - mouse_x, upgrade_menu.mouse_start_y - mouse_y) -- compare to the last frame
     upgrade_menu.mouse_start_x, upgrade_menu.mouse_start_y = mouse_x, mouse_y -- update for the next comparision 
@@ -126,7 +126,7 @@ function upgrade_menu:draw()
   love.graphics.setColor(COLORS.orange)
   love.graphics.print("Up", 10, 10)
 
-  for key, upgrade in pairs(upgrade_list) do
+  for key, upgrade in pairs(upgrade_manager:getNodeList()) do
     upgrade:draw()
     love.graphics.setColor(COLORS.yellow)
     upgrade_menu:drawConnections(upgrade)
@@ -139,10 +139,7 @@ function upgrade_menu:draw()
 end
 
 function upgrade_menu:mousereleased(x,y, mouse_btn)
-  for key, upgrade in pairs(upgrade_list) do
-    local mouse_x, mouse_y = upgrade_menu.camera:mousePosition()
-    upgrade:mousereleased(mouse_x, mouse_y, mouse_btn) -- pass the released coordinates to the individual upgrade objects
-  end
+  upgrade_manager:mousereleased(x, y, mouse_btn)
 end
 
 function upgrade_menu:keypressed(key)

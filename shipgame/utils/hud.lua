@@ -23,6 +23,7 @@ function drawHUD()
   love.graphics.print(string.format("Total Score: %d", game_data.score), start_x, start_y + shield_bar_y_offset * 2)
   love.graphics.print(string.format("Level Score: %d", game_data.level_score), start_x, start_y + shield_bar_y_offset * 3)
   love.graphics.print(string.format("Enemies Alive: %d", game_data.enemies_alive), start_x, start_y + shield_bar_y_offset * 4)
+  love.graphics.print(string.format("Max Speed: %d", game_data.local_player.max_speed), start_x, start_y + shield_bar_y_offset * 5)
 
   drawRadar()
   drawWeaponStats()
@@ -108,8 +109,8 @@ end
 
 
 
-
 function drawUpgradeHud()
   love.graphics.setColor(COLORS.olive)
   love.graphics.rectangle('fill', 0, 0, FRAME_WIDTH, 40)
+  love.graphics.print("Coins " .. game_data.coins, 200, 10)
 end
