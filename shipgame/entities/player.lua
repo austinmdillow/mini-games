@@ -19,8 +19,10 @@ function Player:new(x_start, y_start)
   self.shield_health = 100
   self.shield_recharge_rate = 5
   self.shield_max = 110
-  self.equipped_weapon = Gun(2, 80) -- currently a default gun, may want to change
+  self.inventory = {Gun(2, 80)} -- currently a default gun, may want to change
+  self.equipped_weapon = self.inventory[1]
   self.invincible = false
+  
 
   self.sprite_image = sprites.player_image
   self.timer = Timer.new() -- not sure if this is used
@@ -46,6 +48,9 @@ function Player:reset() -- need to add info
   print("Upgrade mods")
   print(upgrade_manager:getModifiers("speed"))
   self.max_speed = self.max_speed_base * upgrade_manager:getModifiers("speed")
+  if upgrade_manager:isUnlocked("shotgun") then -- this should be handeled by an inventory system that tracks upgrade events
+    self.inventory[3] = Shotgun()
+  end
 end
 
 function Player:update(dt)
@@ -148,13 +153,17 @@ function Player:keypressed(key)
   end
 
   if key == "1" then
-    self.equipped_weapon = Gun(2,80)
+    if self.inventory[1] ~= nil then
+      self.equipped_weapon = self.inventory[1]
+    end
   end
   if key == "2" then
     self.equipped_weapon = Machinegun()
   end
   if key == "3" then
-    self.equipped_weapon = Shotgun(2,80)
+    if self.inventory[3] ~= nil then
+    self.equipped_weapon = self.inventory[3]
     print(self.equipped_weapon)
+    end
   end
 end

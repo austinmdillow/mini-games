@@ -68,6 +68,15 @@ local upgrade_progression = {
     flag = "magnetism",
     previous = "magnet_1",
     multiplier = 1.2
+  },
+  shotgun = {
+    x = 0,
+    y = 0,
+    title = "Big Gun",
+    cost = 1,
+    flag = "shotgun",
+    previous = "magnet_1",
+    multiplier = 1
   }
 }
 
@@ -86,7 +95,7 @@ function upgrade_menu:init()
   upgrade_menu.window_x_max = 500 + FRAME_WIDTH / 2
   upgrade_menu.window_x_min = 0 + FRAME_WIDTH / 2
   upgrade_menu.window_y_max = 100 + FRAME_HEIGHT / 2
-  upgrade_menu.window_y_min = -100 + FRAME_HEIGHT / 2
+  upgrade_menu.window_y_min = -400 + FRAME_HEIGHT / 2
 
   upgrade_manager:loadUpgrades(upgrade_progression)
 
