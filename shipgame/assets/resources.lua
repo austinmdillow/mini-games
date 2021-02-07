@@ -12,6 +12,6 @@ background = love.graphics.newImage("assets/space.jpg")
 
 
 -- Font time
-arcade_font = love.graphics.newFont("assets/fonts/ARCADECLASSIC.TTF")
+arcade_font = love.graphics.newFont("assets/fonts/ARCADECLASSIC.TTF", 40)
 
 ITEM_PIX_WIDTH = 32

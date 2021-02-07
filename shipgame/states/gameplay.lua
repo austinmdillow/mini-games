@@ -141,21 +141,14 @@ function checkEndLevel(level_number)
         Gamestate.switch(death_screen)
     end
 
-    if level_number == 1 then
-        if game_data.level_score > 10 and false then -- depricated
-            game_data.score = game_data.score + game_data.level_score
-            Gamestate.switch(main_menu)
-        end
-
-        if gameplay.spawner:completed() then
-            save_data.level_stats[game_data.current_level].completed = true
-            save_data.level_stats[game_data.current_level].kills = game_data.level_kills -- change to get from the spawner
-            save_data.level_stats[game_data.current_level].score = game_data.level_score
-            game_data.current_level = game_data.current_level + 1
-            Gamestate.switch(main_menu)
-        end
-
+    if gameplay.spawner:completed() then
+        save_data.level_stats[game_data.current_level].completed = true
+        save_data.level_stats[game_data.current_level].kills = game_data.level_kills -- change to get from the spawner
+        save_data.level_stats[game_data.current_level].score = game_data.level_score
+        game_data.current_level = game_data.current_level + 1
+        Gamestate.switch(after_action, game_data.current_level - 1)
     end
+
 end
 
 function checkCollisions()

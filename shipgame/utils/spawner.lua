@@ -8,7 +8,7 @@ spawn_sequences = {
     level = 1,
     {
       wave_num = 1,
-      total_enemies = 2,
+      total_enemies = 1,
       type = "fighter",
       spawn_location = {
         x = 400,
@@ -20,7 +20,7 @@ spawn_sequences = {
     },
     {
       wave_num = 2,
-      total_enemies = 3,
+      total_enemies = 1,
       type = "fighter",
       spawn_location = {
         x = 400,

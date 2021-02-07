@@ -49,6 +49,7 @@ local gameplay = require("states.gameplay")
 local death_screen = require("states.death_screen")
 local upgrade_menu = require("states.upgrade_menu")
 local level_menu = require("states.level_menu")
+local after_action = require("states.after_action")
 
 upgrade_manager = UpgradeManager()
 
