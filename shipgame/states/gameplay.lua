@@ -149,7 +149,7 @@ function checkEndLevel(level_number)
 
         if gameplay.spawner:completed() then
             save_data.level_stats[game_data.current_level].completed = true
-            save_data.level_stats[game_data.current_level].kills = game_data.level_kills
+            save_data.level_stats[game_data.current_level].kills = game_data.level_kills -- change to get from the spawner
             save_data.level_stats[game_data.current_level].score = game_data.level_score
             game_data.current_level = game_data.current_level + 1
             Gamestate.switch(main_menu)

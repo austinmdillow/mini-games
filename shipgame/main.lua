@@ -10,6 +10,7 @@ Gamestate = require "lib.hump.gamestate"
 SaveData = require "lib.savedata.saveData"
 lovebird = require "lib.mylove.lovebird"
 Timer = require "lib.hump.timer"
+reflowprint = require "lib.reflowprint.init"
 
 require "lib.mylove.colors"
 require "lib.mylove.intersections"
@@ -71,12 +72,6 @@ game_data = { -- where we store all global variables related to gameplay
         height = 1000
     },
     gameplay_paused = false,
-    unlocks = {
-        magnetism = {
-            unlocked = false,
-            amount = 0
-        }
-    }
 }
 
 -- default save values that will be loaded and written
@@ -103,6 +98,7 @@ local start_time = love.timer.getTime()
 FRAME_WIDTH, FRAME_HEIGHT = love.graphics.getDimensions()
 
 function love.load()
+    delta_t = 0
     if game_data.mode == "single" then
         game_data.local_player = Player(200, 200)
     elseif game_data.mode == "online" then

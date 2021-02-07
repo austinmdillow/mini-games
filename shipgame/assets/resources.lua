@@ -10,4 +10,8 @@ sprites.particle_image = love.graphics.newImage("assets/particle.png")
 
 background = love.graphics.newImage("assets/space.jpg")
 
+
+-- Font time
+arcade_font = love.graphics.newFont("assets/fonts/ARCADECLASSIC.TTF")
+
 ITEM_PIX_WIDTH = 32
