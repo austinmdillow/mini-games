@@ -142,11 +142,14 @@ function checkEndLevel(level_number)
     end
 
     if gameplay.spawner:completed() then
+        if save_data.level_stats[game_data.current_level] == nil then -- create a new entry to save level data
+            save_data.level_stats[game_data.current_level] = {}
+        end
         save_data.level_stats[game_data.current_level].completed = true
         save_data.level_stats[game_data.current_level].kills = game_data.level_kills -- change to get from the spawner
         save_data.level_stats[game_data.current_level].score = game_data.level_score
         game_data.current_level = game_data.current_level + 1
-        Gamestate.switch(after_action, game_data.current_level - 1)
+        Gamestate.switch(after_action, game_data.current_level - 1, game_data.level_score, game_data.level_kills)
     end
 
 end
