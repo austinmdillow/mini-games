@@ -174,6 +174,7 @@ function checkCollisions()
             if game_data.local_player.coord:distanceToPoint(bullet_x, bullet_y) < game_data.local_player.hitbox + bullet.size then
                 game_data.local_player:damage(bullet.damage)
                 screen:shake(20)
+                sounds.hit_1:play()
                 game_data.bullet_list[idx_bullet] = nil
             end 
         end
@@ -183,6 +184,7 @@ function checkCollisions()
             -- there was a hit
             if enemy.team ~= bullet.team and enemy.coord:distanceToPoint(bullet_x, bullet_y) < enemy.hitbox + bullet.size then
                 game_data.bullet_list[idx_bullet] = nil
+                sounds.hit_2:clone():play()
                 if enemy:damage(bullet.damage) then -- the bullet killed the enemy
                     game_data.enemy_list[idx] = nil
                     screen:shake(50)

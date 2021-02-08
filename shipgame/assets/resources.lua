@@ -14,4 +14,9 @@ background = love.graphics.newImage("assets/space.jpg")
 -- Font time
 arcade_font = love.graphics.newFont("assets/fonts/ARCADECLASSIC.TTF", 40)
 
+-- Sounds
+sounds = {}
+sounds.hit_1 = love.audio.newSource("assets/sounds/hit_1.wav", "static")
+sounds.hit_2 = love.audio.newSource("assets/sounds/hit_2.wav", "static")
+
 ITEM_PIX_WIDTH = 32
