@@ -11,6 +11,7 @@ SaveData = require "lib.savedata.saveData"
 lovebird = require "lib.mylove.lovebird"
 Timer = require "lib.hump.timer"
 reflowprint = require "lib.reflowprint.init"
+Sti = require "lib.sti"
 
 require "lib.mylove.colors"
 require "lib.mylove.intersections"

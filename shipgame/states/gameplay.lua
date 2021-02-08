@@ -1,5 +1,7 @@
 gameplay = {}
 
+map = Sti("assets/maps/test_map.lua")
+
 function gameplay:enter()
     game_data.level_score = 0 --reset the score for this level
     game_data.level_kills = 0 -- not used
@@ -53,6 +55,10 @@ function gameplay:draw()
     camera:attach()
     love.graphics.setColor(1,1,1, .7)
     love.graphics.draw(background)
+    local tx = camera.x - love.graphics.getWidth() / 2
+	local ty = camera.y - love.graphics.getHeight() / 2
+
+	map:draw(-tx, -ty, camera.scale, camera.scale)
 
     screen:apply(dt)
 
@@ -73,7 +79,10 @@ function gameplay:draw()
         item:draw()
     end
     drawBoundaries()
+
+    --map:draw()
     camera:detach()
+    
 
     drawHUD()
 
