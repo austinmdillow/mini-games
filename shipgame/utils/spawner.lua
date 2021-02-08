@@ -61,7 +61,8 @@ spawn_sequences = {
   }
 }
 
-function Spawner:new(level)
+function Spawner:new(level, map)
+  self.map = map
   self.current_level = level
   self.current_wave = 1
   assert(spawn_sequences[self.current_level].level == level)
@@ -69,15 +70,22 @@ function Spawner:new(level)
   self.last_spawn_time = 0
   self.wave_spawns = 0
   self.level_spawns = 0
+
+  if self.map ~= nil then
+    self:spawnFromMap()
+  end
 end
 
-function Spawner:spawn(enemy_obj, type)
+function Spawner:spawn(enemy_obj, type, x, y)
+  x = x or love.math.random(500)
+  y = y or love.math.random(500)
+  print(x, y)
   game_data.current_enemy_number = game_data.current_enemy_number + 1
   local tmp_enemy = nil
   if self.sequence.type == "fighter" then
-    tmp_enemy = EnemyFighter(love.math.random(500), love.math.random(500))
+    tmp_enemy = EnemyFighter(x, y)
   else
-    tmp_enemy = Enemy(love.math.random(500), love.math.random(500))
+    tmp_enemy = Enemy(x, y)
   end
   tmp_enemy.id = game_data.current_enemy_number
   table.insert(game_data.enemy_list, tmp_enemy)
@@ -95,14 +103,18 @@ function Spawner:update(dt)
         self:spawn()
       end
 
-      if self.wave_spawns == self.sequence.total_enemies and game_data.enemies_alive == 0 then -- check if we need to switch to another wave
+      if self.wave_spawns >= self.sequence.total_enemies and game_data.enemies_alive == 0 then -- check if we need to switch to another wave
         self.wave_spawns = 0
         self.current_wave = self.current_wave + 1
         self.sequence = spawn_sequences[self.current_level][self.current_wave]
       end
-      --print("seq, ", self.sequence, level, self.current_wave)
     end
+end
 
+function Spawner:spawnFromMap()
+  for _, spawn_point in pairs(map.layers.enemy_spawn.objects) do
+    self:spawn(nil, nil, spawn_point.x, spawn_point.y)
+  end
 end
 
 function Spawner:getWave()

@@ -10,7 +10,7 @@ function gameplay:enter()
     game_data.enemy_list = {}
     game_data.item_list = {}
     game_data.local_player:setXYT(500, 500, 0)
-    gameplay.spawner = Spawner(game_data.current_level)
+    gameplay.spawner = Spawner(game_data.current_level, map)
 end
 
 function gameplay:update(dt)
@@ -188,6 +188,7 @@ function checkCollisions()
                     screen:shake(50)
                     print("KILLLLEEDDD")
                     game_data.level_score = game_data.level_score + enemy.difficulty
+                    game_data.level_kills = game_data.level_kills + 1
                     table.insert(game_data.item_list, Item(enemy:getXY()))
                 end
             end
