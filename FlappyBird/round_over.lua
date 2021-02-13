@@ -1,14 +1,5 @@
 round_over = {}
 
-function round_over:enter()
-end
-
-function round_over:leave()
-end
-
-function round_over:update(dt)
-end
-
 function round_over:draw()
   love.graphics.setColor(1,0,0)
   love.graphics.print("Press Any key to continue", 50, 50, 0, 2, 2)

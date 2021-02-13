@@ -36,7 +36,6 @@ function main_gameplay:update(dt)
 	end
 
   local frame_speed = math.min(pipe_speed + score * 5, max_speed)
-  print(frame_speed, love.timer.getFPS())
   pipe_1_x = pipe_1_x - frame_speed * dt
   pipe_2_x = pipe_2_x - frame_speed * dt
   background_x = background_x - frame_speed / 10 * dt
@@ -78,7 +77,6 @@ function main_gameplay:draw()
 	-- Draw the background
 	love.graphics.setColor(background_r, background_g, background_b)
 	love.graphics.rectangle('fill', 0,0,frame_width, frame_height)
-	--love.graphics.draw(background_sky,0,500)
   love.graphics.draw(background_sky,0,-100,0,1,1,0,0,0,0)
   love.graphics.draw(small_spencer, spencer_x,300,0,1,1,0,0,0,0)
 	love.graphics.draw(background_image, background_x,100,0,1,1,0,0,0,0)
@@ -135,22 +133,4 @@ function CheckCollision(x1,y1,w1,h1, x2,y2,w2,h2)
          x2 < x1+w1 and
          y1 < y2+h2 and
          y2 < y1+h1
-end
-
-
-function newAnimation(image, width, height, duration)
-    local animation = {}
-    animation.spriteSheet = image;
-    animation.quads = {};
- 
-    for y = 0, image:getHeight() - height, height do
-        for x = 0, image:getWidth() - width, width do
-            table.insert(animation.quads, love.graphics.newQuad(x, y, width, height, image:getDimensions()))
-        end
-    end
- 
-    animation.duration = duration or 1
-    animation.currentTime = 0
- 
-    return animation
 end
