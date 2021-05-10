@@ -23,6 +23,7 @@ require "lib.mylove.entity"
 require "lib.mylove.coord"
 require "lib.hump.gamestate"
 require "lib.menuengine"
+require "lib.anim8"
 
 
 require "entities.ship"
@@ -45,10 +46,6 @@ require "utils.spawner"
 require "utils.upgrade_node"
 require "utils.upgrade_manager"
 require "utils.interractions"
-
-
-
-
 
 require "assets.resources"
 
