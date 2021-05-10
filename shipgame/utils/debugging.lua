@@ -6,3 +6,9 @@ function drawDebugInfo()
   love.graphics.print("FPS " .. fps, start_x, 5)
   love.graphics.print("Stats " .. collectgarbage("count"), start_x, 25)
 end
+
+debug_message = ""
+
+function DEBUG(msg)
+  debug_message = msg
+end

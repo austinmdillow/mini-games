@@ -14,12 +14,13 @@ function Upgrade:new(x_home, y_home)
   self.title = "default upgrade"
   self.description = "This is a placeholder for a more detailed description"
   self.width = 100
-  self.height = 150
+  self.height = 100
   self.unlocked = false
   self.oscillation_offset_x = love.math.random(2 * math.pi)
   self.oscillation_offset_y = love.math.random(2 * math.pi)
   self.oscillation_amount_x = love.math.random(-10, 10)
   self.oscillation_amount_y = love.math.random(-10, 10)
+  self.ui_panel = ui_elements.metalPanel_blue
 end
 
 function Upgrade:update(dt)
@@ -35,20 +36,39 @@ end
 function Upgrade:draw()
   love.graphics.push()
   love.graphics.translate(self.x, self.y)
-  love.graphics.setColor(.6,.6,.6)
-  love.graphics.rectangle('fill', 0, 0, self.width, self.height)
+  love.graphics.setColor(COLORS.white)
 
-  -- draw unlocked vs locked
+  
+  --love.graphics.rectangle('fill', 0, 0, self.width, self.height)
+
+  -- draw unlocked vs locked we will fade the element if it is locked
+  -- actually we will draw little colored tabs for state
+  local unlocked_tab = ui_elements.barVertical_green_bottom
   if self.unlocked then
-    love.graphics.setColor(COLORS.green)
+    --love.graphics.setColor(COLORS.white)
+    unlocked_tab = ui_elements.barVertical_green_bottom
   else
-    love.graphics.setColor(COLORS.red)
+    unlocked_tab = ui_elements.barVertical_red_bottom
+    --love.graphics.setColor(.6, .6, .6)
+    if self:hasPreviousUnlocked() then
+      unlocked_tab = ui_elements.barVertical_yellow_bottom
+    else
+      unlocked_tab = ui_elements.barVertical_red_bottom
+    end
   end
-  love.graphics.rectangle('line', 0, 0, self.width, self.height)
+  --love.graphics.rectangle('line', 0, 0, self.width, self.height)
+  --love.graphics.setColor(.5,.5,.5)
+  love.graphics.draw(self.ui_panel, 0, 0, 0, 1.5, 1.5)
+  love.graphics.draw(unlocked_tab, 70, 2)
 
   -- draw tex_homet
-  love.graphics.setColor(COLORS.blue)
-  love.graphics.print(self.title, 10, 10)
+  love.graphics.setFont(fonts.upgrades)
+  love.graphics.setColor(COLORS.white)
+  love.graphics.print("Cost " .. self.cost, 5, 2)
+  love.graphics.print(self.title, 5, 15)
+  love.graphics.setColor(COLORS.black)
+  love.graphics.printf(self.description, 5, 30, 90, "left")
+  
   love.graphics.pop()
 end
 
@@ -63,11 +83,13 @@ function Upgrade:mousereleased(x,y, mouse_btn)
 
     if self.unlocked == true then
       print("Already unlocked")
+      DEBUG("Already unlocked")
       return false
     end
 
     if not self:hasPreviousUnlocked() then -- check prerequisites met
       print("Prior upgrade needs to be unlocked")
+      DEBUG("Prior upgrade needs to be unlocked")
       return false
     end
 
@@ -94,6 +116,14 @@ end
 function Upgrade:setTitle(title)
   assert(type(title) == "string")
   self.title = title
+end
+
+function Upgrade:setDescription(description)
+  if description == nil then -- no description given
+    return
+  end
+  assert(type(description) == "string")
+  self.description = description
 end
 
 function Upgrade:setCost(cost)

@@ -5,6 +5,7 @@ local upgrade_progression = {
     x = 100,
     y = 100,
     title = "speed number 1",
+    description = "Increases speed by 20%",
     cost = 5,
     next = {"speed_2"},
     flag = "speed",
@@ -133,7 +134,7 @@ function upgrade_menu:draw()
 
 
   love.graphics.setColor(COLORS.orange)
-  love.graphics.print("Up", 10, 10)
+  love.graphics.print("Upgrades", 10, 10)
 
   for key, upgrade in pairs(upgrade_manager:getNodeList()) do
     upgrade:draw()

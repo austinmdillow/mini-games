@@ -1,39 +1,48 @@
+-- Handles all upgrades
+
 UpgradeManager = Object:extend()
 
 
 function UpgradeManager:new()
   self.unlock_flags = {}
   self.upgrade_nodes = {}
+  self.messages = {}
 end
 
 function UpgradeManager:update(dt)
   for key, node in pairs(self.upgrade_nodes) do
     node:update(dt)
   end
-  self:printUnlockFlags()
+  --self:printUnlockFlags()
 end
 
 function UpgradeManager:draw()
 
 end
 
+function UpgradeManager:addMessage(msg)
+  table.insert(self.messages)
+end
+
 function UpgradeManager:getNodeList()
   return self.upgrade_nodes
 end
 
-function UpgradeManager:loadUpgrades(progression_table)
 
-  for key, progrssion in pairs(progression_table) do
-    local tmp_upgrade = Upgrade(progrssion.x, progrssion.y)
-    tmp_upgrade:setTitle(progrssion.title)
-    tmp_upgrade:setCost(progrssion.cost)
-    tmp_upgrade:setResult(progrssion.flag, progrssion.multiplier, progrssion.increase)
+-- create upgrade nodes using a given progression table
+function UpgradeManager:loadUpgrades(progression_table)
+  for key, progression in pairs(progression_table) do
+    local tmp_upgrade = Upgrade(progression.x, progression.y)
+    tmp_upgrade:setTitle(progression.title)
+    tmp_upgrade:setDescription(progression.description)
+    tmp_upgrade:setCost(progression.cost)
+    tmp_upgrade:setResult(progression.flag, progression.multiplier, progression.increase)
     self.upgrade_nodes[key] = tmp_upgrade
   end
 
-  for key, progrssion in pairs(progression_table) do
-    if progrssion.next ~= nil then
-      for _,next_key in pairs(progrssion.next) do
+  for key, progression in pairs(progression_table) do
+    if progression.next ~= nil then
+      for _,next_key in pairs(progression.next) do
         assert(self.upgrade_nodes[next_key] ~= nil) -- the next upgrade object was never created
         table.insert(self.upgrade_nodes[key].next, self.upgrade_nodes[next_key]) -- add the next object to the current object
         table.insert(self.upgrade_nodes[next_key].previous, self.upgrade_nodes[key]) -- add the current object to the next objects previous list

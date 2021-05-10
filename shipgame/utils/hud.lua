@@ -112,5 +112,7 @@ end
 function drawUpgradeHud()
   love.graphics.setColor(COLORS.olive)
   love.graphics.rectangle('fill', 0, 0, FRAME_WIDTH, 40)
+  love.graphics.setColor(COLORS.white)
   love.graphics.print("Coins " .. game_data.coins, 200, 10)
+  love.graphics.print(debug_message, 400, 10)
 end
