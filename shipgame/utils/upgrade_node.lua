@@ -13,8 +13,8 @@ function Upgrade:new(x_home, y_home)
   self.cost = 100 -- how much this upgrade will cost
   self.title = "default upgrade"
   self.description = "This is a placeholder for a more detailed description"
-  self.width = 100
-  self.height = 100
+  self.width = 150
+  self.height = 150
   self.unlocked = false
   self.oscillation_offset_x = love.math.random(2 * math.pi)
   self.oscillation_offset_y = love.math.random(2 * math.pi)
@@ -82,19 +82,18 @@ function Upgrade:mousereleased(x,y, mouse_btn)
     self:printConnections()
 
     if self.unlocked == true then
-      print("Already unlocked")
-      DEBUG("Already unlocked")
+      Logger:log("Already unlocked", "upgrade")
       return false
     end
 
     if not self:hasPreviousUnlocked() then -- check prerequisites met
-      print("Prior upgrade needs to be unlocked")
-      DEBUG("Prior upgrade needs to be unlocked")
+      Logger:log("Prior upgrade needs to be unlocked", "upgrade")
       return false
     end
 
     if self.cost > game_data.coins then -- check that player has enough money
       print("Item costs " .. self.cost ..", need " .. self.cost - game_data.coins .. " more")
+      Logger:log("Item costs " .. self.cost ..", need " .. self.cost - game_data.coins .. " more", 2)
       return false
     end
     -- check if unlock is available
@@ -106,6 +105,7 @@ function Upgrade:mousereleased(x,y, mouse_btn)
       if pressedbutton == 1 then
         game_data.coins = game_data.coins - self.cost
         self.unlocked = true
+        Logger:log("Purchased for " .. self.cost, "upgrade")
       end
       return true
     end

@@ -8,27 +8,39 @@ spawn_sequences = {
     level = 1,
     {
       wave_num = 1,
-      total_enemies = 1,
+      spawn_count = 5,
       type = "fighter",
       spawn_location = {
         x = 400,
         y = 10,
         t = 0
       },
-      time_spacing = .6,
-      max_alive = 3
+      time_spacing = 0.3,
+      max_alive = 2
     },
     {
       wave_num = 2,
-      total_enemies = 1,
+      spawn_count = 1,
       type = "fighter",
       spawn_location = {
         x = 400,
         y = 10,
-        t = 0
+        t = 4
       },
       time_spacing = 3,
       max_alive = 3
+    },
+    {
+      wave_num = 3,
+      spawn_count = 10,
+      type = "fighter",
+      spawn_location = {
+        x = 1000,
+        y = 10,
+        t = 4
+      },
+      time_spacing = .1,
+      max_alive = 10
     }
   },
 
@@ -36,7 +48,7 @@ spawn_sequences = {
     level = 2,
     {
       wave_num = 1,
-      total_enemies = 2,
+      spawn_count = 2,
       type = "default",
       spawn_location = {
         x = 400,
@@ -48,7 +60,34 @@ spawn_sequences = {
     },
     {
       wave_num = 2,
-      total_enemies = 3,
+      spawn_count = 3,
+      type = "fighter",
+      spawn_location = {
+        x = 400,
+        y = 10,
+        t = 0
+      },
+      time_spacing = 3,
+      max_alive = 3
+    }
+  },
+
+  { level = 3,
+    {
+      wave_num = 1,
+      spawn_count = 2,
+      type = "default",
+      spawn_location = {
+        x = 400,
+        y = 10,
+        t = 0
+      },
+      time_spacing = .6,
+      max_alive = 3
+    },
+    {
+      wave_num = 2,
+      spawn_count = 3,
       type = "fighter",
       spawn_location = {
         x = 400,
@@ -74,6 +113,8 @@ function Spawner:new(level, map)
   if self.map ~= nil then
     self:spawnFromMap()
   end
+
+  self:verifyConfig()
 end
 
 function Spawner:spawn(enemy_obj, type, x, y)
@@ -99,11 +140,11 @@ function Spawner:update(dt)
 
     if self.sequence ~= nil then
       assert(self.sequence.wave_num == self.current_wave)
-      if self.last_spawn_time > self.sequence.time_spacing and game_data.enemies_alive < self.sequence.max_alive and self.wave_spawns < self.sequence.total_enemies then
+      if self.last_spawn_time > self.sequence.time_spacing and game_data.enemies_alive < self.sequence.max_alive and self.wave_spawns < self.sequence.spawn_count then
         self:spawn()
       end
 
-      if self.wave_spawns >= self.sequence.total_enemies and game_data.enemies_alive == 0 then -- check if we need to switch to another wave
+      if self.wave_spawns >= self.sequence.spawn_count and game_data.enemies_alive == 0 then -- check if we need to switch to another wave
         self.wave_spawns = 0
         self.current_wave = self.current_wave + 1
         self.sequence = spawn_sequences[self.current_level][self.current_wave]
@@ -127,4 +168,12 @@ end
 
 function Spawner:getLevel()
   return self.current_level
+end
+
+function Spawner:verifyConfig()
+  for index, level_table in pairs(spawn_sequences) do
+    print(index, level_table.level, level_table)
+    --print(level_table[1].wave_num)
+    assert(level_table.level == index, "Level did not match. Expected " .. index)
+  end
 end

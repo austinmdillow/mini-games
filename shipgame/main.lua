@@ -2,6 +2,10 @@
 
 
 Object = require "lib.mylove.classic"
+
+require "utils.logger" -- including here so that all other can use it
+Logger = Logger(1)
+
 Camera = require "lib.hump.camera"
 smoothie = Camera.smooth.damped(.1)
 screen = require "lib.shack.shack"
@@ -43,6 +47,9 @@ require "utils.upgrade_manager"
 require "utils.interractions"
 
 
+
+
+
 require "assets.resources"
 
 -- all gamestates
@@ -54,6 +61,7 @@ local level_menu = require("states.level_menu")
 local after_action = require("states.after_action")
 
 upgrade_manager = UpgradeManager()
+
 
 VERSION = "0.1" -- not used at all
 
