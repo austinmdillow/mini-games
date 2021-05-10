@@ -2,7 +2,7 @@ EnemyFighter = Enemy:extend()
 
 function EnemyFighter:new(x_start, y_start, dir_start)
     EnemyFighter.super.new(self, x_start, y_start, dir_start)
-    self.max_speed = 320
+    self.max_speed = 120
     self.color = {1,1,0}
     self.radius = 10
     self.current_speed = 0
