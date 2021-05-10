@@ -71,8 +71,8 @@ game_data = { -- where we store all global variables related to gameplay
     bullet_list = {},
     item_list = {},
     map_properties = {
-        width = 2000,
-        height = 1000
+        width = 4000,
+        height = 3000
     },
     gameplay_paused = false,
 }
