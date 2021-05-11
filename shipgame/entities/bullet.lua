@@ -5,7 +5,7 @@ function Bullet:new(damage, x_start, y_start, dir_start)
   self:setColor(COLORS.green)
 
   self.rotation_visual = 0
-  self.max_speed = 800
+  self.max_speed = 400
   self.size = 10
   self.team = nil
   self.source_id = nil
@@ -25,7 +25,7 @@ function Bullet:draw()
     love.graphics.push()
     love.graphics.translate(self.coord.x, self.coord.y)
     love.graphics.rotate(self.coord:getT() + self.rotation_visual)
-    love.graphics.rectangle('line', -1 * self.size / 2, -1 * self.size / 2, self.size, self.size)
+    love.graphics.rectangle('fill', -1 * self.size / 2, -1 * self.size / 2, self.size, self.size)
     love.graphics.pop()
     love.graphics.setColor(1,1,1)
 end
