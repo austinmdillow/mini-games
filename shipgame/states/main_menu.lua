@@ -18,7 +18,11 @@ end
 local function levelSelect()
   main_menu:setText("Level Select was selected!")
   Gamestate.push(level_menu)
-  --game_data.current_level = game_data.current_level + 1
+end
+
+local function testSelect()
+  main_menu:setText("Test was selected!")
+  Gamestate.push(test_menu)
 end
 
 local function upgradeSelect()
@@ -78,6 +82,7 @@ function main_menu:enter()
   main_menu_engine:addEntry("Upgrades", upgradeSelect)
   main_menu_engine:addEntry("Load Game", loadFromSave)
   main_menu_engine:addEntry("Options", options)
+  main_menu_engine:addEntry("Test", testSelect)
   main_menu_engine:addSep()
   main_menu_engine:addEntry("Quit Game", quitGame)
 

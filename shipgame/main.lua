@@ -16,6 +16,7 @@ lovebird = require "lib.mylove.lovebird"
 Timer = require "lib.hump.timer"
 reflowprint = require "lib.reflowprint.init"
 Sti = require "lib.sti"
+anim8 = require "lib.anim8"
 
 require "lib.mylove.colors"
 require "lib.mylove.intersections"
@@ -23,7 +24,7 @@ require "lib.mylove.entity"
 require "lib.mylove.coord"
 require "lib.hump.gamestate"
 require "lib.menuengine"
-require "lib.anim8"
+
 
 
 require "entities.ship"
@@ -38,7 +39,7 @@ require "weapons.gun"
 require "weapons.machinegun"
 require "weapons.shotgun"
 
-
+require "utils.animation_manager"
 require "utils.serverCallbacks"
 require "utils.debugging"
 require "utils.hud"
@@ -56,6 +57,7 @@ local death_screen = require("states.death_screen")
 local upgrade_menu = require("states.upgrade_menu")
 local level_menu = require("states.level_menu")
 local after_action = require("states.after_action")
+local test_menu = require("states.test_menu")
 
 upgrade_manager = UpgradeManager()
 

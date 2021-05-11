@@ -9,6 +9,7 @@ function gameplay:enter()
     game_data.item_list = {}
     game_data.local_player:setXYT(500, 500, 0)
     gameplay.spawner = Spawner(game_data.current_level, map)
+    gameplay.animation_manager = AnimationManager()
 end
 
 function gameplay:update(dt)
@@ -42,6 +43,7 @@ function gameplay:update(dt)
         -- updatee other odds and ends
         checkCollisions()
         gameplay.spawner:update(dt)
+        gameplay.animation_manager:update(dt)
         updateHud(dt)
         checkEndLevel(1)
     end
@@ -73,6 +75,8 @@ function gameplay:draw()
         item:draw()
     end
     drawBoundaries()
+
+    gameplay.animation_manager:draw()
 
     --map:draw()
     camera:detach()

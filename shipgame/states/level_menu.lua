@@ -5,9 +5,11 @@ function level_menu:init()
 end
 
 function level_menu:enter()
+  effect = effects.explosion_6:clone()
 end
 
 function level_menu:update(dt)
+  effect:update(dt)
 end
 
 function level_menu:draw()
@@ -29,6 +31,7 @@ function level_menu:draw()
     love.graphics.setColor(COLORS.black)
     love.graphics.print("L" .. i, 100 + 200 * col + 20, 100 + 200 * row + 20)
   end
+  love.graphics.setColor(COLORS.white)
 
 end
 

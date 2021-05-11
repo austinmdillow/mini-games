@@ -5,21 +5,25 @@ function checkCollisions()
         local bullet_x, bullet_y = bullet:getXY()
 
         num_checks = num_checks + 1
+        -- player bullet collisions
         if bullet.source ~= game_data.local_player then
             if game_data.local_player.coord:distanceToPoint(bullet_x, bullet_y) < game_data.local_player.hitbox + bullet.size then
                 game_data.local_player:damage(bullet.damage)
                 screen:shake(20)
                 sounds.hit_1:play()
                 game_data.bullet_list[idx_bullet] = nil
+                gameplay.animation_manager:addAnimation(effects.explosion_6, bullet_x, bullet_y)
             end 
         end
 
+        -- NPC bullet collisions
         for idx, enemy in pairs(game_data.enemy_list) do
             num_checks = num_checks + 1
             -- there was a hit
             if enemy.team ~= bullet.team and enemy.coord:distanceToPoint(bullet_x, bullet_y) < enemy.hitbox + bullet.size then
                 game_data.bullet_list[idx_bullet] = nil
                 sounds.hit_2:clone():play()
+                gameplay.animation_manager:addAnimation(effects.explosion_5, bullet_x, bullet_y)
                 if enemy:damage(bullet.damage) then -- the bullet killed the enemy
                     game_data.enemy_list[idx] = nil
                     screen:shake(50)
