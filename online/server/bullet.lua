@@ -12,6 +12,7 @@ function Bullet:new(x_start, y_start, dir_start)
   self.damage = 45
   self.time_alive = 0
   self.time_to_death = 2
+  self.roation_speed = 1
 end
 
 function Bullet:update(dt)

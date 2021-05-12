@@ -2,9 +2,12 @@ local count = 0
 local sock = require "lib.sock.sock"
 
 Object = require "lib.mylove.classic"
+
 require "lib.mylove.entity"
+require "lib.ship"
 require "lib.mylove.player"
 require "lib.mylove.coord"
+
 
 
 local state = {
