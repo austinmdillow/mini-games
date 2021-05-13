@@ -4,3 +4,6 @@
 [submodule "shipgame/lib/mylove"]
 	path = shipgame/lib/mylove
 	url = https://github.com/austinmdillow/mylove.git
+[submodule "shipgame/lib/ripple"]
+	path = shipgame/lib/ripple
+	url = https://github.com/tesselode/ripple.git
