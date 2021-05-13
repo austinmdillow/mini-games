@@ -4,7 +4,8 @@
 Object = require "lib.mylove.classic"
 
 require "utils.logger" -- including here so that all other can use it
-Logger = Logger(1)
+logger = Logger(3) -- create the logger and print most stuff
+logger:log("Starting Game")
 
 Camera = require "lib.hump.camera"
 smoothie = Camera.smooth.damped(.1)
@@ -17,6 +18,7 @@ Timer = require "lib.hump.timer"
 reflowprint = require "lib.reflowprint.init"
 Sti = require "lib.sti"
 anim8 = require "lib.anim8"
+suit = require "lib.suit"
 
 require "lib.mylove.colors"
 require "lib.mylove.intersections"
@@ -24,6 +26,7 @@ require "lib.mylove.entity"
 require "lib.mylove.coord"
 require "lib.hump.gamestate"
 require "lib.menuengine"
+ripple = require "lib.ripple.ripple"
 
 
 
@@ -48,7 +51,9 @@ require "utils.upgrade_node"
 require "utils.upgrade_manager"
 require "utils.interractions"
 
+require "effects.music_manager"
 require "assets.resources"
+
 
 -- all gamestates
 local main_menu = require("states.main_menu")
@@ -58,6 +63,7 @@ local upgrade_menu = require("states.upgrade_menu")
 local level_menu = require("states.level_menu")
 local after_action = require("states.after_action")
 local test_menu = require("states.test_menu")
+local settings_menu = require("states.settings_menu")
 
 upgrade_manager = UpgradeManager()
 
@@ -82,6 +88,7 @@ game_data = { -- where we store all global variables related to gameplay
         height = 3000
     },
     gameplay_paused = false,
+    god_mode = false,
 }
 
 -- default save values that will be loaded and written

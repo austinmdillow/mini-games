@@ -5,11 +5,11 @@ function level_menu:init()
 end
 
 function level_menu:enter()
-  effect = effects.explosion_6:clone()
+
 end
 
 function level_menu:update(dt)
-  effect:update(dt)
+
 end
 
 function level_menu:draw()

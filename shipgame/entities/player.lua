@@ -5,6 +5,8 @@ function Player:new(x_start, y_start)
   self:setColor(COLORS.red)
   self.max_speed_base = 450
   self.max_speed = self.max_speed_base
+  self.max_acceleration = 400
+  self.max_deceleration = -200
   self.cruise_speed = 150
   self.min_speed = 50
   self.boost = 100
@@ -55,19 +57,19 @@ end
 
 function Player:update(dt)
     Player.super.update(self, dt)
-    self.timer:update(dt)
-    self:updateBoost(dt)
-    if outOfBounds(self.coord) then
+    self.timer:update(dt) -- maybe not used
+    self:updateBoost(dt) -- Boost time
+    if outOfBounds(self.coord) then -- Damage if out of bounds. may want to change to bounce
       self:damage(dt*20)
     end
 
     if love.keyboard.isDown("up") and not self.over_boosted then
-      self.boost = self.boost - 100*dt
-      self.current_speed = math.min(self.current_speed + 500 * dt, self.max_speed)
+      self.boost = self.boost - 100 * dt
+      self.current_speed = math.min(self.current_speed + self.max_acceleration * dt, self.max_speed)
     elseif love.keyboard.isDown("down") then
-      self.current_speed = self.min_speed
-    else 
-      self.current_speed = math.max(self.current_speed - 200*dt, self.cruise_speed)
+      self.current_speed = math.max(self.current_speed + self.max_deceleration * dt, self.min_speed)
+    else -- gently coast to cruise
+      self.current_speed = (self.cruise_speed - self.current_speed) * dt  + self.current_speed
     end
     local rotation_speed_const = 1
     if love.keyboard.isDown("right") then

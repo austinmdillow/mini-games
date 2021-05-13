@@ -9,7 +9,7 @@
 print level is the level at which logged output will print to the terminal
  ]]
 
- Logger = Object:extend()
+Logger = Object:extend()
 
 function Logger:new(print_level)
     self.print_level = print_level or 1
@@ -18,12 +18,10 @@ function Logger:new(print_level)
 end
 
 
-function Logger:log(msg, level)
-    msg_level = level
-    if level == nil then
-        msg_level = 1
-    end
-    tmp_message = {timestamp = love.timer.getTime(), message = msg, level = msg_level}
+function Logger:log(msg, lev)
+    local msg_level = lev or self.print_level
+    print(lev, msg, "pdpspd")
+    local tmp_message = {timestamp = love.timer.getTime(), message = msg, level = msg_level}
 
     if type(tmp_message.level) == "number" then
         if tmp_message.level <= self.print_level then

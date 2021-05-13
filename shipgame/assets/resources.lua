@@ -24,6 +24,30 @@ sounds = {}
 sounds.hit_1 = love.audio.newSource("assets/sounds/hit_1.wav", "static")
 sounds.hit_2 = love.audio.newSource("assets/sounds/hit_2.wav", "static")
 
+audio_tags = {
+    music_tag = ripple.newTag(),
+    effects_tag = ripple.newTag(),
+}
+
+audio = {
+    
+    music = {
+        {   
+            title = "Dragon Fly",
+            artist = "UNknocn",
+            song = ripple.newSound(love.audio.newSource("assets/music/dragon_fly.mp3", "stream"), {
+                tags = {audio_tags.music_tag},
+            }),
+        },
+    },
+    sounds = {
+        shot_1 = love.audio.newSource("assets/sounds/shot.wav", "static"),
+    },
+}
+
+dj = MusicManager(audio.music, audio_tags.music_tag)
+dj:play()
+
 
 --- Animated Effects
 local explosion_5_grid = anim8.newGrid(sprites.explosion_5:getHeight(), sprites.explosion_5:getHeight(), sprites.explosion_5:getWidth(), sprites.explosion_5:getHeight())

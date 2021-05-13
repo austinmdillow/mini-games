@@ -13,7 +13,7 @@ function DEBUG(msg)
   debug_message = msg
 end
 
-Logger:log(1)
-Logger:log(2)
-Logger:print()
+logger:log(1)
+logger:log(2)
+logger:print()
 

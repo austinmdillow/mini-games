@@ -36,8 +36,9 @@ local function loadFromSave()
 end
 
 -- Options
-local function options()
-
+local function settings()
+  main_menu:setText("Settings was selected!")
+  Gamestate.push(settings_menu)
 end
 
 -- Quit Game
@@ -81,7 +82,7 @@ function main_menu:enter()
   main_menu_engine:addEntry("Levels", levelSelect)
   main_menu_engine:addEntry("Upgrades", upgradeSelect)
   main_menu_engine:addEntry("Load Game", loadFromSave)
-  main_menu_engine:addEntry("Options", options)
+  main_menu_engine:addEntry("Settings", settings)
   main_menu_engine:addEntry("Test", testSelect)
   main_menu_engine:addSep()
   main_menu_engine:addEntry("Quit Game", quitGame)
