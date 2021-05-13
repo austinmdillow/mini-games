@@ -1,5 +1,6 @@
-print(package.path..'\n'..package.cpath)
-local socket = require "socket"
+--print(package.path..'\n'..package.cpath)
+--local socket = require "socket"
+local sock = require "sock.sock"
 
 -- begin
 local udp = socket.udp()

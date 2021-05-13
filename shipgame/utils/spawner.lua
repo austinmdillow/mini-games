@@ -5,7 +5,7 @@ Spawner = Object:extend()
 
 spawn_sequences = {
   { 
-    level = 1,
+    level = 1, ---------- Level 1
     {
       wave_num = 1,
       spawn_count = 5,
@@ -60,15 +60,15 @@ spawn_sequences = {
     },
     {
       wave_num = 2,
-      spawn_count = 3,
+      spawn_count = 30,
       type = "fighter",
       spawn_location = {
         x = 400,
-        y = 10,
+        y = love.math.random(600),
         t = 0
       },
       time_spacing = 3,
-      max_alive = 3
+      max_alive = 10
     }
   },
 
