@@ -39,7 +39,7 @@ spawn_sequences = {
         y = 10,
         t = 4
       },
-      time_spacing = .1,
+      time_spacing = .01,
       max_alive = 1000,
     }
   },

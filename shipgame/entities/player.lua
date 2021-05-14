@@ -50,7 +50,7 @@ function Player:reset() -- need to add info
   self.current_health = 100
   print("Upgrade mods")
   print(upgrade_manager:getModifiers("speed"))
-  self.max_speed = self.max_speed_base * upgrade_manager:getModifiers("speed")
+  --self.max_speed = self.max_speed_base * upgrade_manager:getModifiers("speed")
   if upgrade_manager:isUnlocked("shotgun") then -- this should be handeled by an inventory system that tracks upgrade events
     self.inventory[3] = Shotgun()
   end

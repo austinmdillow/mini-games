@@ -8,16 +8,15 @@ local upgrade_progression = {
     description = "Increases speed by 20%",
     cost = 5,
     next = {"speed_2"},
-    flag = "speed",
+    flag = "max_speed",
     multiplier = 1.2
-
   },
   speed_2 = {
     x = 400,
     y = 200,
     title = "Speed number 2",
     cost = 10,
-    flag = "speed",
+    flag = "max_speed",
     multiplier = 1.2
   },
   armor_1 = {
@@ -27,7 +26,7 @@ local upgrade_progression = {
     previous = nil,
     next = {"armor_2", "armor_3"},
     cost = 4,
-    flag = "max_health",
+    flag = "shield_max",
     multiplier = 1.2
   },
   armor_2 = {
@@ -35,6 +34,7 @@ local upgrade_progression = {
     y = 200,
     title = "armor 2",
     prerequisite = "crafting_1",
+    flag = "shield_max",
     cost = 23
   },
   armor_3 = {

@@ -4,7 +4,7 @@ UpgradeManager = Object:extend()
 
 
 function UpgradeManager:new()
-  self.unlock_flags = {}
+  self.unlock_flags = {4}
   self.upgrade_nodes = {}
   self.messages = {}
   self.upgrade_history = {}
@@ -59,15 +59,7 @@ function UpgradeManager:mousereleased(x, y, mouse_btn)
     local mouse_x, mouse_y = upgrade_menu.camera:mousePosition()
     if node:mousereleased(mouse_x, mouse_y, mouse_btn) then -- pass the released coordinates to the individual upgrade objects
       table.insert(self.upgrade_history, key) -- store all upgrades for laster in case we need to reload
-      if node.flag ~= nil then
-        local m_new, a_new = node:getModifiers()
-        if self.unlock_flags[node.flag] ~= nil then
-          self.unlock_flags[node.flag][1] = self.unlock_flags[node.flag][1] * m_new
-          self.unlock_flags[node.flag][2] = self.unlock_flags[node.flag][2] + a_new
-        else
-          self.unlock_flags[node.flag] = {m_new, a_new}
-        end
-      end
+      self:handleUpgrade(node)
     end
   end
 end
@@ -91,5 +83,14 @@ function UpgradeManager:printUnlockFlags()
   print("Printing Unlock flags")
   for key, val in pairs(self.unlock_flags) do
     print(key, val)
+  end
+end
+
+function UpgradeManager:handleUpgrade(upgrade)
+  if upgrade.flag ~= nil then
+    local m_new, a_new = upgrade:getModifiers()
+    print(string.format("Upgrading %s. was %f", upgrade.flag, game_data.local_player[upgrade.flag]))
+    game_data.local_player[upgrade.flag] = game_data.local_player[upgrade.flag] * m_new + a_new
+    print(string.format("After %s. is %f", upgrade.flag, game_data.local_player[upgrade.flag]))
   end
 end
