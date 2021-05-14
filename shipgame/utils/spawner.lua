@@ -32,7 +32,7 @@ spawn_sequences = {
     },
     {
       wave_num = 3,
-      spawn_count = 10,
+      spawn_count = 1000,
       type = "fighter",
       spawn_location = {
         x = 1000,
@@ -40,7 +40,7 @@ spawn_sequences = {
         t = 4
       },
       time_spacing = .1,
-      max_alive = 10
+      max_alive = 1000,
     }
   },
 
@@ -67,8 +67,8 @@ spawn_sequences = {
         y = love.math.random(600),
         t = 0
       },
-      time_spacing = 3,
-      max_alive = 10
+      time_spacing = .2,
+      max_alive = 30
     }
   },
 

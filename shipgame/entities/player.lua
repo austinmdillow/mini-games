@@ -8,12 +8,13 @@ function Player:new(x_start, y_start)
   self.max_acceleration = 400
   self.max_deceleration = -200
   self.cruise_speed = 150
+  self.cruise_acceleration = 75
   self.min_speed = 50
   self.boost = 100
   self.max_boost = 400
   self.over_boosted = false
   self.radius = 10
-  self.current_speed = 0
+  self.current_speed = self.cruise_speed
   self.roation_speed = 3
   self.size = 5
   self.team = Teams.blue
@@ -69,7 +70,11 @@ function Player:update(dt)
     elseif love.keyboard.isDown("down") then
       self.current_speed = math.max(self.current_speed + self.max_deceleration * dt, self.min_speed)
     else -- gently coast to cruise
-      self.current_speed = (self.cruise_speed - self.current_speed) * dt  + self.current_speed
+      if self.current_speed > self.cruise_speed then
+        self.current_speed = math.max(self.current_speed - self.cruise_acceleration * dt, self.cruise_speed)
+      elseif self.current_speed < self.cruise_speed then
+        self.current_speed = math.min(self.current_speed + self.cruise_acceleration * dt, self.cruise_speed)
+      end
     end
     local rotation_speed_const = 1
     if love.keyboard.isDown("right") then

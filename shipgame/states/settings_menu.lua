@@ -18,6 +18,7 @@ function settings_menu:update(dt)
     suit.layout:padding(10, 10)
     
     if suit.Button("Go Back (Esc)", 0,0,150,30).hit then
+        logger:log("pop button press")
         Gamestate.pop()
     end
 
@@ -33,7 +34,7 @@ function settings_menu:update(dt)
     suit.Label("Music Volume", {}, suit.layout:row(300,30))
     suit.Slider(settings_menu.volume_slider, suit.layout:col(300,30))
     local music_volume = settings_menu.volume_slider.value
-    suit.Label(tostring(music_volume), {align = "left"}, suit.layout:col(50,30))
+    suit.Label(tostring(math.floor(100 * music_volume)) .. "%", {align = "left"}, suit.layout:col(50,30))
     dj:setVolume(music_volume)
 end
 
@@ -44,6 +45,7 @@ end
 
 function settings_menu:keypressed(key)
     if key == "escape" then
+        logger:log("escape press")
         Gamestate.pop()
     end
 

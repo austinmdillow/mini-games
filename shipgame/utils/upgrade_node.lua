@@ -82,18 +82,17 @@ function Upgrade:mousereleased(x,y, mouse_btn)
     self:printConnections()
 
     if self.unlocked == true then
-      Logger:log("Already unlocked", "upgrade")
+      logger:log("Already unlocked", "upgrade")
       return false
     end
 
     if not self:hasPreviousUnlocked() then -- check prerequisites met
-      Logger:log("Prior upgrade needs to be unlocked", "upgrade")
+      logger:log("Prior upgrade needs to be unlocked", "upgrade")
       return false
     end
 
     if self.cost > game_data.coins then -- check that player has enough money
-      print("Item costs " .. self.cost ..", need " .. self.cost - game_data.coins .. " more")
-      Logger:log("Item costs " .. self.cost ..", need " .. self.cost - game_data.coins .. " more", 2)
+      logger:log("Item costs " .. self.cost ..", need " .. self.cost - game_data.coins .. " more", 2)
       return false
     end
     -- check if unlock is available
@@ -105,7 +104,7 @@ function Upgrade:mousereleased(x,y, mouse_btn)
       if pressedbutton == 1 then
         game_data.coins = game_data.coins - self.cost
         self.unlocked = true
-        Logger:log("Purchased for " .. self.cost, "upgrade")
+        logger:log("Purchased for " .. self.cost, "upgrade", 2)
       end
       return true
     end

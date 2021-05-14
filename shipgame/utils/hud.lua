@@ -114,7 +114,7 @@ function drawUpgradeHud()
   love.graphics.rectangle('fill', 0, 0, FRAME_WIDTH, 40)
   love.graphics.setColor(COLORS.white)
   love.graphics.print("Coins " .. game_data.coins, 200, 10)
-  recent_message = Logger:get("upgrade")
+  recent_message = logger:get("upgrade")
   message_print = ""
   -- check that there is a message and it's recent
   if recent_message ~= nil and love.timer.getTime() - recent_message.timestamp < 4 then

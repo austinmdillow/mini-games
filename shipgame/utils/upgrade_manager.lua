@@ -7,6 +7,7 @@ function UpgradeManager:new()
   self.unlock_flags = {}
   self.upgrade_nodes = {}
   self.messages = {}
+  self.upgrade_history = {}
 end
 
 function UpgradeManager:update(dt)
@@ -57,6 +58,7 @@ function UpgradeManager:mousereleased(x, y, mouse_btn)
   for key, node in pairs(self.upgrade_nodes) do
     local mouse_x, mouse_y = upgrade_menu.camera:mousePosition()
     if node:mousereleased(mouse_x, mouse_y, mouse_btn) then -- pass the released coordinates to the individual upgrade objects
+      table.insert(self.upgrade_history, key) -- store all upgrades for laster in case we need to reload
       if node.flag ~= nil then
         local m_new, a_new = node:getModifiers()
         if self.unlock_flags[node.flag] ~= nil then

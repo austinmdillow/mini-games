@@ -10,7 +10,6 @@ print level is the level at which logged output will print to the terminal
  ]]
 
 Logger = Object:extend()
-
 function Logger:new(print_level)
     self.print_level = print_level or 1
     self.log_table = {}
