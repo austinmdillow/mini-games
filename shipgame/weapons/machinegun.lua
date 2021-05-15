@@ -7,7 +7,7 @@ function Machinegun:new()
   self.unlimited_ammo = true
   self.fire_rate = 30
   self.last_fire_time = love.timer.getTime()
-  self.damage = 30
+  self.damage = 300
   self.cooldown_rate = 29
   self.current_heat = 0
   self.max_heat = 20

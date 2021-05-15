@@ -5,20 +5,24 @@ function test_menu:init()
 end
 
 function test_menu:enter()
-    test_menu.animation_manager = AnimationManager()
-    test_menu.animation_manager:addAnimation(effects.explosion_5, 400, 100)
-    test_menu.animation_manager:addAnimation(effects.explosion_6, 100, 100)
+    test_menu.enemy = Enemy(100,100,0)
+    test_menu.enemy.max_speed = 100
+    test_menu.enemy.rotation_speed = 1
+    test_menu.mouse = HC.circle(400,300,100)
+
 end
 
 function test_menu:update(dt)
-    test_menu.animation_manager:update(dt)
+    test_menu.mouse:moveTo(love.mouse.getPosition())
+    test_menu.enemy:update(dt)
+    game_data.local_player:update(dt)
 end
 
 function test_menu:draw()
-    love.graphics.setColor(COLORS.green)
-    love.graphics.rectangle('line', 100, 100, 300, 300)
-    love.graphics.setColor(COLORS.white)
-    test_menu.animation_manager:draw()
+    test_menu.enemy:draw()
+    game_data.local_player:draw()
+    love.graphics.setColor({255,255,0})
+    test_menu.mouse:draw()
 
 end
 

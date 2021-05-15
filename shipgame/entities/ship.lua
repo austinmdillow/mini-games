@@ -8,7 +8,7 @@ function Ship:new(x_start, y_start)
   self.max_speed = 75
   self.radius = 10
   self.current_speed = 0
-  self.roation_speed = 3
+  self.rotation_speed = 3
   self.size = 10
   self.last_fire_time = love.timer.getTime() -- last time since a bullet was fired
   self.fire_rate = 2 -- bullets per second
@@ -75,9 +75,9 @@ end
 function Ship:rateLimitedTurn(dt, angle) -- the desired amount of turning
   local rotation_amount = 0
   if angle >= 0 then
-    rotation_amount = math.min(dt * self.roation_speed, angle)
+    rotation_amount = math.min(dt * self.rotation_speed, angle)
   else
-    rotation_amount = math.max(-dt * self.roation_speed, angle)
+    rotation_amount = math.max(-dt * self.rotation_speed, angle)
   end
   self.coord:rotate(rotation_amount)
 end

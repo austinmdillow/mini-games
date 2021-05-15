@@ -16,7 +16,7 @@ function Player:new(x_start, y_start)
   self.radius = 10
   self.current_speed = self.cruise_speed
   self.roation_speed = 3
-  self.size = 5
+  self.size = 100
   self.team = Teams.blue
   self.shield_enabled = true
   self.shield_health = 100

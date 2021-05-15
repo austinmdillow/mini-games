@@ -19,6 +19,7 @@ reflowprint = require "lib.reflowprint.init"
 Sti = require "lib.sti"
 anim8 = require "lib.anim8"
 suit = require "lib.suit"
+HC = require "lib.HC"
 
 require "lib.mylove.colors"
 require "lib.mylove.intersections"

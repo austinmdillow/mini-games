@@ -7,3 +7,6 @@
 [submodule "shipgame/lib/ripple"]
 	path = shipgame/lib/ripple
 	url = https://github.com/tesselode/ripple.git
+[submodule "shipgame/lib/HC"]
+	path = shipgame/lib/HC
+	url = git://github.com/vrld/HC.git

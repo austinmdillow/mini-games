@@ -52,6 +52,7 @@ function Item:drawIcon(x_loc, y_loc)
 end
 
 function Item:draw()
+
   if self.coord ~= nil and self.image ~= nil then
     img_width, img_height = self.image:getDimensions()
     love.graphics.setColor(COLORS.white)
